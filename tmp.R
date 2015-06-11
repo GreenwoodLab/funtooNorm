@@ -12,7 +12,7 @@ i=3
 PATH=PATH_C[i]
 
 library(pls)
-#source("~/data/methylation/SCRIPT/newnormfunctions2.V2.R")
+#source("~/data/methylation/SCRIPT/funtoonormfunctions2.V2.R")
 
 #####################
 #Annotation file
@@ -94,20 +94,20 @@ Annot<-default.Annot
 devtools::use_data(Annot, internal = F, overwrite = T)
 devtools::use_data(cp.types, internal = F, overwrite = T)
 
-newnormout <- newnorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                        ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=F)
 
 
-newnormout <- newnorm(sigA=sigAsample, sigB=sigBsample,
+funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                       ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, logit.quant=FALSE, validate=5)
 
 
-origBeta <- newnormout[[1]]
-newBeta <- newnormout[[2]]
+origBeta <- funtoonormout[[1]]
+newBeta <- funtoonormout[[2]]
 rownames(newBeta) <- rownames(origBeta)
 colnames(newBeta) <- colnames(origBeta)
 #save(newBeta, file=paste(PATH,"NEW_NORM_DATA/newBeta4.RData",sep=""))

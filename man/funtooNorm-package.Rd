@@ -1,5 +1,5 @@
-\name{newNorm}
-\alias{newNorm}
+\name{funtooNorm}
+\alias{funtooNorm}
 \docType{package}
 \title{
 NewNorm
@@ -8,7 +8,7 @@ NewNorm
 }
 \details{
 \tabular{ll}{
-Package: \tab newNorm\cr
+Package: \tab funtooNorm\cr
 Type: \tab Package\cr
 Version: \tab 0.99.1\cr
 Date: \tab 2015-04-29\cr
@@ -26,7 +26,7 @@ License: \tab GPL-3\cr
 %%\examples{
 %%    data("data")
 %%    ncmp <- 4
-%%   newnormout <- newnorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+%%   funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
 %%                      controlred=matred, controlgrn=matgrn, 
 %%                      cp.types=cp.types, cell_type = cell_type,
 %%                       ncmp=ncmp, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)

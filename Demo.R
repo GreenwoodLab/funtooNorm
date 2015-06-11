@@ -6,12 +6,12 @@ library(pls)
 save(sigAsample, sigBsample, Annotsample, matred, matgrn, cp.types, cell_type, file='data.Rda')
 
 
-newnormout <- newnorm(ifquant=FALSE, sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+funtoonormout <- funtoonorm(ifquant=FALSE, sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                       ncmp = ncmp, save.loess=TRUE, applyloess=TRUE, logit.quant=TRUE)
-origBeta <- newnormout[[1]]
-newBeta <- newnormout[[2]]
+origBeta <- funtoonormout[[1]]
+newBeta <- funtoonormout[[2]]
 rownames(newBeta) <- rownames(origBeta)
 colnames(newBeta) <- colnames(origBeta)
 #save(newBeta, file=paste(PATH,"NEW_NORM_DATA/newBeta4.RData",sep=""))

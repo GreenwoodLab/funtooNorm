@@ -4,7 +4,7 @@
 ## if you use GenomeStudio to extract control probes, then they would be in a certain order
 ## that we could use
 
-newnorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
+funtoonorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,
                     save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
 {
@@ -57,7 +57,7 @@ newnorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
     is.wholenumber <-  function(x){abs(x - round(x)) == 0}
     
     #Function, adjusting beta values with results of loess regression
-    applynewnorm <- function(loessfits, sigA, sigB, Annot)  {
+    applyfuntoonorm <- function(loessfits, sigA, sigB, Annot)  {
         
         wh.red <- which(Annot$Type=='I' & Annot$Color=="Red")
         wh.grn <- which(Annot$Type=='I' & Annot$Color=="Grn")
@@ -114,11 +114,11 @@ newnorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
     
     if (is.null(Annot))
         {cat("Since Annot is NULL using default annotation.", '\n')
-        data('Annot', package='newNorm', envir = environment())
+        data('Annot', package='funtooNorm', envir = environment())
     }
     if (is.null(cp.types))
     {cat("Since cp.types is NULL using default cp.types.", '\n')
-     data('cp.types', package='newNorm', envir = environment())
+     data('cp.types', package='funtooNorm', envir = environment())
     }
     
     #checking sanity of the data
@@ -366,7 +366,7 @@ newnorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
     loessfits <- list(loessfitsA.red, loessfitsA.grn, loessfitsA.II,
                       loessfitsB.red, loessfitsB.grn, loessfitsB.II)
     if (apply.loess)  {
-        betamatrices <- applynewnorm(loessfits, sigA, sigB, Annot)
+        betamatrices <- applyfuntoonorm(loessfits, sigA, sigB, Annot)
         return(betamatrices)
     } else {   return(loessfits)  }
 }  # end function

@@ -1,5 +1,5 @@
-\name{newnorm}
-\alias{newnorm}
+\name{funtoonorm}
+\alias{funtoonorm}
 
 \title{
 Function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K)
@@ -9,7 +9,7 @@ Function performs normalization Illumina Infinium Human Methylation 450 BeadChip
 correcting for quantile and tissue/cell type. 
 }
 \usage{
-newnorm(sigA, sigB, Annot = NULL, quantiledat = NULL, controlred, controlgrn,
+funtoonorm(sigA, sigB, Annot = NULL, quantiledat = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, save.quant = TRUE, save.loess = TRUE,
 apply.loess = TRUE, logit.quant = TRUE, validate = FALSE)
 }
@@ -87,13 +87,13 @@ beta values, depending on the value of apply.loess.
 %% to normalize methylation data:
 data("data")
 ncmp <- 4
- newnormout <- newnorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+ funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type, 
                        ncmp=ncmp, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, 
                        logit.quant=TRUE, validate=FALSE)
 %%to validate: 
-newnormout <- newnorm(sigA=sigAsample, sigB=sigBsample,
+funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                       ncmp=4, save.quant=TRUE, save.loess=TRUE, 
