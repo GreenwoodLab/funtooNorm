@@ -1,0 +1,151 @@
+\documentclass{article}
+% \VignettePackage{funtooNorm}
+% \VignetteIndexEntry{Normalization of Illumina Infinium HumanMethylation450 Beadchip data}
+\usepackage{graphicx}
+\usepackage[margin=2cm]{geometry}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{array}
+\usepackage{color}
+\usepackage{underscore}
+%\usepackage[authoryear,round]{natbib}
+\bibliographystyle{plainnat}
+\usepackage{verbatim}
+%\usepackage[utf8]{inputenc} % for UTF-8/single quotes from sQuote()
+\usepackage{Sweave}%
+% for bold symbols in mathmode
+\usepackage{bm}
+\usepackage{setspace}
+\doublespacing
+
+\SweaveOpts{keep.source=TRUE}
+
+\title{Using funtooNorm}
+\author{Celia Greenwood, Stepan Grinek. }
+
+\date{\today}
+\sloppy
+\hyphenpenalty 10000
+
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+
+
+%% Note: These are explained in '?RweaveLatex' :
+%<<preliminaries, echo=FALSE>>=
+%options(width=75)
+%@
+
+\section{Introduction}
+
+
+The \textbf{funtooNorm} package provides functions for normalization of Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types. 
+The algorithm in this package represents an extension of a normalization method introduced recently by
+\cite{Fortin2014, Aryee2014}. 
+In addition to the percentile-specific adjustments implemented in funNorm, funtooNorm is specifically designed to allow flexibility in the adjustments for different cell types or tissue types.  
+Percentiles of methylation levels may vary across cell types and hence the original funNorm may not be ideal if applied to all samples simultaneously.  
+Normalization separately for each cell type may introduce unwanted variability if sample sizes are small.
+Therefore, this algorithm provides flexibility while optimizing the sample size used to estimate the corrections.
+
+A partial least squares (PLS) fit is included as the core of the algorithm, followed by smoothing across percentiles. 
+
+Note that the current version of the package does not do a good job of normalizing the Y chromosome probes; the funNorm method performs better.  
+In a subsequent version of the package we will address this issue. 
+
+\section{Package use}
+
+The user needs to provide the following information:
+\begin{itemize}
+\item \textbf{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
+These matrices should have columns representing each sample, and rows for each probe.  
+The probe names should index the rows, and the sample names should index the columns.
+ {\color{red} These can be extracted from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by ..., or extracted directly from the IDAT files with Bioconductor packages such as .... }.
+
+\item \textbf{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
+The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
+{\color{red} This information can also be extracted from the IDAT files using Genome Studio, by .... , or ....}
+
+\item \textbf{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
+There must be at least two different cell or tissue types in the data {\color{red} or the program will terminate with a warning}.
+\end{itemize}
+
+The program also requires the following information, but default matrices are provided and used if the parameters are set to NULL in the function call.
+
+\begin{itemize}
+
+\item \textbf{Annot:} An annotation table, containing information on probe names, probe type, and color (for probes of type I).  
+This can be extracted from the Illumina annotation information for the Infinium BeadChip.
+A default annotation table is provided if not supplied.
+
+\item  \textbf{cp.types:}  A list of the types of control probes to be used in the normalization.
+\end{itemize}
+
+Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
+
+We have provided a small data set containing $N=93$ individuals and 1000 {\color{red} I don't think that 1000 is not enough for testing. Try 20,000} probes to demonstrate the usage of the package. 
+The samples are either from cord blood or foetal placenta tissue. 
+
+Here is a basic call to normalize this sample data set: 
+ %The code to be inserted
+%\begin{Verbatim}
+<<>>= 
+    library(funtooNorm)
+    data("data")
+    ncmp <- 4
+    funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
+                      controlred=matred, controlgrn=matgrn, 
+                      cp.types=NULL, cell_type = cell_type,
+                      ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
+
+@
+%\end{Verbatim}
+
+\emph{save.quant} implies that the quantiles should be saved;  \emph{save.loess} means that loess fits to the curves should be saved; \emph{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits;  \emph{logit.quant} asks whether the quantiles should be logit-transformed prior to fitting PLS models.
+
+An important user-chosen parameter is  \emph{ncmp}, the number of PLS components to be included in the model.  
+This can be chosen after examining a series of fits with different numbers of PLS components, together with a cross-validation procedure to assess how well the quantiles are modelled by the control probe data.  
+By setting $validate=N$, for a maximum of $N$ components, the algorithm will graph the cross-validated errors across the percentiles for
+models with $1, 2, ... , N$ PLS components.  
+Examination of these graphs will enable choice of the best value for \emph{ncmp} for each data set.
+
+The following call performs cross-validation to assess the performance of the model fitting for \emph{ncmp} between 1 and 5.  
+Note that here the \emph{ncmp} parameter is not specified.
+%\begin{Verbatim}
+<<>>= 
+    #This call  will perform cross validation of to find optimal value of parameter ncmp for PLS regression:
+    funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
+                      controlred=matred, controlgrn=matgrn, 
+                      cp.types=cp.types, cell_type = cell_type,
+                      save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, logit.quant=TRUE, validate=5)
+
+@
+%\end{Verbatim}
+
+Calling the funtoonorm function with \emph{validate =N} produce set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figure \ref{val}, the goal is to choose the smallest value of \emph{ncmp} where the cross-validated error is small.
+We have set 4 as the default value for \emph{ncmp}.
+%%Add graph and explanations of its meaning.
+
+\begin{figure}[val]
+\centering
+\includegraphics[width=10cm,height=10cm]{valid.jpg}
+\caption{Cross-validated errors across percentiles of the signal distributions for different numbers of PLS components.  Left: signal A; Right: signal B;  Top: probe type I red; Middle: probe type I green; Bottom: probe type II.  } \label{val}
+\end{figure}
+
+
+\begin{thebibliography}{}
+
+\bibitem{deLeeuw1976} de Leeuw, J., Young, F. W., and Takane, Y. (1976). Additive structure in qualitative data: An alternating least squares method with optimal scaling features. \emph{Psychometrika}, 41, 471-503.
+\bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization of 450K methylation array data improves replication in large cancer studies. \emph{Genome Biology},  15: p. 503.
+\bibitem{Aryee2014} Aryee, M.J., et al. (2014). Minfi: a flexible and comprehensive Bioconductor package for the analysis of Infinium DNA methylation microarrays. \emph{Bioinformatics}, 30(10): p. 1363-9.
+\bibitem{funtooNorm}  Kathleen Oros Klein et al. (2015). \emph{funtooNorm:} An improvement of the funNorm normalization method for methylation data from multiple cell or tissue types.  Manuscript in preparation.  
+
+
+\end{thebibliography}
+ 
+
+
+
+
+\end{document}
