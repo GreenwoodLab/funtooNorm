@@ -128,6 +128,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
     if (NotNumeric(controlred)){stop("There are non-numeric values in the matrix", '\n')}
     if (NotNumeric(controlgrn)){stop("There are non-numeric values in the matrix", '\n')}
     if (any(cell_type == '' | typeof(cell_type) != 'character' | is.na(cell_type))) {{stop("There are non-character values in cell_type", '\n')}}
+    if (length(unique(cell_type))<2) {{stop("There should be more that one tissue or cell type in cell_type variable", '\n')}}
     if (any(cp.types == '' | typeof(cp.types) != 'character' | is.na(cp.types))) {{stop("There are non-character values in cp.types", '\n')}}
     
     #check that ID's match between sigA, sigB and control probe data
@@ -215,14 +216,10 @@ funtoonorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
         load("quantilesB.II.RData")
     }
     
-    # TODO get cp.types from control probe data automatically
-    # do log(x+1) of the control probes prior to code below
-    #add warning message log transform wasnr't !!!!!
-    
+        
     controlgrn <- log2(1 + controlgrn)
     controlred <- log2(1 + controlgrn)
     
-    # assume log transformation has already been done
     # construct control probe summaries, averages by type of control probe
     # then specifically create columns by cell type
     cp.type.tab <- table(cp.types)

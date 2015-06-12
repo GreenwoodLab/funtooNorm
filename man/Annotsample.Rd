@@ -5,12 +5,12 @@
 Annotation sample
 }
 \description{
-A sample annotation data set to be used in examples.
+A sample annotation data set to be used in examples for funtoonorm function.
 }
 \usage{Annotsample}
 
 \format{
-  A data frame with annotation for 1000 probes having the following 7 variables:
+  A data frame with annotation for 20000 probes having the following 7 variables:
   \describe{
     \item{\code{Index}}{a numeric vector}
     \item{\code{probe}}{a character vector}

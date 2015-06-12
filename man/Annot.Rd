@@ -5,12 +5,12 @@
 Annotation table for Illumina 450K data set  
 }
 \description{
-A sample annotation data set to be used in absense of user supplied annotation.
+A sample annotation data set to be used in absense of user supplied annotation by default.
 }
 \usage{Annotsample}
 
 \format{
-  A data frame with annotation for 1000 probes having the following 7 variables:
+  A data frame with annotation for 485577 probes having the following 7 variables:
   \describe{
     \item{\code{Index}}{a numeric vector}
     \item{\code{probe}}{a character vector}

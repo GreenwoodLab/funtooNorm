@@ -9,4 +9,4 @@ Description: Provides a function to normalize Illumina Infinium Human Methylatio
 License: GPL-3
 Imports: pls
 Suggests: BiocStyle
-biocViews: DNAMethylation, Preprocessing
+biocViews: DNAMethylation, Preprocessing, illuminaio

@@ -5,7 +5,7 @@
 Red control signal
 }
 \description{
-Matrix with red control probes signal to be used in examples.
+Matrix with red control probes signal to be used in examples for funtoonorm function.
 }
 
 \usage{matred}

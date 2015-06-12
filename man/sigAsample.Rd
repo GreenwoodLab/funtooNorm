@@ -5,6 +5,6 @@
 Signal A
 }
 \description{
-Matrix with signal A of 1000 probes to be used in examples.
+Matrix with signal A of 20000 probes to be used in examples for funtoonorm function.
 }
 \usage{sigAsample}

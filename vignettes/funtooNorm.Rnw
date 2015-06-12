@@ -20,7 +20,7 @@
 \SweaveOpts{keep.source=TRUE}
 
 \title{Using funtooNorm}
-\author{Celia Greenwood, Stepan Grinek. }
+\author{Celia Greenwood, Stepan Grinek.}
 
 \date{\today}
 \sloppy
@@ -61,11 +61,14 @@ The user needs to provide the following information:
 \item \textbf{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
 These matrices should have columns representing each sample, and rows for each probe.  
 The probe names should index the rows, and the sample names should index the columns.
- {\color{red} These can be extracted from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by ..., or extracted directly from the IDAT files with Bioconductor packages such as .... }.
+ {\color{red} These can be extracted from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by
+Extracting Signal_A and Signal_B from the Sample Methylation Profile or extracted directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio}}, \cite{Smith2013}.
 
 \item \textbf{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
 The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
-{\color{red} This information can also be extracted from the IDAT files using Genome Studio, by .... , or ....}
+{\color{red} This information can also be extracted from the IDAT files using Genome Studio, by 
+Extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio} and \textbf{IlluminaDataTestFiles}
+}
 
 \item \textbf{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
 There must be at least two different cell or tissue types in the data {\color{red} or the program will terminate with a warning}.
@@ -84,7 +87,7 @@ A default annotation table is provided if not supplied.
 
 Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
 
-We have provided a small data set containing $N=93$ individuals and 1000 {\color{red} I don't think that 1000 is not enough for testing. Try 20,000} probes to demonstrate the usage of the package. 
+We have provided a small data set containing $N=93$ individuals and 20000 probes to demonstrate the usage of the package. 
 The samples are either from cord blood or foetal placenta tissue. 
 
 Here is a basic call to normalize this sample data set: 
@@ -139,7 +142,10 @@ We have set 4 as the default value for \emph{ncmp}.
 \bibitem{deLeeuw1976} de Leeuw, J., Young, F. W., and Takane, Y. (1976). Additive structure in qualitative data: An alternating least squares method with optimal scaling features. \emph{Psychometrika}, 41, 471-503.
 \bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization of 450K methylation array data improves replication in large cancer studies. \emph{Genome Biology},  15: p. 503.
 \bibitem{Aryee2014} Aryee, M.J., et al. (2014). Minfi: a flexible and comprehensive Bioconductor package for the analysis of Infinium DNA methylation microarrays. \emph{Bioinformatics}, 30(10): p. 1363-9.
+\bibitem{Smith2013} Smith M., et al. (2013)   illuminaio:  An open source  IDAT  parsing  tool  for  Illumina  microarrays. \emph{F1000Research}, 2:264, 2013.
 \bibitem{funtooNorm}  Kathleen Oros Klein et al. (2015). \emph{funtooNorm:} An improvement of the funNorm normalization method for methylation data from multiple cell or tissue types.  Manuscript in preparation.  
+
+
 
 
 \end{thebibliography}

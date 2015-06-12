@@ -5,6 +5,6 @@
 Cell types
 }
 \description{
-Vector of cell types to be used in examples.
+Vector of cell types to be used in examples for funtoonorm function.
 }
 \usage{cell_type}

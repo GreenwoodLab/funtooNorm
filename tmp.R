@@ -88,7 +88,7 @@ identical(colnames(matgrn), rownames(SampleInfo))
 
 ##### normalize data #
 # this creates the fits required to do the normalization
-sigAsample<-sigA[1:10000,]; sigBsample=sigB[1:10000,]; Annotsample<-Annot[1:10000,] 
+sigAsample<-sigA[1:20000,]; sigBsample=sigB[1:20000,]; Annotsample<-Annot[1:20000,] 
 save(sigAsample, sigBsample, Annotsample, matred, matgrn, cp.types, cell_type, file='./data/data.rda')
 Annot<-default.Annot
 devtools::use_data(Annot, internal = F, overwrite = T)
@@ -104,6 +104,7 @@ funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                       ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, logit.quant=FALSE, validate=5)
+#convert -quality 100 -density 150 -sharpen 0x1.0 validationCurves.pdf valid.jpg
 
 
 origBeta <- funtoonormout[[1]]

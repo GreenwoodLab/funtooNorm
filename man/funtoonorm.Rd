@@ -13,7 +13,7 @@ funtoonorm(sigA, sigB, Annot = NULL, quantiledat = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, save.quant = TRUE, save.loess = TRUE,
 apply.loess = TRUE, logit.quant = TRUE, validate = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
 \item{sigA, sigB}{
 Matrices with signals A and B.
@@ -59,30 +59,11 @@ is triggered by setting validate variable to the integer value bigger that 1.
 }
 \value{
 If the validation regime is triggered (see details) the function creates a pdf 
-file with validation curves. In normalization regime output can be either results 
+file with validation curves. In the normalization regime output can be either results 
 of loess fitting (Celia, could you add better definitions here) or normalised 
 beta values, depending on the value of apply.loess.
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
 }
-%%\references{
-%% ~put references to the literature/web site here ~
-%%}
-%%\author{
-%%  ~~who you are~~
-%%}
-%%\note{
-%%  ~~further notes~~
-%%}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-%%\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-%%}
 \examples{
 %% to normalize methylation data:
 data("data")
@@ -99,7 +80,3 @@ funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       ncmp=4, save.quant=TRUE, save.loess=TRUE, 
                       apply.loess=FALSE, logit.quant=FALSE, validate=5)
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-%\keyword{ ~kwd1 }
-%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
