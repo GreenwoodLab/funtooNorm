@@ -7,6 +7,7 @@ Annotation table for Illumina 450K data set
 \description{
 A sample annotation data set to be used in absense of user supplied annotation by default.
 }
+
 \usage{Annotsample}
 
 \format{

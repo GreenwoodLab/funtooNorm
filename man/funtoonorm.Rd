@@ -9,7 +9,7 @@ Function performs normalization Illumina Infinium Human Methylation 450 BeadChip
 correcting for quantile and tissue/cell type. 
 }
 \usage{
-funtoonorm(sigA, sigB, Annot = NULL, quantiledat = NULL, controlred, controlgrn,
+funtoonorm(sigA, sigB, Annot = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, save.quant = TRUE, save.loess = TRUE,
 apply.loess = TRUE, logit.quant = TRUE, validate = FALSE)
 }
@@ -21,7 +21,6 @@ Matrices with signals A and B.
 \item{controlred, controlgrn}{
 Matrices with control probes signal.
 }
-
 \item{Annot}{
 Annotation matrix.
 }
@@ -55,7 +54,6 @@ If not FALSE, takes the maximum number of PLS components for validation.
 \details{
 Function works in two regimes, validation and  normalization. Validation regime 
 is triggered by setting validate variable to the integer value bigger that 1.      
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 If the validation regime is triggered (see details) the function creates a pdf 

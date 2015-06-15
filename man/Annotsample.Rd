@@ -4,6 +4,7 @@
 \title{
 Annotation sample
 }
+
 \description{
 A sample annotation data set to be used in examples for funtoonorm function.
 }

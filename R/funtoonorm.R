@@ -1,10 +1,5 @@
-###  TODO there should be a default Annot matrix with required information for all probes.
-###  ###  sigA and sigB have had log transforamtions prior this should be incoporated (log (1+x))
 
-## if you use GenomeStudio to extract control probes, then they would be in a certain order
-## that we could use
-
-funtoonorm <- function(sigA, sigB, Annot=NULL, quantiledat=NULL,
+funtoonorm <- function(sigA, sigB, Annot=NULL, 
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,
                     save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
 {
