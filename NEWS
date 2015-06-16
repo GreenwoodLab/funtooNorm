@@ -1,0 +1,11 @@
+\name{funtooNormnews}
+\title{funtooNorm News}
+\encoding{UTF-8}
+
+\section{Version 0.99.0}{
+  \itemize{
+    \item Initial release to Bioconductor.
+    \item Added NEWS file.
+  }
+}
+

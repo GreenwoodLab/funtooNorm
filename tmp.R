@@ -89,7 +89,13 @@ identical(colnames(matgrn), rownames(SampleInfo))
 ##### normalize data #
 # this creates the fits required to do the normalization
 sigAsample<-sigA[1:20000,]; sigBsample=sigB[1:20000,]; Annotsample<-Annot[1:20000,] 
-save(sigAsample, sigBsample, Annotsample, matred, matgrn, cp.types, cell_type, file='./data/data.rda')
+save(sigAsample, file='./data/sigAsample.rda', compress=T)
+save(sigBsample, file='./data/sigBsample.rda', compress=T)
+save(Annotsample, file='./data/Annotsample.rda', compress=T)
+save(matred, file='./data/matred.rda', compress=T)
+save(matgrn, file='./data/matgrn.rda', compress=T)
+save(cp.types, file='./data/cp.types.rda', compress=T)
+save(cell_type, file='./data/cell_type.rda', compress=T)
 Annot<-default.Annot
 devtools::use_data(Annot, internal = F, overwrite = T)
 devtools::use_data(cp.types, internal = F, overwrite = T)
