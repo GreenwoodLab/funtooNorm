@@ -61,17 +61,16 @@ The user needs to provide the following information:
 \item \textbf{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
 These matrices should have columns representing each sample, and rows for each probe.  
 The probe names should index the rows, and the sample names should index the columns.
- {\color{red} These can be extracted from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by
-Extracting Signal_A and Signal_B from the Sample Methylation Profile or extracted directly from the IDAT files with Bioconductor package such as \textbf{illuminaio}}, \cite{Smith2013}.
+These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio}} and \textbf{IlluminaDataTestFiles}, \cite{Smith2013}. \textbf{illuminaio} provides function readIDAT to extract sygnal from IDAT files, control probes signal could be separated using probe summaries probided in file 4343238080_A_ProbeSummary.txt.gz of \textbf{IlluminaDataTestFiles}.
+
 
 \item \textbf{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
 The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
-{\color{red} This information can also be extracted from the IDAT files using Genome Studio, by 
-Extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio} and \textbf{IlluminaDataTestFiles}
+This information can also be extracted from the IDAT files using Genome Studio, by extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files as described above.
 }
 
 \item \textbf{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
-There must be at least two different cell or tissue types in the data {\color{red} or the program will terminate with a warning}.
+There must be at least two different cell or tissue types in the data or the program will terminate with a warning.
 \end{itemize}
 
 The program also requires the following information, but default matrices are provided and used if the parameters are set to NULL in the function call.
@@ -87,7 +86,7 @@ A default annotation table is provided if not supplied.
 
 Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
 
-We have provided a small data set containing $N=93$ individuals and 20000 probes to demonstrate the usage of the package. 
+We have provided a small data set containing $N=93$ individuals and 20,000 probes to demonstrate the usage of the package. 
 The samples are either from cord blood or foetal placenta tissue. 
 
 Here is a basic call to normalize this sample data set: 
