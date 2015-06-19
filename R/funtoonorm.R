@@ -3,6 +3,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,
                     save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
 {
+    ####################################################################################
     # functions
     logitfn <- function(x) { log(x/(1-x)) }
     ##
@@ -102,7 +103,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
         colnames(newBeta) <- colnames(origBeta)
         return(list(origBeta, newBeta))
     }
-    ###############################
+    ###############################################################################
     
     
     

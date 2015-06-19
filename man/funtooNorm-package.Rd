@@ -4,7 +4,7 @@
 \title{
 NewNorm
 }
-\description{Package provides functions to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), correcting for  tissue and/or cell type.
+\description{The funtooNorm Package provides normalization method for data arising from the Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), including explicit considerations of differences between tissues or cell types.  This method should only be used when the data saet contains samples fom multiple different tissues or cell types.
 }
 \details{
 \tabular{ll}{
@@ -15,7 +15,7 @@ Date: \tab 2015-04-29\cr
 License: \tab GPL-3\cr
 }
 }
-%%\author{Celia Greenwood, Stepan Grinek}
+%%\author{Celia Greenwood, Stepan Grinek, Kathleen Oros Klein}
 
 %\references{
 %Literature or other references for background information

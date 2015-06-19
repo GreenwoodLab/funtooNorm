@@ -137,7 +137,7 @@ We have set 4 as the default value for \emph{ncmp}.
 \end{figure}
 
 
-To access the performance of normalization function one can use a measure of intra-replicate differences \emph{M}, described in \cite{funntoNorm}. We provide a function \emph{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of patient ID's. For the function to work some elements of patient's vector, obviously, should be identical. The returned value of \emph{M} is expected to be similar for the data before and after normalization:
+To access the performance of normalization function one can use a measure of intra-replicate differences \emph{M}, described in \cite{funtooNorm}. We provide a function \emph{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of patient ID's. For the function to work some elements of patient's vector, obviously, should be identical. The returned value of \emph{M} is expected to be similar for the data before and after normalization:
 %\begin{Verbatim}
 <<>>= 
 agreement(funtoonormout[[1]], patientid) # M for data before the normalization

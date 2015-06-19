@@ -2,10 +2,8 @@
 \alias{matgrn}
 \docType{data}
 \title{
-Green control signal
+Green control signals
 }
 \description{
-Matrix with green control probes signal to be used in examples for funtoonorm function.
-}
-
+Matrix containing the control probes signals from the green channel.  The column names should be the same as in the signal A and signal B matrices.}
 \usage{matgrn}

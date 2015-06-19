@@ -2,10 +2,9 @@
 \alias{matred}
 \docType{data}
 \title{
-Red control signal
+Red control signals
 }
 \description{
-Matrix with red control probes signal to be used in examples for funtoonorm function.
+Matrix containing the control probes signals from the red channel.  The column names should be the same as in the signal A and signal B matrices. 
 }
-
 \usage{matred}
