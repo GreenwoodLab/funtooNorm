@@ -61,13 +61,13 @@ The user needs to provide the following information:
 \item \textbf{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
 These matrices should have columns representing each sample, and rows for each probe.  
 The probe names should index the rows, and the sample names should index the columns.
-These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio}} and \textbf{IlluminaDataTestFiles}, \cite{Smith2013}. \textbf{illuminaio} provides function readIDAT to extract sygnal from IDAT files, control probes signal could be separated using probe summaries probided in file 4343238080_A_ProbeSummary.txt.gz of \textbf{IlluminaDataTestFiles}.
+These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio} and \textbf{IlluminaDataTestFiles}, \cite{Smith2013}. \textbf{illuminaio} provides function readIDAT to extract sygnal from IDAT files, control probes signal could be separated using probe summaries provided in file 4343238080_A_ProbeSummary.txt.gz of \textbf{IlluminaDataTestFiles}.
 
 
 \item \textbf{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
 The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
 This information can also be extracted from the IDAT files using Genome Studio, by extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files as described above.
-}
+
 
 \item \textbf{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
 There must be at least two different cell or tissue types in the data or the program will terminate with a warning.
@@ -94,7 +94,6 @@ Here is a basic call to normalize this sample data set:
 %\begin{Verbatim}
 <<>>= 
     library(funtooNorm)
-    data("data")
     ncmp <- 4
     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
                       controlred=matred, controlgrn=matgrn, 
@@ -129,28 +128,30 @@ Calling the funtoonorm function with \emph{validate =N} produce set of plots, on
 We have set 4 as the default value for \emph{ncmp}.
 %%Add graph and explanations of its meaning.
 
+
+
 \begin{figure}[val]
 \centering
 \includegraphics[width=10cm,height=10cm]{valid.jpg}
-\caption{Cross-validated errors across percentiles of the signal distributions for different numbers of PLS components.  Left: signal A; Right: signal B;  Top: probe type I red; Middle: probe type I green; Bottom: probe type II.  } \label{val}
+\caption{Cross-validated errors across percentiles of the signal distributions for different numbers of PLS components.  Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val}
 \end{figure}
 
 
-\begin{thebibliography}{}
+To access the performance of normalization function one can use a measure of intra-replicate differences \emph{M}, described in \cite{funntoNorm}. We provide a function \emph{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of patient ID's. For the function to work some elements of patient's vector, obviously, should be identical. The returned value of \emph{M} is expected to be similar for the data before and after normalization:
+%\begin{Verbatim}
+<<>>= 
+agreement(funtoonormout[[1]], patientid) # M for data before the normalization
+agreement(funtoonormout[[2]], patientid) # M for data after normalization
+@
+%\end{Verbatim} 
 
+
+\begin{thebibliography}{}
 \bibitem{deLeeuw1976} de Leeuw, J., Young, F. W., and Takane, Y. (1976). Additive structure in qualitative data: An alternating least squares method with optimal scaling features. \emph{Psychometrika}, 41, 471-503.
 \bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization of 450K methylation array data improves replication in large cancer studies. \emph{Genome Biology},  15: p. 503.
 \bibitem{Aryee2014} Aryee, M.J., et al. (2014). Minfi: a flexible and comprehensive Bioconductor package for the analysis of Infinium DNA methylation microarrays. \emph{Bioinformatics}, 30(10): p. 1363-9.
 \bibitem{Smith2013} Smith M., et al. (2013). illuminaio:  An open source  IDAT  parsing  tool  for  Illumina  microarrays. \emph{F1000Research}, 2:264, 2013.
 \bibitem{funtooNorm}  Kathleen Oros Klein et al. (2015). \emph{funtooNorm:} An improvement of the funNorm normalization method for methylation data from multiple cell or tissue types.  Manuscript in preparation.  
 
-
-
-
 \end{thebibliography}
- 
-
-
-
-
 \end{document}

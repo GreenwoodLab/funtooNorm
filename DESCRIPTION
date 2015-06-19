@@ -10,4 +10,5 @@ License: GPL-3
 Imports: pls
 Suggests: BiocStyle, illuminaio
 Depends: R(>= 2.10.0)
+LazyData: true
 biocViews: DNAMethylation, Preprocessing, Normalization 

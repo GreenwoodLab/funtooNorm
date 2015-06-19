@@ -4,7 +4,7 @@
 \title{
 NewNorm
 }
-\description{Package provides a function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), correcting for  tissue and/or cell type.
+\description{Package provides functions to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), correcting for  tissue and/or cell type.
 }
 \details{
 \tabular{ll}{

@@ -278,9 +278,9 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
         #mtext("Root mean square error of prediction ", line=2, font=2, cex=1.2)
         par(mar=c(3, 3, 3, 3), mgp = c(2.0, 0.5, 0))
         matplot(t(apply(RMSEP(fit2cvA.red, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="Error", main= 'A red', type = "l", col=1:validate, lty=1)
-        matplot(t(apply(RMSEP(fit2cvB.red, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="", main= 'B red', type = "l" , col=1:validate, lty=1)
-        matplot(t(apply(RMSEP(fit2cvA.II, estimate='adjCV', intercept=F)$val, 2, function(x) x)),  ylab="", main= 'A II', type = "l" , col=1:validate, lty=1)
-        matplot(t(apply(RMSEP(fit2cvA.grn, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="Error", xlab="Quantiles", main= 'A grn', type = "l" , col=1:validate, lty=1)
+        matplot(t(apply(RMSEP(fit2cvA.grn, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="", main= 'A grn', type = "l" , col=1:validate, lty=1)
+        matplot(t(apply(RMSEP(fit2cvA.II, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="", main= 'A II', type = "l" , col=1:validate, lty=1)
+        matplot(t(apply(RMSEP(fit2cvB.red, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="Error", xlab="Quantiles", main= 'B red', type = "l" , col=1:validate, lty=1)
         matplot(t(apply(RMSEP(fit2cvB.grn, estimate='adjCV', intercept=F)$val, 2, function(x) x)), xlab="Quantiles", ylab="", main= 'B grn', type = "l" , col=1:validate, lty=1)
         matplot(t(apply(RMSEP(fit2cvB.II, estimate='adjCV', intercept=F)$val, 2, function(x) x)), xlab="Quantiles", ylab="", main= 'B II', type = "l" , col=1:validate, lty=1)
         
