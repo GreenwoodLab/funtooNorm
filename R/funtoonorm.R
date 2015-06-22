@@ -1,7 +1,7 @@
 
 funtoonorm <- function(sigA, sigB, Annot=NULL, 
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,
-                    save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
+                    save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, validate=FALSE)
 {
     ####################################################################################
     # functions
@@ -324,8 +324,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     loessfitsB.red <- list()
     loessfitsB.grn <- list()
     loessfitsB.II <- list()
-    if (!logit.quant) {xq <- qntllist }
-    if (logit.quant)  {xq <- logitfn(qntllist)  }
+    xq <- logitfn(qntllist)  
     for (i in (1:nrow(quantilesA.red))) {    # i: over samples
         # assemble the fitted values into a vector
         fittedvals <-  unlist(lapply(fit2.red, extractqnt, i=i, AB=1, ncmp=ncmp))

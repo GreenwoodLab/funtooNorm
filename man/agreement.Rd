@@ -43,7 +43,7 @@
                        controlred=matred, controlgrn=matgrn,
                        cp.types=NULL, cell_type = cell_type,
                        ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE,
- logit.quant=TRUE, validate=FALSE)
+ validate=FALSE)
  
      #To calculate measures of agreement before and  after normalization
      agreement(funtoonormout[[1]], patientid)

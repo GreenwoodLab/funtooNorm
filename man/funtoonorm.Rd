@@ -11,7 +11,7 @@ correcting for quantile and tissue/cell type.
 \usage{
 funtoonorm(sigA, sigB, Annot = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, save.quant = TRUE, save.loess = TRUE,
-apply.loess = TRUE, logit.quant = TRUE, validate = FALSE)
+apply.loess = TRUE,  validate = FALSE)
 }
 
 \arguments{
@@ -44,9 +44,6 @@ Logical, whether to save calculated results of loess regression.
 Logical, whether to apply results of loess regression. If TRUE, matrix of 
 normalised beta values is returned.
 }
-\item{logit.quant}{
-Whether to apply logit transformation to quantiles.
-}
 \item{validate}{
 Either FALSE, or the maximum number of PLS components to be explored in cross-validation.
 If FALSE, the normalization corrections are calculated using \emph{ncmp} partial least squares (PLS) components.  if not FALSE, then a number must be supplied.  This number will be the maximum number of PLS components used when exploring model fit performance across a range of \emph{ncmp} values ranging from 1 to the supplied number.
@@ -68,11 +65,11 @@ funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type, 
                        ncmp=ncmp, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, 
-                       logit.quant=TRUE, validate=FALSE)
+                       validate=FALSE)
 %%to validate: 
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
                       ncmp=4, save.quant=TRUE, save.loess=TRUE, 
-                      apply.loess=FALSE, logit.quant=TRUE, validate=5)
+                      apply.loess=FALSE, validate=5)
 }

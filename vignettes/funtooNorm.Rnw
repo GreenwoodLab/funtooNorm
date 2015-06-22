@@ -98,12 +98,12 @@ Here is a basic call to normalize this sample data set:
     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
-                      ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
+                      ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, validate=FALSE)
 
 @
 %\end{Verbatim}
 
-\emph{save.quant} implies that the quantiles should be saved;  \emph{save.loess} means that loess fits to the curves should be saved; \emph{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits;  \emph{logit.quant} asks whether the quantiles should be logit-transformed prior to fitting PLS models.
+\emph{save.quant} implies that the quantiles should be saved;  \emph{save.loess} means that loess fits to the curves should be saved; \emph{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits.
 
 An important user-chosen parameter is  \emph{ncmp}, the number of PLS components to be included in the model.  
 This can be chosen after examining a series of fits with different numbers of PLS components, together with a cross-validation procedure to assess how well the quantiles are modelled by the control probe data.  
@@ -119,7 +119,7 @@ Note that here the \emph{ncmp} parameter is not specified.
     funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
-                      save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, logit.quant=TRUE, validate=5)
+                      save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, validate=5)
 
 @
 %\end{Verbatim}
