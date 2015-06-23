@@ -41,7 +41,7 @@
 \section{Introduction}
 
 
-The \textbf{funtooNorm} package provides functions for normalization of Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types. 
+The \texttt{funtooNorm} package provides  a function for normalization of Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types. 
 The algorithm in this package represents an extension of a normalization method introduced recently by
 \cite{Fortin2014, Aryee2014}. 
 In addition to the percentile-specific adjustments implemented in funNorm, funtooNorm is specifically designed to allow flexibility in the adjustments for different cell types or tissue types.  
@@ -58,30 +58,24 @@ In a subsequent version of the package we will address this issue.
 
 The user needs to provide the following information:
 \begin{itemize}
-\item \textbf{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
-These matrices should have columns representing each sample, and rows for each probe.  
-The probe names should index the rows, and the sample names should index the columns.
-These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \textbf{illuminaio} and \textbf{IlluminaDataTestFiles}, \cite{Smith2013}. \textbf{illuminaio} provides function readIDAT to extract sygnal from IDAT files, control probes signal could be separated using probe summaries provided in file 4343238080_A_ProbeSummary.txt.gz of \textbf{IlluminaDataTestFiles}.
-
-
-\item \textbf{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
-The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
-This information can also be extracted from the IDAT files using Genome Studio, by extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files as described above.
-
-
-\item \textbf{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
-There must be at least two different cell or tissue types in the data or the program will terminate with a warning.
+  \item \texttt{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
+  These matrices should have columns representing each sample, and rows for each probe.  
+  The probe names should index the rows, and the sample names should index the columns.
+  These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \texttt{illuminaio} and \texttt{IlluminaDataTestFiles}, \cite{Smith2013}. \texttt{illuminaio} provides the function readIDAT to extract signals from the IDAT files. Control probe signals can be extracted using probe summaries provided in file 4343238080_A_ProbeSummary.txt.gz of \texttt{IlluminaDataTestFiles}.
+   \item \texttt{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
+  The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
+  This information can also be extracted from the IDAT files using Genome Studio, by extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files as described above.
+   \item \texttt{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
+  There must be at least two different cell or tissue types in the data or the program will terminate with a warning.
 \end{itemize}
 
 The program also requires the following information, but default matrices are provided and used if the parameters are set to NULL in the function call.
 
 \begin{itemize}
-
-\item \textbf{Annot:} An annotation table, containing information on probe names, probe type, and color (for probes of type I).  
+\item \texttt{Annot:} An annotation table, containing information on probe names, probe type, and color (for probes of type I).  
 This can be extracted from the Illumina annotation information for the Infinium BeadChip.
-A default annotation table is provided if not supplied.
-
-\item  \textbf{cp.types:}  A list of the types of control probes to be used in the normalization.
+A default annotation table is provided if not supplied including all probes on the 450K array.
+\item  \texttt{cp.types:}  A list of the types of control probes to be used in the normalization.
 \end{itemize}
 
 Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
@@ -98,34 +92,36 @@ Here is a basic call to normalize this sample data set:
     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
-                      ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, validate=FALSE)
+                      ncmp=4, save.quant=TRUE, save.loess=TRUE, 
+                      apply.loess=TRUE, validate=FALSE)
 
 @
 %\end{Verbatim}
+\texttt{save.quant} implies that the quantiles should be saved;  \texttt{save.loess} means that loess fits to the curves should be saved; \texttt{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits;  \texttt{logit.quant} asks whether the quantiles should be logit-transformed prior to fitting PLS models.
 
-\emph{save.quant} implies that the quantiles should be saved;  \emph{save.loess} means that loess fits to the curves should be saved; \emph{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits.
-
-An important user-chosen parameter is  \emph{ncmp}, the number of PLS components to be included in the model.  
+An important user-chosen parameter is  \texttt{ncmp}, the number of PLS components to be included in the model.  
 This can be chosen after examining a series of fits with different numbers of PLS components, together with a cross-validation procedure to assess how well the quantiles are modelled by the control probe data.  
 By setting $validate=N$, for a maximum of $N$ components, the algorithm will graph the cross-validated errors across the percentiles for
 models with $1, 2, ... , N$ PLS components.  
-Examination of these graphs will enable choice of the best value for \emph{ncmp} for each data set.
+Examination of these graphs will enable choice of the best value for \texttt{ncmp} for each data set.
 
-The following call performs cross-validation to assess the performance of the model fitting for \emph{ncmp} between 1 and 5.  
-Note that here the \emph{ncmp} parameter is not specified.
+The following call performs cross-validation to assess the performance of the model fitting for \texttt{ncmp} between 1 and 5.  
+Note that here the \texttt{ncmp} parameter is not specified.
 %\begin{Verbatim}
 <<>>= 
-    #This call  will perform cross validation of to find optimal value of parameter ncmp for PLS regression:
+    #This call  will perform cross validation to find optimal value 
+    #of parameter ncmp for PLS regression:
     funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=cp.types, cell_type = cell_type,
-                      save.quant=TRUE, save.loess=TRUE, apply.loess=FALSE, validate=5)
+                      save.quant=TRUE, save.loess=TRUE, 
+                      apply.loess=FALSE, validate=5)
 
 @
 %\end{Verbatim}
 
-Calling the funtoonorm function with \emph{validate =N} produce set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figure \ref{val}, the goal is to choose the smallest value of \emph{ncmp} where the cross-validated error is small.
-We have set 4 as the default value for \emph{ncmp}.
+Calling the funtoonorm function with \texttt{validate = N} produce set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figure \ref{val}, the goal is to choose the smallest value of \texttt{ncmp} where the cross-validated error is small.
+We have set 4 as the default value for \texttt{ncmp}.
 %%Add graph and explanations of its meaning.
 
 
@@ -137,11 +133,11 @@ We have set 4 as the default value for \emph{ncmp}.
 \end{figure}
 
 
-To access the performance of normalization function one can use a measure of intra-replicate differences \emph{M}, described in \cite{funtooNorm}. We provide a function \emph{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of patient ID's. For the function to work some elements of patient's vector, obviously, should be identical. The returned value of \emph{M} is expected to be similar for the data before and after normalization:
+To access the performance of normalization function one can use a measure of intra-replicate differences \texttt{M}, described in \cite{funtooNorm}. We provide a function \texttt{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of individual ID's. For the function to work some elements of individual's vector, obviously, should be identical. The returned value of \texttt{M} is expected to be similar for the data before and after normalization:
 %\begin{Verbatim}
 <<>>= 
-agreement(funtoonormout[[1]], patientid) # M for data before the normalization
-agreement(funtoonormout[[2]], patientid) # M for data after normalization
+agreement(funtoonormout$origBeta, individualID) # M for data before the normalization
+agreement(funtoonormout$newBeta, individualID)  # M for data after normalization
 @
 %\end{Verbatim} 
 

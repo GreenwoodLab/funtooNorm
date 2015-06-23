@@ -1,10 +1,10 @@
-\name{patientid}
-\alias{patientid}
+\name{individualID}
+\alias{individualID}
 \docType{data}
 \title{
-Patient ID's
+Individual ID's
 }
 \description{
-Vector of patient ID's to be used in examples for funtoonorm function.
+Vector of individual IDs, for evaluation of the performance of funtoonorm when using agreement function.
 }
-\usage{patientid}
+\usage{individualID}

@@ -101,7 +101,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
         origBeta <- (origBeta * 999 + 0.5)/1000 
         rownames(newBeta) <- rownames(origBeta)
         colnames(newBeta) <- colnames(origBeta)
-        return(list(origBeta, newBeta))
+        return(list(origBeta=origBeta, newBeta=newBeta))
     }
     ###############################################################################
     

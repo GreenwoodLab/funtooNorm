@@ -5,7 +5,9 @@
 Annotation table for Illumina 450K data set  
 }
 \description{
-A sample annotation data set to be used in absense of user supplied annotation by default.
+Annotation information for probes undergoing normalization.  
+The default, supplied, annotation file will be used if \verb{Annot=NULL}.  
+The default annotation file contains all probes on the Illumina beadchip.
 }
 
 \usage{Annot}
