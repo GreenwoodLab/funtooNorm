@@ -2,7 +2,7 @@
 \alias{funtooNorm}
 \docType{package}
 \title{
-NewNorm
+funtooNorm
 }
 \description{The funtooNorm Package provides a normalization method for data arising from the Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), including explicit considerations of differences between tissues or cell types.  This method should only be used when the data set contains samples fom multiple different tissues or cell types.
 }
