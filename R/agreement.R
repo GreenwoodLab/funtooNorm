@@ -1,3 +1,4 @@
+# Function to measure intra-replicate agreement in methylation data.
 agreement <- function(Beta, individualID) {
   pt.table <- table(individualID)
   sum.over.pt <- 0
@@ -11,6 +12,6 @@ agreement <- function(Beta, individualID) {
                          sum(upper.tri(tmp) )   } )
     
     sum.over.pt <- sum.over.pt + mat.diffs
-  } # end for
+  } 
   return(mean(sum.over.pt, na.rm=TRUE))
 }

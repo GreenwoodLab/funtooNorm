@@ -1,4 +1,5 @@
-
+#Function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) with multiple tissues or cell types.
+#Main function of the package.s
 funtoonorm <- function(sigA, sigB, Annot=NULL, 
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,
                     save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, validate=FALSE)
@@ -52,7 +53,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     
     is.wholenumber <-  function(x){abs(x - round(x)) == 0}
     
-    #Function, adjusting beta values with results of loess regression
+    #Function adjusts beta values with results of loess regression
     applyfuntoonorm <- function(loessfits, sigA, sigB, Annot)  {
         
         wh.red <- which(Annot$Type=='I' & Annot$Color=="Red")
@@ -91,12 +92,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
         predmatB[wh.II,] <- predmatB.II
         
         newBeta <- (exp(predmatB)-1)/(exp(predmatA) + exp(predmatB)-2)
-        
-        #rm(predmatA); rm(predmatB); rm(predmatA.red); rm(predmatA.grn); rm(predmatA.II)
-        #rm(predmatB.red); rm(predmatB.grn); rm(predmatB.II)
-        
-        # now for residuals
-        #   residmat <- (exp(sigB)-1)/(exp(sigA) + exp(sigB) - 2 + 0.1)  - predBeta
+       
         origBeta <- (exp(sigB)-1)/(exp(sigA) + exp(sigB) - 2  + 0.1)
         origBeta <- (origBeta * 999 + 0.5)/1000 
         rownames(newBeta) <- rownames(origBeta)
@@ -147,11 +143,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     if(any(!(rownames(sigA) %in% rownames(Annot)))){stop("Probe names do not match annotation entries", '\n')}
     cpg<-intersect(rownames(sigA), rownames(Annot))
     Annot=Annot[cpg,]
-    
-    
-    ### TODO add a check that all probes in sigA and sigB also exist in Annot (Annot can be bigger but cannot be smaller)
-    ### then extract relevant rows from Annot
-    
+   
     cat("Data is ok.", '\n')
     
     sigA <- log2(1 + sigA)
@@ -274,9 +266,6 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
         par(mar=c(0, 0, 0, 0))
         plot.new()
         text(0.5, 0.4,"Root mean square error of prediction",cex=2,font=1.5)
-        #mtext("Root mean square error of prediction",cex=2,font=2)
-        #plot.new()
-        #mtext("Root mean square error of prediction ", line=2, font=2, cex=1.2)
         par(mar=c(3, 3, 3, 3), mgp = c(2.0, 0.5, 0))
         matplot(t(apply(RMSEP(fit2cvA.red, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="Error", main= 'A red', type = "l", col=1:validate, lty=1)
         matplot(t(apply(RMSEP(fit2cvA.grn, estimate='adjCV', intercept=F)$val, 2, function(x) x)), ylab="", main= 'A grn', type = "l" , col=1:validate, lty=1)
