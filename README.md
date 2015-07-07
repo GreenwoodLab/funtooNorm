@@ -21,7 +21,8 @@ $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 
 There are two functions in the package, <i>funtoonorm</i> and <i>agreement</i>. 
 
-The output of <i>funtoonorm</i> function is a normalized methylation data set of beta values and raw, not normalized beta values. As an input, user needs to have matrices with signal A and signal B extracted from Illumina IDAT files, as well as control probes signals. The function also requires a list of cell types or tissues. Besides its main purpose of normalization, <i>funtoonorm</i> can be run in a validation regime and its graphical output is used to choose optimal parameters for normalization.  
+The output of <i>funtoonorm</i> function is two matrices: both a normalized methylation data set of beta values and also raw, non-normalized beta values. As an input, the user needs to provide signal A and signal B matrices of data extracted from Illumina IDAT files, as well as control probes signals. The function also requires a list of cell types or tissues. Besides its main purpose of normalization, <i>funtoonorm</i> can be run in a validation mode and its graphical output is used to choose optimal parameters for normalization. 
+
 
 Function <i>agreement</i> accesses the performance of normalization measuring intra-replicate differences before and after normalization. It takes output of <i>funtoonorm</i> as an input.
 
