@@ -16,7 +16,7 @@ Or, if you want to build from source:
 >install_github('adminGreenwoodLab/funtooNorm', local=TRUE, build_vignettes = TRUE)
 </pre>
 
-If you have difficulties with direct installation from GitHub you can download and install source with R CMD build and install commands:
+If you have difficulties with <i>install_github</i> function you can download and install source with R CMD build and install commands:
 <pre>
 $git clone https://github.com/adminGreenwoodLab/funtooNorm.git
 $R CMD build ./funtooNorm
