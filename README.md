@@ -5,7 +5,7 @@ The R package <b>funtooNorm</b>  provides a function for normalization of Illumi
 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types.
 
 ## Installation options
-Download current <a href="https://github.com/adminGreenwoodLab/funtooNorm/releases"  ><b>build</b></a> and install it with
+Download current build <a href="https://github.com/adminGreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 <pre>
 $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 </pre>
