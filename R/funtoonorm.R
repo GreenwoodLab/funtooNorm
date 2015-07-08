@@ -1,4 +1,4 @@
-#Function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) with multiple tissues or cell types.
+# Function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) with multiple tissues or cell types.
 #Main function of the package.s
 funtoonorm <- function(sigA, sigB, Annot=NULL, 
                     controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,

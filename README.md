@@ -4,18 +4,26 @@
 The R package <b>funtooNorm</b>  provides a function for normalization of Illumina Infinium Human Methylation 450
 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types.
 
-## Installation
+## Installation options
+Download current <a href="https://github.com/adminGreenwoodLab/funtooNorm/releases">build</a> and install it with
+<pre>
+$R CMD INSTALL funtooNorm_N.NN.N.tar.gz
+</pre>
 
+Or, if you want to build from source: 
 <pre>
 >library(devtools)
 >install_github('adminGreenwoodLab/funtooNorm', local=TRUE, build_vignettes = TRUE)
 </pre>
+
 If you have difficulties with direct installation from GitHub you can download and install source with R CMD build and install commands:
 <pre>
 $git clone https://github.com/adminGreenwoodLab/funtooNorm.git
 $R CMD build ./funtooNorm
 $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 </pre>
+
+
 
 ## Usage
 
