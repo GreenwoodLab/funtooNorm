@@ -4,6 +4,6 @@ funtooNorm
 
 <pre>
 library(devtools)
-install_github('adminGreenwoodLab/funtooNorm')
+install_github('greenwoodLab/funtooNorm')
 </pre>
 
