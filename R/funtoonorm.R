@@ -206,7 +206,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     
         
     controlgrn <- log2(1 + controlgrn)
-    controlred <- log2(1 + controlgrn)
+    controlred <- log2(1 + controlred)
     
     # construct control probe summaries, averages by type of control probe
     # then specifically create columns by cell type
