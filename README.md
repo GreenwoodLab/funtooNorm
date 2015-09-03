@@ -5,20 +5,20 @@ The R package <b>funtooNorm</b>  provides a function for normalization of Illumi
 BeadChip (Illumina 450K) data when there are samples from multiple tissues or cell types.
 
 ## Installation options
-Download current build <a href="https://github.com/adminGreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
+Download current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 <pre>
 $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 </pre>
 
-Or, if you want to build from source: 
-<pre>
->library(devtools)
->install_github('adminGreenwoodLab/funtooNorm', local=TRUE, build_vignettes = TRUE)
-</pre>
+Or, if you want to build from source, you can also install from GitHub using the [devtools](http://cran.r-project.org/web/packages/devtools/index.html) package in `R`: 
+```r
+library(devtools)
+install_github('GreenwoodLab/funtooNorm', local=TRUE, build_vignettes = TRUE)
+```
 
 If you have difficulties with <i>install_github</i> function you can download and install source with R CMD build and install commands:
 <pre>
-$git clone https://github.com/adminGreenwoodLab/funtooNorm.git
+$git clone https://github.com/GreenwoodLab/funtooNorm.git
 $R CMD build ./funtooNorm
 $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 </pre>
@@ -34,5 +34,5 @@ The output of <i>funtoonorm</i> function is two matrices: both a normalized meth
 
 Function <i>agreement</i> accesses the performance of normalization measuring intra-replicate differences before and after normalization. It takes output of <i>funtoonorm</i> as an input.
 
-For more details, see the vignette provided in package or download .pdf file from <a href="https://github.com/adminGreenwoodLab/funtooNorm/releases"  ><b>here</b></a>.
+For more details, see the vignette provided in package or download .pdf file from <a href="https://github.com/GreenwoodLab/funtooNorm/releases"  ><b>here</b></a>.
 
