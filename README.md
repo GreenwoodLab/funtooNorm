@@ -13,6 +13,7 @@ $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
 Or, if you want to build from source, you can also install from GitHub using the [devtools](http://cran.r-project.org/web/packages/devtools/index.html) package in `R`: 
 ```r
 library(devtools)
+<<<<<<< HEAD
 install_github('GreenwoodLab/funtooNorm', local=TRUE, build_vignettes = TRUE)
 ```
 
@@ -21,6 +22,9 @@ If you have difficulties with <i>install_github</i> function you can download an
 $git clone https://github.com/GreenwoodLab/funtooNorm.git
 $R CMD build ./funtooNorm
 $R CMD INSTALL funtooNorm_N.NN.N.tar.gz
+=======
+install_github('greenwoodLab/funtooNorm')
+>>>>>>> 7297099192e6044ee9d44f41491d073e3dc411d8
 </pre>
 
 
