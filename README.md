@@ -36,5 +36,5 @@ The output of <i>funtoonorm</i> function is two matrices: both a normalized meth
 
 Function <i>agreement</i> accesses the performance of normalization measuring intra-replicate differences before and after normalization. It takes output of <i>funtoonorm</i> as an input.
 
-For more details, see the vignette provided in package or download .pdf file from <a href="https://github.com/GreenwoodLab/funtooNorm/releases"  ><b>here</b></a>.
+For more details, see the vignette provided in package or download .pdf file from <a href="https://github.com/GreenwoodLab/funtooNorm/releases"><b>here</b></a>.
 
