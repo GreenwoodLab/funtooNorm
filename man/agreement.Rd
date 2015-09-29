@@ -38,11 +38,11 @@
 
      #This call  will perform normalization of the data:
      ncmp <- 4
-     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL,
-                       controlred=matred, controlgrn=matgrn,
-                       cp.types=NULL, cell_type = cell_type,
-                       ncmp=4, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE,
-                       validate=FALSE)
+     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+                      controlred=matred, controlgrn=matgrn, 
+                      cp.types=NULL, cell_type = cell_type, 
+                      logged.data=FALSE, save.quant=TRUE, ncmp=ncmp, apply.fits=TRUE, 
+                      validate=FALSE)
  
      #To calculate measures of agreement before and  after normalization
      agreement(funtoonormout[[1]], individualID)

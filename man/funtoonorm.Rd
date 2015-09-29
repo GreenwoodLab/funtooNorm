@@ -9,73 +9,82 @@ This function performs normalization of Illumina Infinium Human Methylation 450 
 }
 \usage{
 funtoonorm(sigA, sigB, Annot = NULL, controlred, controlgrn,
-cp.types = NULL, cell_type, ncmp = 4, save.quant = TRUE, save.loess = TRUE,
-apply.loess = TRUE,  validate = FALSE)
+cp.types = NULL, cell_type, ncmp = 4, 
+ncv.fold = 10, logged.data=FALSE, save.quant=TRUE,
+type.fits="PCR", apply.fits = TRUE, validate = FALSE)
 }
 
 \arguments{
 \item{sigA, sigB}{
-Matrices containing the signal A and signal B results extracted from the IDAT files.
-}
-\item{controlred, controlgrn}{
-Matrices containing control probe data. 
+Matrices containing the signal A and signal B results extracted from the IDAT files.  (The user should know whether or not these data have undergone a log transformation prior to being sent into funtooNorm.)
 }
 \item{Annot}{
 Annotation matrix.  Supplied by default.
 }
- 
+\item{controlred, controlgrn}{
+Matrices containing control probe data. (Again, the user should know whether the data have been log transformed prior to calling funtooNorm).
+}
 \item{cp.types}{
-Vector of types of control probes. 
+Vector of types of control probes. (Often available as the row names from the control probe information).
 }
 \item{cell_type}{
 Vector of cell type (or tissue type) information.
 }
 \item{ncmp}{
-Number of partial least squares components used in the model fitting.
+Number of components, from either principal component regression or partial least squares regression, used in the model fitting when \verb{validate=FALSE}.
 }
+\item{ncv.fold}{
+Number of cross-validation partitions.
+}
+\item{logged.data}{
+Logical, \verb{TRUE} if data have been previously log transformed (sigA, sigB, controlred, controlgrn), and \verb{FALSE} if not.
+}
+
 \item{save.quant}{
 Logical, whether to save calculated quantiles.
 }
-\item{save.loess}{
-Logical, whether to save calculated results of loess regression.
+\item{type.fits}{
+Values are either \verb{"PLS"}, or \verb{"PCR"} for partial least squares or principal component regression, respectively. The default is \verb{"PCR"}.
 }
-\item{apply.loess}{
-Logical, whether to apply results of loess regression. If TRUE, two matrices are returned, one the data before normalization and one after normalization.  
-normalised beta values is returned.
+\item{apply.fits}{
+Logical, whether to apply results of the PCR/PLS fits to normalize the data. If \verb{TRUE}, two matrices are returned, one the data before normalization and one after normalization.  
+This would normally be set to \verb{FALSE} when \verb{validate=TRUE}. 
 }
 \item{validate}{
-Either FALSE, or the maximum number of PLS components to be explored in cross-validation.
-If FALSE, the normalization corrections are calculated using \verb{ncmp} partial least squares (PLS) components.  if not FALSE, then a number must be supplied.  This number will be the maximum number of PLS components used when exploring model fit performance across a range of \verb{ncmp} values ranging from 1 to the supplied number.
+Logical.  If \verb{FALSE}, the normalization corrections are calculated using \verb{ncmp} components.  
+If \verb{TRUE}, then a range of numbers of components are explored graphically. 
 }
 }
 \details{
-The funtooNorm function operates in one of two modes. If validate=FALSE, then the normalization corrections are calculated using the supplied value of \verb{ncmp} to fix the number of partial least squares (PLS) components.  If validate is an integer, K>1, (e.g. K=5), then cross-validation is performed exploring performance across a range of values for \verb{ncmp} ranging from 1 to K.
+The funtooNorm function operates in one of two modes. If \verb{validate=FALSE}, then the normalization corrections are calculated using the supplied value of \verb{ncmp} to specify the number of components.  
+If \verb{validate=TRUE}, then cross-validation is performed exploring performance across a range of values.  The maximum value is set to 8 to facilite the visualization of results.
 }
 \value{The values returned depend on the parameters chosen.
 \itemize{
-\item If validate is not FALSE (i.e. validate=K), the function creates a pdf file containing a series of plots showing residual error curves across percentiles of the signal distributions, to facilitate the choice of an appropriate value for \verb{ncmp}.   No object is returned by the function.
+\item If validate is TRUE the function creates two pdf files, each containing a series of plots showing root mean squared error curves across percentiles of the signal distributions, obtained from cross-validation, to facilitate the choice of an appropriate value for \verb{ncmp}.   No object is returned by the function.
 
-\item If validate = FALSE, then funtoonorm has the following behaviour:
+\item If validate is FALSE, then \verb{funtoonorm} has the following behaviour:
   \itemize{
-   \item If apply.loess = FALSE the function will not return any object.  
-         However, if save.loess=TRUE or if save.quant=TRUE then RData objects will be saved to disk for future use.
-   \item If apply.less= TRUE, then the function returns a list of 2 objects.  The first, 'origBeta', is the matrix of Beta avalues before normalization, and the second, 'newBeta' is the Beta values after normalization.
+   \item If apply.fits = FALSE the function will not return any object.  
+         However, if save.quant=TRUE then RData objects will be saved to disk for future use.
+   \item If apply.fits= TRUE, then the function returns a list of 2 objects.  The first, 'origBeta', is the matrix of Beta values before normalization, and the second, 'newBeta' is the Beta values after normalization.
   }
 }
 }
 
 \examples{
-%% to normalize methylation data:
-ncmp <- 4
-funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
-                      controlred=matred, controlgrn=matgrn, 
-                      cp.types=cp.types, cell_type = cell_type, 
-                       ncmp=ncmp, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, 
-                       validate=FALSE)
 %%to choose the number of components: 
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
-                      cp.types=cp.types, cell_type = cell_type,
-                      ncmp=4, save.quant=TRUE, save.loess=TRUE, 
-                      apply.loess=FALSE, validate=5)
+                      cp.types=NULL, cell_type = cell_type,
+                      logged.data=FALSE, save.quant=TRUE, apply.fits=FALSE,  
+                      validate=TRUE)
+%% to normalize methylation data, assuming save.quant was set to TRUE in the previous call:
+ncmp <- 4
+funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
+                      controlred=matred, controlgrn=matgrn, 
+                      cp.types=NULL, cell_type = cell_type, 
+                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE, 
+                      validate=FALSE)
+
 }

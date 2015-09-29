@@ -49,8 +49,6 @@ Percentiles of methylation levels may vary across cell types and hence the origi
 Normalization separately for each cell type may introduce unwanted variability if sample sizes are small.
 Therefore, this algorithm provides flexibility while optimizing the sample size used to estimate the corrections.
 
-A partial least squares (PLS) fit is included as the core of the algorithm, followed by smoothing across percentiles. 
-
 Note that the current version of the package does not do a good job of normalizing the Y chromosome probes; the funNorm method performs better.  
 In a subsequent version of the package we will address this issue. 
 
@@ -75,7 +73,7 @@ The program also requires the following information, but default matrices are pr
 \item \texttt{Annot:} An annotation table, containing information on probe names, probe type, and color (for probes of type I).  
 This can be extracted from the Illumina annotation information for the Infinium BeadChip.
 A default annotation table is provided if not supplied including all probes on the 450K array.
-\item  \texttt{cp.types:}  A list of the types of control probes to be used in the normalization.
+\item  \texttt{cp.types:}  A list of the types of control probes to be used in the normalization.  This may be obtainable from the row names of the control probe matrices (controlred, controlgrn).
 \end{itemize}
 
 Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
@@ -88,50 +86,75 @@ Here is a basic call to normalize this sample data set:
 %\begin{Verbatim}
 <<>>= 
     library(funtooNorm)
-    ncmp <- 4
+    ncmp <-4
     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
-                      ncmp=4, save.quant=TRUE, save.loess=TRUE, 
-                      apply.loess=TRUE, validate=FALSE)
+                      ncmp=4, ncv.fold=10, logged.data=FALSE, save.quant=TRUE, 
+                      type.fits="PCR", apply.fits=TRUE, validate=FALSE)
 
 @
 %\end{Verbatim}
-\texttt{save.quant} implies that the quantiles should be saved;  \texttt{save.loess} means that loess fits to the curves should be saved; \texttt{apply.loess} means that the normalization itself should be applied to all the data based on the loess fits;  \texttt{logit.quant} asks whether the quantiles should be logit-transformed prior to fitting PLS models.
+FuntooNorm will fit either principal component regression (PCR) or partial least squares regression (PLS) by specifying \texttt{type.fits="PCR"} or \texttt{type.fits="PLS"}.  The default is set to "PCR" to match funNorm. 
+An important user-chosen parameter is  \texttt{ncmp}, the number of components to be included in either of these two models; these components are calculated from the control probe data and cell type data.
 
-An important user-chosen parameter is  \texttt{ncmp}, the number of PLS components to be included in the model.  
-This can be chosen after examining a series of fits with different numbers of PLS components, together with a cross-validation procedure to assess how well the quantiles are modelled by the control probe data.  
-By setting $validate=N$, for a maximum of $N$ components, the algorithm will graph the cross-validated errors across the percentiles for
-models with $1, 2, ... , N$ PLS components.  
-Examination of these graphs will enable choice of the best value for \texttt{ncmp} for each data set.
+Choice of the number of components can be facilitated by examining a series of fits with different numbers of components. 
+When \texttt{validate=TRUE}, funtooNorm produces two files showing the root mean squared errors from cross-validated fits, for different numbers of components. Results are displayed across the quantiles of the signal distributions, separately for A and B signals, and for type I red, type I green, and type II probes.
+By default, funtooNorm will perform 10-fold cross-validation, but this can be changed with the parameter \texttt{ncv.fold}.
 
-The following call performs cross-validation to assess the performance of the model fitting for \texttt{ncmp} between 1 and 5.  
-Note that here the \texttt{ncmp} parameter is not specified.
+Other parameters include: \\
+\texttt{save.quant:} When \texttt{TRUE}, the quantiles should be saved. When \texttt{FALSE}, saved quantiles from a previous run will be loaded and used. \\
+\texttt{apply.fits:} When \texttt{TRUE}, the results of the model fitting process should be used - i.e. the original data should be normalized. This parameter can be set fo \texttt{FALSE} when exploring the desired number of components. \\
+\texttt{logged.data:} If \texttt{TRUE}, the \texttt{sigA} and \texttt{sigB} matrices, as well as the control probe data matrices (controlred, controlgrn) are assumed to have been previously log transformed prior to sending the data
+into the algorithm.  If \texttt{logged.data=FALSE}, then these data will be log transformed (log(1+x)) inside the algorithm. \\
+
+The following call performs cross-validation to assess the performance of the model fitting.  
+Note that here the \texttt{ncmp} parameter does not need to be specified.
 %\begin{Verbatim}
 <<>>= 
     #This call  will perform cross validation to find optimal value 
     #of parameter ncmp for PLS regression:
     funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
-                      controlred=matred, controlgrn=matgrn, 
-                      cp.types=cp.types, cell_type = cell_type,
-                      save.quant=TRUE, save.loess=TRUE, 
-                      apply.loess=FALSE, validate=5)
+                      controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
+                      ncv.fold=10, logged.data=FALSE, save.quant=TRUE, 
+                      type.fits="PCR", apply.fits=FALSE, validate = TRUE)
+
 
 @
 %\end{Verbatim}
 
-Calling the funtoonorm function with \texttt{validate = N} produce set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figure \ref{val}, the goal is to choose the smallest value of \texttt{ncmp} where the cross-validated error is small.
+Calling the funtoonorm function with \texttt{validate = TRUE} produces two files, corresponding to PCR and PLS regressions, where each file contains a set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figures \ref{val1} and \ref{val2} the goal is to choose the smallest value of \texttt{ncmp} where the cross-validated root mean squared error is fairly small across the quantiles.
 We have set 4 as the default value for \texttt{ncmp}.
 %%Add graph and explanations of its meaning.
 
 
-
-\begin{figure}[val]
+\begin{figure}[val1]
 \centering
-\includegraphics[width=10cm,height=10cm]{valid.jpg}
-\caption{Cross-validated errors across percentiles of the signal distributions for different numbers of PLS components.  Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val}
+\includegraphics[width=10cm,height=10cm]{validationcurvesPCRlow.jpg}
+\caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PCR components.  
+Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val1}
 \end{figure}
 
+\begin{figure}[val2]
+\centering
+\includegraphics[width=10cm,height=10cm]{validationcurvesPLSlow.jpg}
+\caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PLS components.  
+Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val2}
+\end{figure}
+
+
+After choosing a desired number of components, in order to run the program to normalize the data, 
+%\begin{Verbatim}
+<<>>= 
+    #This call  will normalize the data, using parameter ncmp for the number of components
+    # and PLR regresion
+    funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
+                      controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
+                      logged.data=FALSE, save.quant=FALSE, ncmp=4, 
+                      type.fits="PLS", apply.fits=TRUE, validate = FALSE)
+
+@
+%\end{Verbatim}
 
 To access the performance of normalization function one can use a measure of intra-replicate differences \texttt{M}, described in \cite{funtooNorm}. We provide a function \texttt{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of individual ID's. For the function to work some elements of individual's vector, obviously, should be identical. The returned value of \texttt{M} is expected to be similar for the data before and after normalization:
 %\begin{Verbatim}
@@ -143,11 +166,10 @@ agreement(funtoonormout$newBeta, individualID)  # M for data after normalization
 
 
 \begin{thebibliography}{}
-\bibitem{deLeeuw1976} de Leeuw, J., Young, F. W., and Takane, Y. (1976). Additive structure in qualitative data: An alternating least squares method with optimal scaling features. \emph{Psychometrika}, 41, 471-503.
 \bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization of 450K methylation array data improves replication in large cancer studies. \emph{Genome Biology},  15: p. 503.
 \bibitem{Aryee2014} Aryee, M.J., et al. (2014). Minfi: a flexible and comprehensive Bioconductor package for the analysis of Infinium DNA methylation microarrays. \emph{Bioinformatics}, 30(10): p. 1363-9.
 \bibitem{Smith2013} Smith M., et al. (2013). illuminaio:  An open source  IDAT  parsing  tool  for  Illumina  microarrays. \emph{F1000Research}, 2:264, 2013.
-\bibitem{funtooNorm}  Kathleen Oros Klein et al. (2015). \emph{funtooNorm:} An improvement of the funNorm normalization method for methylation data from multiple cell or tissue types.  Manuscript in preparation.  
+\bibitem{funtooNorm}  Kathleen Oros Klein et al. (2015). \emph{funtooNorm:} An improvement of the funNorm normalization method for methylation data from multiple cell or tissue types.  Manuscript submitted.  
 
 \end{thebibliography}
 \end{document}

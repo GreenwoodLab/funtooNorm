@@ -27,8 +27,9 @@ License: \tab GPL-3\cr
 %%    data("data")
 %%    ncmp <- 4
 %%   funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
-%%                      controlred=matred, controlgrn=matgrn, 
-%%                      cp.types=cp.types, cell_type = cell_type,
-%%                       ncmp=ncmp, save.quant=TRUE, save.loess=TRUE, apply.loess=TRUE, logit.quant=TRUE, validate=FALSE)
+%%                     controlred=matred, controlgrn=matgrn, 
+%%                      cp.types=cp.types, cell_type = cell_type, 
+%%                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE, 
+%%                      validate=FALSE)
     
 %%}
