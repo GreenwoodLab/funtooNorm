@@ -99,7 +99,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   if (NotNumeric(sigB)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(controlred)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(controlgrn)){stop("There are non-numeric values in the matrix", '\n')}
-  if (any(cell_type == '' | typeof(cell_type) != 'character' | is.na(cell_type))) {{stop("There are non-character values in cell_type", '\n')}}
+  if (any(cell_type == '' | typeof(levels(cell_type)) != 'character' | is.na(cell_type))) {{stop("There are non-character values in cell_type", '\n')}}
   if (length(unique(cell_type))<2) {{stop("There should be more that one tissue or cell type in cell_type variable", '\n')}}
   if (any(cp.types == '' | typeof(cp.types) != 'character' | is.na(cp.types))) {{stop("There are non-character values in cp.types", '\n')}}
   if (type.fits !="PCR" & type.fits !="PLS")  {{stop("type.fits must be either PCR or PLS","\n")}}
