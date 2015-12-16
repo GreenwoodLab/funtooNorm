@@ -72,6 +72,8 @@ If \verb{validate=TRUE}, then cross-validation is performed exploring performanc
 }
 }
 
+\seealso{\link[minfi]{preprocessFunnorm} in the \pkg{minfi} package}
+
 \examples{
 ## to choose the number of components:
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
