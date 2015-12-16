@@ -9,4 +9,8 @@ A matrix containing the signal B results from the Illumina Infinium HumanMethyla
 }
 \usage{sigBsample}
 
-
+\format{
+  A matrix with 20,000 rows (one per probe) and 93 columns (one per
+  sample). The rownames and colnames on the matrix are Illumina probe IDs
+  and sample IDs, respectively.
+}
