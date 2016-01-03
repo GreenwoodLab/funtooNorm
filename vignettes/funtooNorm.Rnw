@@ -217,6 +217,134 @@ grs
 @
 
 
+\subsection{Using the example data from \texttt{minfi}}
+Here we will show how to use the FuntooNorm functions on the
+\texttt{RGsetEx} example data of the \texttt{minfi} package.
+
+First, load the \texttt{minfiData} package that contains the example
+data set.
+<<>>=
+library(minfiData)
+@
+
+The \texttt{IlluminaHumanMethylation450kmanifest} object contains
+information on the array, which we need to extract various types of
+information from.
+<<>>=
+manifest <- getManifest(RGsetEx)
+@
+
+Information on the type of control probes on the array can be found
+like this:
+<<>>=
+ctrlInfo <- getProbeInfo(manifest, type="Control")
+unique(ctrlInfo$Type)
+@
+
+Next, let's load the \texttt{RGsetEx} data set and have a look at the
+summary of its contents:
+<<>>=
+data(RGsetEx)
+RGsetEx
+@
+The matrices with red and green signals need to be extracted first.
+<<>>=
+matRed <- getRed(RGsetEx)
+matGrn <- getGreen(RGsetEx)
+@
+
+The following code extracts the control probe data from the red and
+green matrices.
+<<>>=
+ctrlRed <- matRed[rownames(matRed) %in% ctrlInfo$Address,]
+ctrlGrn <- matGrn[rownames(matGrn) %in% ctrlInfo$Address,]
+@
+
+As the \texttt{minfi} vignette describes nicely, the 450k array
+contains two types of probes:
+\begin{quote}
+  CpGs measured using a Type I design are measured using a single
+  color, with two different probes in the same color channel providing
+  the methylated and the unmethylated measurements. CpGs measured
+  using a Type II design are measured using a single probe, and 1two
+  different colors provide the methylated and the unmethylated
+  measurements.
+\end{quote}
+Therefore, the procedure to extract the A (methylated) and B
+(unmethylated) signals from the \texttt{matRed} and \texttt{matGrn}
+matrices is slightly different for the Type I and Type II probes. The
+following code first extracts the information on the two probe Types
+from the manifest and then creates the signal A matrix for Type I
+probes. Note that \texttt{funtooNorm} requires the row names of the
+signal matrices to be the probe names whereas the \texttt{matRed} and
+\texttt{matGrn} matrices have the position as rownames.
+<<>>=
+typeI_info <- getProbeInfo(manifest, type="I")
+typeII_info <- getProbeInfo(manifest, type="II")
+
+typeIARed <- typeI_info[typeI_info$Color=="Red",]
+typeIAGrn <- typeI_info[typeI_info$Color=="Grn",]
+
+sigAIRed <- matRed[rownames(matRed) %in% typeIARed$AddressA,]
+rownames(sigAIRed) <- typeIARed$Name
+sigAIGrn <- matGrn[rownames(matGrn) %in% typeIAGrn$AddressA,]
+rownames(sigAIGrn) <- typeIAGrn$Name
+
+sigAI <- rbind(sigAIRed, sigAIGrn)
+@
+
+The extraction of the signal A matrix for Type II probes is much simpler:
+<<>>=
+sigAII <- matRed[rownames(matRed) %in% typeII_info$AddressA,]
+rownames(sigAII) <- typeII_info$Name
+@
+Now these the Type I and Type II signal A matrices can be combined:
+<<>>=
+sigA <- rbind(sigAI, sigAII)
+@
+The following code block repeats the same steps for the unmethylated B
+signal matrix:
+<<>>=
+typeIBRed <- typeI_info[typeI_info$Color=="Red",]
+typeIBGrn <- typeI_info[typeI_info$Color=="Grn",]
+
+sigBIRed <- matRed[rownames(matRed) %in% typeIBRed$AddressB,]
+rownames(sigBIRed) <- typeIBRed$Name
+sigBIGrn <- matGrn[rownames(matGrn) %in% typeIBGrn$AddressB,]
+rownames(sigBIGrn) <- typeIBGrn$Name
+
+sigBI <- rbind(sigBIRed, sigBIGrn)
+
+sigBII <- matGrn[rownames(matGrn) %in% typeII_info$AddressA,]
+rownames(sigBII) <- typeII_info$Name
+
+sigB <- rbind(sigBI, sigBII)
+@
+
+\texttt{funtooNorm} requires a vector with the cell type of each of
+the 6 amples in the RGsetEx data set.
+<<>>=
+cellType <- as.factor(c(rep("cellTypeA", 2), rep("cellTypeB", 4)))
+@
+
+For the \texttt{Annot} option of \texttt{funtooNorm} we set up the
+annotations selecting only the probes that are in the example data set
+and then order those according to the order in the signal matrices.
+<<>>=
+data(Annot)
+annot <- Annot[rownames(Annot) %in% rownames(sigA),]
+annot <- annot[match(rownames(sigA), rownames(annot)),]
+@
+
+After these conversion steps, we can run \texttt{funtooNorm()} on the
+\texttt{RgsetEx} data:
+<<>>=
+ftRGsetExOut <- funtoonorm(sigA=sigA, sigB=sigB, controlred=ctrlRed,
+                           controlgrn=ctrlGrn, cell_type=cellType,
+                           Annot=annot)
+@
+
+
 
 \begin{thebibliography}{}
 \bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization of 450K methylation array data improves replication in large cancer studies. \emph{Genome Biology},  15: p. 503.
