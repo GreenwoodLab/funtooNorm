@@ -128,14 +128,14 @@ We have set 4 as the default value for \texttt{ncmp}.
 %%Add graph and explanations of its meaning.
 
 
-\begin{figure}[val1]
+\begin{figure}[]
 \centering
 \includegraphics[width=10cm,height=10cm]{validationcurvesPCRlow.jpg}
 \caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PCR components.  
 Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val1}
 \end{figure}
 
-\begin{figure}[val2]
+\begin{figure}[]
 \centering
 \includegraphics[width=10cm,height=10cm]{validationcurvesPLSlow.jpg}
 \caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PLS components.  
