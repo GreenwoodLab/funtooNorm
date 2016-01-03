@@ -194,8 +194,8 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   # construct control probe summaries, averages by type of control probe
   # then specifically create columns by cell type
   for (k in (1:length(cp.types.tab))) {
-    temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]),],2,mean) 
-    temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]),],2,mean)
+    temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
+    temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
     if (k==1) {
       mat.by.ct <- cbind(temp1,temp2)  }
     if (k>1) {  mat.by.ct <- cbind(mat.by.ct, cbind(temp1,temp2))  }
