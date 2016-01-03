@@ -163,6 +163,59 @@ agreement(funtoonormout$origBeta, individualID) # M for data before the normaliz
 agreement(funtoonormout$newBeta, individualID)  # M for data after normalization
 @
 %\end{Verbatim} 
+\section{FuntooNorm and the minfi package}
+
+
+The \texttt{minfi} package~\cite{Aryee2014} contains several tools for
+analyzing and visualizing Illumina's 450k array data. This section
+shows the interoperability of this package with the
+\texttt{funtooNorm} package.
+<<>>=
+library(minfi)
+@
+
+
+\subsection{Downstream use of the funtooNorm output}
+Since normalization is rarely the final goal, this section shows how
+to convert the output of \texttt{funtooNorm()} (the
+\texttt{funtoonromout} object created in
+section~\ref{sec:package-use})to a \texttt{GenomicRatioSet} object, so
+that it can be used by other tools in \texttt{minfi} like
+\texttt{bumphunter()} or \texttt{blockFinder()}.
+
+A \texttt{GenomicRatioSet} object requires some phenotype information,
+so the following creates a \texttt{DataFrame}\footnote{The
+  \texttt{DataFrame} class is part of the
+  \href{http://www.bioconductor.org/packages/release/bioc/html/S4Vectors.html}{\texttt{S4Vectors}}
+  package on Bioconductor, which is loaded by \texttt{minfi}} with
+(random) gender information.
+<<>>=
+phenoData <- DataFrame(Sample_Name=colnames(funtoonormout$newBeta),
+                       sex=sample(c("M", "F"), 93, replace=TRUE))
+rownames(phenoData) <- phenoData$Sample_Name
+
+@
+
+<<>>=
+includedProbes <- Annot[which(Annot$probe %in%
+                              rownames(funtoonormout$newBeta)),]
+genomerange <- GRanges(seqnames=includedProbes$probe,
+                       ranges=includedProbes$Mapinfo, strand=NA)
+
+grs <- GenomicRatioSet(gr=genomerange,
+                       Beta=funtoonormout$newBeta,
+                       preprocessMethod="funtooNorm",
+                       pData=phenoData)
+
+@
+
+The default print method of a \texttt{GenomicRatioSet} object shows
+basic information of that object. In this example things were kept
+simple in order to show the bare necessities.
+<<>>=
+grs
+@
+
 
 
 \begin{thebibliography}{}
