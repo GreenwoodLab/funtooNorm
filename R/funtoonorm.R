@@ -99,7 +99,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   if (NotNumeric(sigB)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(controlred)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(controlgrn)){stop("There are non-numeric values in the matrix", '\n')}
-  if (any(cell_type == '' | typeof(cell_type) != 'character' | is.na(cell_type))) {{stop("There are non-character values in cell_type", '\n')}}
+  if (any(cell_type == '' | typeof(levels(cell_type)) != 'character' | is.na(cell_type))) {{stop("There are non-character values in cell_type", '\n')}}
   if (length(unique(cell_type))<2) {{stop("There should be more that one tissue or cell type in cell_type variable", '\n')}}
   if (any(cp.types == '' | typeof(cp.types) != 'character' | is.na(cp.types))) {{stop("There are non-character values in cp.types", '\n')}}
   if (type.fits !="PCR" & type.fits !="PLS")  {{stop("type.fits must be either PCR or PLS","\n")}}
@@ -194,8 +194,8 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   # construct control probe summaries, averages by type of control probe
   # then specifically create columns by cell type
   for (k in (1:length(cp.types.tab))) {
-    temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]),],2,mean) 
-    temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]),],2,mean)
+    temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
+    temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
     if (k==1) {
       mat.by.ct <- cbind(temp1,temp2)  }
     if (k>1) {  mat.by.ct <- cbind(mat.by.ct, cbind(temp1,temp2))  }

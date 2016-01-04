@@ -72,19 +72,21 @@ If \verb{validate=TRUE}, then cross-validation is performed exploring performanc
 }
 }
 
+\seealso{\link[minfi]{preprocessFunnorm} in the \pkg{minfi} package}
+
 \examples{
-%%to choose the number of components: 
+## to choose the number of components:
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
                       logged.data=FALSE, save.quant=TRUE, apply.fits=FALSE,  
                       validate=TRUE)
-%% to normalize methylation data, assuming save.quant was set to TRUE in the previous call:
+## to normalize methylation data, assuming save.quant was set to TRUE in the previous call:
 ncmp <- 4
-funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annotsample, 
-                      controlred=matred, controlgrn=matgrn, 
-                      cp.types=NULL, cell_type = cell_type, 
-                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE, 
+funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annot,
+                      controlred=matred, controlgrn=matgrn,
+                      cp.types=NULL, cell_type = cell_type,
+                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE,
                       validate=FALSE)
 
 }
