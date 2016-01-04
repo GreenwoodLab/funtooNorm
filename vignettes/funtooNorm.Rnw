@@ -53,6 +53,7 @@ Note that the current version of the package does not do a good job of normalizi
 In a subsequent version of the package we will address this issue. 
 
 \section{Package use}
+\label{sec:package-use}
 
 The user needs to provide the following information:
 \begin{itemize}
@@ -179,7 +180,7 @@ library(minfi)
 Since normalization is rarely the final goal, this section shows how
 to convert the output of \texttt{funtooNorm()} (the
 \texttt{funtoonromout} object created in
-section~\ref{sec:package-use})to a \texttt{GenomicRatioSet} object, so
+section~\ref{sec:package-use}) to a \texttt{GenomicRatioSet} object, so
 that it can be used by other tools in \texttt{minfi} like
 \texttt{bumphunter()} or \texttt{blockFinder()}.
 
