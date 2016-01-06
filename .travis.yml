@@ -5,6 +5,7 @@ bioc_packages:
   - BiocStyle
   - illuminaio
   - minfi
+  - minfiData
 
 r_binary_packages:
   - knitr
