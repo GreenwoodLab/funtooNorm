@@ -1,6 +1,9 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 funtooNorm.Rproj
 .Rbuildignore
-.gitignore
+# files created during vignette building
+*.pdf
+vignettes/*
+!vignettes/funtooNorm.Rnw
