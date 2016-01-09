@@ -74,7 +74,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   
   
   if (is.null(Annot))  {
-    cat("Since Annot is NULL using default annotation.", '\n')
+    message("Since Annot is NULL using default annotation.", '\n')
     data('Annot', package='funtooNorm', envir = environment())
   }
   
@@ -86,7 +86,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
       cp.types <- rownames(controlgrn)
     }
     if (!(any(names(cp.types.tab)=="NEGATIVE")))  {
-      cat("Since cp.types is NULL and rownames of control probe matrices do not contain,", "\n", 
+      message("Since cp.types is NULL and rownames of control probe matrices do not contain,", "\n", 
           "this information, analysis will use default cp.types.", '\n')
       data('cp.types', package='funtooNorm', envir = environment())
       cp.types.tab <- table(cp.types)
@@ -94,7 +94,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   }
   
   #checking sanity of the data
-  cat("Checking sanity of the data...", '\n')
+  message("Checking sanity of the data...", '\n')
   if (NotNumeric(sigA)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(sigB)){stop("There are non-numeric values in the matrix", '\n')}
   if (NotNumeric(controlred)){stop("There are non-numeric values in the matrix", '\n')}
@@ -125,7 +125,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     stop("apparent inconsistency w.r.t. log transformation of sigA/B data and control data \n")
   }
   if (max(sigA, na.rm=TRUE)>25) {
-    cat("Assuming data have not been previously log transformed, and applying a log transformation, \n")
+    message("Assuming data have not been previously log transformed, and applying a log transformation, \n")
     logged.data <- FALSE
   }
   
@@ -135,7 +135,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   cpg<-intersect(rownames(sigA), rownames(Annot))
   Annot=Annot[cpg,]
   
-  cat("Data is ok.", '\n')
+  message("Data is ok.", '\n')
   
   if (!logged.data) {        # log transformation if data are not already logged at input
     sigA <- log2(1 + sigA)
@@ -194,8 +194,10 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   # construct control probe summaries, averages by type of control probe
   # then specifically create columns by cell type
   for (k in (1:length(cp.types.tab))) {
-    temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
-    temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
+    # temp1 <- apply(controlred[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
+    # temp2 <- apply(controlgrn[cp.types==names(cp.types.tab[k]), , drop=FALSE],2,mean)
+    temp1 <- colMeans(controlred[cp.types==names(cp.types.tab[k]), , drop=FALSE])
+    temp2 <- colMeans(controlgrn[cp.types==names(cp.types.tab[k]), , drop=FALSE])
     if (k==1) {
       mat.by.ct <- cbind(temp1,temp2)  }
     if (k>1) {  mat.by.ct <- cbind(mat.by.ct, cbind(temp1,temp2))  }
@@ -231,7 +233,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
       stop('There may be a problem with the SVD decomposition of the control matrix: number of components needed is either>20 or missing', "\n")
     }
     
-    cat('\n', 'Starting validation with ', numcomp , ' components...',  '\n')
+    message('\n', 'Starting validation with ', numcomp , ' components...',  '\n')
     
     cores=1 #probably does not make sense to use parallelisation
     pls.options(parallel = cores)
@@ -287,19 +289,32 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     rmse2.Bgrn <- rmse1.Ared; rmse2.BII <- rmse1.Ared
     
     for (i.n in (1:numcomp)) {
-      rmse1.Ared[i.n,] <- sqrt(apply((mat1P.Ared[,,i.n]-quantilesA.red)^2, 2, sum))
-      rmse1.Agrn[i.n,] <- sqrt(apply((mat1P.Agrn[,,i.n]-quantilesA.grn)^2, 2, sum))
-      rmse1.AII[i.n,] <- sqrt(apply((mat1P.AII[,,i.n]-quantilesA.II)^2, 2, sum))
-      rmse1.Bred[i.n,] <- sqrt(apply((mat1P.Bred[,,i.n]-quantilesB.red)^2, 2, sum))
-      rmse1.Bgrn[i.n,] <- sqrt(apply((mat1P.Bgrn[,,i.n]-quantilesB.grn)^2, 2, sum))
-      rmse1.BII[i.n,] <- sqrt(apply((mat1P.BII[,,i.n]-quantilesB.II)^2, 2, sum))
+      # rmse1.Ared[i.n,] <- sqrt(apply((mat1P.Ared[,,i.n]-quantilesA.red)^2, 2, sum))
+      # rmse1.Agrn[i.n,] <- sqrt(apply((mat1P.Agrn[,,i.n]-quantilesA.grn)^2, 2, sum))
+      # rmse1.AII[i.n,] <- sqrt(apply((mat1P.AII[,,i.n]-quantilesA.II)^2, 2, sum))
+      # rmse1.Bred[i.n,] <- sqrt(apply((mat1P.Bred[,,i.n]-quantilesB.red)^2, 2, sum))
+      # rmse1.Bgrn[i.n,] <- sqrt(apply((mat1P.Bgrn[,,i.n]-quantilesB.grn)^2, 2, sum))
+      # rmse1.BII[i.n,] <- sqrt(apply((mat1P.BII[,,i.n]-quantilesB.II)^2, 2, sum))
+      # 
+      # rmse2.Ared[i.n,] <- sqrt(apply((mat2P.Ared[,,i.n]-quantilesA.red)^2, 2, sum))
+      # rmse2.Agrn[i.n,] <- sqrt(apply((mat2P.Agrn[,,i.n]-quantilesA.grn)^2, 2, sum))
+      # rmse2.AII[i.n,] <- sqrt(apply((mat2P.AII[,,i.n]-quantilesA.II)^2, 2, sum))
+      # rmse2.Bred[i.n,] <- sqrt(apply((mat2P.Bred[,,i.n]-quantilesB.red)^2, 2, sum))
+      # rmse2.Bgrn[i.n,] <- sqrt(apply((mat2P.Bgrn[,,i.n]-quantilesB.grn)^2, 2, sum))
+      # rmse2.BII[i.n,] <- sqrt(apply((mat2P.BII[,,i.n]-quantilesB.II)^2, 2, sum))
+      rmse1.Ared[i.n,] <- sqrt(colSums((mat1P.Ared[,,i.n]-quantilesA.red)^2))
+      rmse1.Agrn[i.n,] <- sqrt(colSums((mat1P.Agrn[,,i.n]-quantilesA.grn)^2))
+      rmse1.AII[i.n,] <- sqrt(colSums((mat1P.AII[,,i.n]-quantilesA.II)^2))
+      rmse1.Bred[i.n,] <- sqrt(colSums((mat1P.Bred[,,i.n]-quantilesB.red)^2))
+      rmse1.Bgrn[i.n,] <- sqrt(colSums((mat1P.Bgrn[,,i.n]-quantilesB.grn)^2))
+      rmse1.BII[i.n,] <- sqrt(colSums((mat1P.BII[,,i.n]-quantilesB.II)^2))
       
-      rmse2.Ared[i.n,] <- sqrt(apply((mat2P.Ared[,,i.n]-quantilesA.red)^2, 2, sum))
-      rmse2.Agrn[i.n,] <- sqrt(apply((mat2P.Agrn[,,i.n]-quantilesA.grn)^2, 2, sum))
-      rmse2.AII[i.n,] <- sqrt(apply((mat2P.AII[,,i.n]-quantilesA.II)^2, 2, sum))
-      rmse2.Bred[i.n,] <- sqrt(apply((mat2P.Bred[,,i.n]-quantilesB.red)^2, 2, sum))
-      rmse2.Bgrn[i.n,] <- sqrt(apply((mat2P.Bgrn[,,i.n]-quantilesB.grn)^2, 2, sum))
-      rmse2.BII[i.n,] <- sqrt(apply((mat2P.BII[,,i.n]-quantilesB.II)^2, 2, sum))
+      rmse2.Ared[i.n,] <- sqrt(colSums((mat2P.Ared[,,i.n]-quantilesA.red)^2))
+      rmse2.Agrn[i.n,] <- sqrt(colSums((mat2P.Agrn[,,i.n]-quantilesA.grn)^2))
+      rmse2.AII[i.n,] <- sqrt(colSums((mat2P.AII[,,i.n]-quantilesA.II)^2, 2))
+      rmse2.Bred[i.n,] <- sqrt(colSums((mat2P.Bred[,,i.n]-quantilesB.red)^2))
+      rmse2.Bgrn[i.n,] <- sqrt(colSums((mat2P.Bgrn[,,i.n]-quantilesB.grn)^2))
+      rmse2.BII[i.n,] <- sqrt(colSums((mat2P.BII[,,i.n]-quantilesB.II)^2))
     }
     
     pdf(file = 'validationcurves.PCR.pdf', height=7, width=7)
@@ -424,7 +439,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     
     #dev.off()
     
-    cat('Done. Check your working directory for the file "validationcurves.PCR.pdf" and validationcurves.PLS.pdf"', '\n')
+    message('Done. Check your working directory for the file "validationcurves.PCR.pdf" and validationcurves.PLS.pdf"', '\n')
     return()
   }    # end if validate
   #########################
