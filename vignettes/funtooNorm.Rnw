@@ -267,8 +267,7 @@ contains two types of probes:
   CpGs measured using a Type I design are measured using a single
   color, with two different probes in the same color channel providing
   the methylated and the unmethylated measurements. CpGs measured
-  using a Type II design are measured using a single probe, and 1two
-  different colors provide the methylated and the unmethylated
+  using a Type II design are measured using a single probe, and two different colors provide the methylated and the unmethylated 
   measurements.
 \end{quote}
 Therefore, the procedure to extract the A (methylated) and B
