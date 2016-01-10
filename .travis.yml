@@ -17,3 +17,4 @@ apt_packages:
 notifications:
   email:
     - maxime.turgeon@mail.mcgill.ca
+    - stepanv1@gmail.com
