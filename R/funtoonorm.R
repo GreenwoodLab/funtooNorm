@@ -13,7 +13,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   sum1 <- function(x, v2) { return(x + v2) }
   ##
   calcbeta <- function(A,B,offset) {
-    return((exp(B)-1)/(exp(A) + exp(B)-2 + offset))
+    return((2^B-1)/(2^A + 2^B-2 + offset))
   }
   extractqnt <- function(x, i, AB, ncmp)  { 
     return(x$fitted.values[i,AB,ncmp])  }
