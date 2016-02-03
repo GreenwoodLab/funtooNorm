@@ -2,7 +2,7 @@
 #Main function of the package.s
 funtoonorm <- function(sigA, sigB, Annot=NULL, 
                        controlred, controlgrn, cp.types=NULL, cell_type, ncmp=4,  ncv.fold=10, 
-                       logged.data = FALSE, save.quant=TRUE, type.fits="PCR", apply.fits=TRUE, validate=FALSE)
+                       logged2.data = FALSE, save.quant=TRUE, type.fits="PCR", apply.fits=TRUE, validate=FALSE)
 {
   ####################################################################################
   # functions
@@ -13,7 +13,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   sum1 <- function(x, v2) { return(x + v2) }
   ##
   calcbeta <- function(A,B,offset) {
-    return((exp(B)-1)/(exp(A) + exp(B)-2 + offset))
+    return((2^B-1)/(2^A + 2^B-2 + offset))
   }
   extractqnt <- function(x, i, AB, ncmp)  { 
     return(x$fitted.values[i,AB,ncmp])  }
@@ -125,8 +125,8 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     stop("apparent inconsistency w.r.t. log transformation of sigA/B data and control data \n")
   }
   if (max(sigA, na.rm=TRUE)>25) {
-    message("Assuming data have not been previously log transformed, and applying a log transformation, \n")
-    logged.data <- FALSE
+    message("Assuming data have not been previously log2 transformed, and applying a log2 transformation, \n")
+    logged2.data <- FALSE
   }
   
   
@@ -137,7 +137,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   
   message("Data is ok.", '\n')
   
-  if (!logged.data) {        # log transformation if data are not already logged at input
+  if (!logged2.data) {        # log transformation if data are not already logged at input
     sigA <- log2(1 + sigA)
     sigB <- log2(1 + sigB)
   }
@@ -186,7 +186,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     load("quantilesB.II.RData")
   }
   
-  if (!logged.data) {   # same assumption as for signalA, signalB w.r.t. log transformation
+  if (!logged2.data) {   # same assumption as for signalA, signalB w.r.t. log transformation
     controlgrn <- log2(1 + controlgrn)
     controlred <- log2(1 + controlred)
   }

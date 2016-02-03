@@ -10,7 +10,7 @@ This function performs normalization of Illumina Infinium Human Methylation 450 
 \usage{
 funtoonorm(sigA, sigB, Annot = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, 
-ncv.fold = 10, logged.data=FALSE, save.quant=TRUE,
+ncv.fold = 10, logged2.data=FALSE, save.quant=TRUE,
 type.fits="PCR", apply.fits = TRUE, validate = FALSE)
 }
 
@@ -36,8 +36,8 @@ Number of components, from either principal component regression or partial leas
 \item{ncv.fold}{
 Number of cross-validation partitions.
 }
-\item{logged.data}{
-Logical, \verb{TRUE} if data have been previously log transformed (sigA, sigB, controlred, controlgrn), and \verb{FALSE} if not.
+\item{logged2.data}{
+Logical, \verb{TRUE} if data have been previously log2 transformed (sigA, sigB, controlred, controlgrn), and \verb{FALSE} if not.
 }
 
 \item{save.quant}{
@@ -79,14 +79,14 @@ If \verb{validate=TRUE}, then cross-validation is performed exploring performanc
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
-                      logged.data=FALSE, save.quant=TRUE, apply.fits=FALSE,  
+                      logged2.data=FALSE, save.quant=TRUE, apply.fits=FALSE,  
                       validate=TRUE)
 ## to normalize methylation data, assuming save.quant was set to TRUE in the previous call:
 ncmp <- 4
 funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annot,
                       controlred=matred, controlgrn=matgrn,
                       cp.types=NULL, cell_type = cell_type,
-                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE,
+                      logged2.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE,
                       validate=FALSE)
 
 }

@@ -29,7 +29,7 @@ License: \tab GPL-3\cr
 %%   funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=Annot,
 %%                     controlred=matred, controlgrn=matgrn,
 %%                      cp.types=cp.types, cell_type = cell_type,
-%%                      logged.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE,
+%%                      logged2.data=FALSE, save.quant=FALSE, ncmp=ncmp, apply.fits=TRUE,
 %%                      validate=FALSE)
     
 %%}
