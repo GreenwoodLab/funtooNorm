@@ -125,7 +125,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     stop("apparent inconsistency w.r.t. log transformation of sigA/B data and control data \n")
   }
   if (max(sigA, na.rm=TRUE)>25) {
-    message("Assuming data have not been previously log transformed, and applying a log transformation, \n")
+    message("Assuming data have not been previously log2 transformed, and applying a log2 transformation, \n")
     logged2.data <- FALSE
   }
   
