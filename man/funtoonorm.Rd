@@ -10,7 +10,7 @@ This function performs normalization of Illumina Infinium Human Methylation 450 
 \usage{
 funtoonorm(sigA, sigB, Annot = NULL, controlred, controlgrn,
 cp.types = NULL, cell_type, ncmp = 4, 
-ncv.fold = 10, logged.data=FALSE, save.quant=TRUE,
+ncv.fold = 10, logged2.data=FALSE, save.quant=TRUE,
 type.fits="PCR", apply.fits = TRUE, validate = FALSE)
 }
 
