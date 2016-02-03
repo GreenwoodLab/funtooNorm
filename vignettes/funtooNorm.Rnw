@@ -91,7 +91,7 @@ Here is a basic call to normalize this sample data set:
     funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
                       controlred=matred, controlgrn=matgrn, 
                       cp.types=NULL, cell_type = cell_type,
-                      ncmp=4, ncv.fold=10, logged.data=FALSE, save.quant=TRUE, 
+                      ncmp=4, ncv.fold=10, logged2.data=FALSE, save.quant=TRUE, 
                       type.fits="PCR", apply.fits=TRUE, validate=FALSE)
 
 @
@@ -117,7 +117,7 @@ Note that here the \texttt{ncmp} parameter does not need to be specified.
     #of parameter ncmp for PLS regression:
     funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
-                      ncv.fold=10, logged.data=FALSE, save.quant=TRUE, 
+                      ncv.fold=10, logged2.data=FALSE, save.quant=TRUE, 
                       type.fits="PCR", apply.fits=FALSE, validate = TRUE)
 
 
@@ -151,7 +151,7 @@ After choosing a desired number of components, in order to run the program to no
     # and PLR regresion
     funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
                       controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
-                      logged.data=FALSE, save.quant=FALSE, ncmp=4, 
+                      logged2.data=FALSE, save.quant=FALSE, ncmp=4, 
                       type.fits="PLS", apply.fits=TRUE, validate = FALSE)
 
 @
@@ -259,6 +259,7 @@ green matrices.
 <<>>=
 ctrlRed <- matRed[rownames(matRed) %in% ctrlInfo$Address,]
 ctrlGrn <- matGrn[rownames(matGrn) %in% ctrlInfo$Address,]
+cp.types<-ctrlInfo$Type[match(rownames(ctrlRed),ctrlInfo$Address)]
 @
 
 As the \texttt{minfi} vignette describes nicely, the 450k array
@@ -281,44 +282,22 @@ signal matrices to be the probe names whereas the \texttt{matRed} and
 <<>>=
 typeI_info <- getProbeInfo(manifest, type="I")
 typeII_info <- getProbeInfo(manifest, type="II")
+snpI_info <- getProbeInfo(manifest, type="SnpI")
+snpII_info <- getProbeInfo(manifest, type="SnpII")
 
-typeIARed <- typeI_info[typeI_info$Color=="Red",]
-typeIAGrn <- typeI_info[typeI_info$Color=="Grn",]
+probeID <-c(typeI_info$Name, typeII_info$Name, snpI_info$Name, snpII_info$Name) 
+address<- c(typeI_info$AddressA, typeII_info$AddressA, snpI_info$AddressA, snpII_info$AddressA)  
 
-sigAIRed <- matRed[rownames(matRed) %in% typeIARed$AddressA,]
-rownames(sigAIRed) <- typeIARed$Name
-sigAIGrn <- matGrn[rownames(matGrn) %in% typeIAGrn$AddressA,]
-rownames(sigAIGrn) <- typeIAGrn$Name
+  
 
-sigAI <- rbind(sigAIRed, sigAIGrn)
 @
 
 The extraction of the signal A matrix for Type II probes is much simpler:
 <<>>=
-sigAII <- matRed[rownames(matRed) %in% typeII_info$AddressA,]
-rownames(sigAII) <- typeII_info$Name
-@
-Now these the Type I and Type II signal A matrices can be combined:
-<<>>=
-sigA <- rbind(sigAI, sigAII)
-@
-The following code block repeats the same steps for the unmethylated B
-signal matrix:
-<<>>=
-typeIBRed <- typeI_info[typeI_info$Color=="Red",]
-typeIBGrn <- typeI_info[typeI_info$Color=="Grn",]
-
-sigBIRed <- matRed[rownames(matRed) %in% typeIBRed$AddressB,]
-rownames(sigBIRed) <- typeIBRed$Name
-sigBIGrn <- matGrn[rownames(matGrn) %in% typeIBGrn$AddressB,]
-rownames(sigBIGrn) <- typeIBGrn$Name
-
-sigBI <- rbind(sigBIRed, sigBIGrn)
-
-sigBII <- matGrn[rownames(matGrn) %in% typeII_info$AddressA,]
-rownames(sigBII) <- typeII_info$Name
-
-sigB <- rbind(sigBI, sigBII)
+sigA<-matRed[rownames(matRed) %in% address,]
+    rownames(sigA)=probeID[match(rownames(sigA),address)]
+sigB<-matGrn[rownames(matGrn) %in% address,]
+    rownames(sigB)=probeID[match(rownames(sigB),address)
 @
 
 \texttt{funtooNorm} requires a vector with the cell type of each of
@@ -340,7 +319,8 @@ After these conversion steps, we can run \texttt{funtooNorm()} on the
 \texttt{RgsetEx} data:
 <<>>=
 ftRGsetExOut <- funtoonorm(sigA=sigA, sigB=sigB, controlred=ctrlRed,
-                           controlgrn=ctrlGrn, cell_type=cellType,
+                           controlgrn=ctrlGrn, logged2.data=FALSE,
+                           cp.types=cp.types,cell_type=cellType,
                            Annot=annot)
 @
 
