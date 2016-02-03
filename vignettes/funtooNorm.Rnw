@@ -292,12 +292,12 @@ address<- c(typeI_info$AddressA, typeII_info$AddressA, snpI_info$AddressA, snpII
 
 @
 
-The extraction of the signal A matrix for Type II probes is much simpler:
+Extraction of the signal A matrix and signal B matrix:
 <<>>=
 sigA<-matRed[rownames(matRed) %in% address,]
     rownames(sigA)=probeID[match(rownames(sigA),address)]
 sigB<-matGrn[rownames(matGrn) %in% address,]
-    rownames(sigB)=probeID[match(rownames(sigB),address)
+    rownames(sigB)=probeID[match(rownames(sigB),address)]
 @
 
 \texttt{funtooNorm} requires a vector with the cell type of each of
