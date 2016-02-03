@@ -80,7 +80,7 @@ A default annotation table is provided if not supplied including all probes on t
 Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
 
 We have provided a small data set containing $N=93$ individuals and 20,000 probes to demonstrate the usage of the package. 
-The samples are either from cord blood or foetal placenta tissue. 
+The samples are either from cord blood or fetal placental tissue. 
 
 Here is a basic call to normalize this sample data set: 
  %The code to be inserted
@@ -106,8 +106,8 @@ By default, funtooNorm will perform 10-fold cross-validation, but this can be ch
 Other parameters include: \\
 \texttt{save.quant:} When \texttt{TRUE}, the quantiles should be saved. When \texttt{FALSE}, saved quantiles from a previous run will be loaded and used. \\
 \texttt{apply.fits:} When \texttt{TRUE}, the results of the model fitting process should be used - i.e. the original data should be normalized. This parameter can be set fo \texttt{FALSE} when exploring the desired number of components. \\
-\texttt{logged.data:} If \texttt{TRUE}, the \texttt{sigA} and \texttt{sigB} matrices, as well as the control probe data matrices (controlred, controlgrn) are assumed to have been previously log transformed prior to sending the data
-into the algorithm.  If \texttt{logged.data=FALSE}, then these data will be log transformed (log(1+x)) inside the algorithm. \\
+\texttt{logged2.data:} If \texttt{TRUE}, the \texttt{sigA} and \texttt{sigB} matrices, as well as the control probe data matrices (controlred, controlgrn) are assumed to have been previously log2 transformed prior to sending the data
+into the algorithm.  If \texttt{logged2.data=FALSE}, then these data will be log2 transformed (log2(1+x)) inside the algorithm. \\
 
 The following call performs cross-validation to assess the performance of the model fitting.  
 Note that here the \texttt{ncmp} parameter does not need to be specified.
