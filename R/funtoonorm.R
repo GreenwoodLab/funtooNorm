@@ -158,18 +158,14 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   ####! TO DO good to add special treatment of Y chromosome.  See Fortin et al. particularly for Y
   ## columns of quantilesA,B are the desired quantiles.  Rows are samples
   if (save.quant)  {
-    quantilesA.red <- matrix(NA, ncol(sigA), nqnt)   
-    quantilesA.grn <- quantilesA.red;  quantilesA.II <- quantilesA.red
-    quantilesB.red <- matrix(NA, ncol(sigA), nqnt)  
-    quantilesB.grn <- quantilesA.red; quantilesB.II <- quantilesA.red      
-    for (i in (1:ncol(sigA)))  {
-      quantilesA.red[i,] <- quantile(sigA[wh.red,i],qntllist) 
-      quantilesA.grn[i,] <- quantile(sigA[wh.grn,i],qntllist)
-      quantilesA.II[i,] <-  quantile(sigA[wh.II,i],qntllist)
-      quantilesB.red[i,] <- quantile(sigB[wh.red,i],qntllist)
-      quantilesB.grn[i,] <- quantile(sigB[wh.grn,i],qntllist)
-      quantilesB.II[i,] <-  quantile(sigB[wh.II,i],qntllist)
-    }
+    # *temp* seem to take 20% less of time on the small data set
+    quantilesA.red <- colQuantiles(sigA[wh.red,],prob=qntllist) 
+    quantilesA.grn <- colQuantiles(sigA[wh.grn,],prob=qntllist)
+    quantilesA.II <-  colQuantiles(sigA[wh.II,],prob=qntllist)
+    quantilesB.red <- colQuantiles(sigB[wh.red,],prob=qntllist)
+    quantilesB.grn <- colQuantiles(sigB[wh.grn,],prob=qntllist)
+    quantilesB.II <-  colQuantiles(sigB[wh.II,],prob=qntllist)
+    
     save(quantilesA.red, file="quantilesA.red.RData")
     save(quantilesA.grn, file="quantilesA.grn.RData")
     save(quantilesA.II, file="quantilesA.II.RData")
@@ -202,16 +198,31 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
       mat.by.ct <- cbind(temp1,temp2)  }
     if (k>1) {  mat.by.ct <- cbind(mat.by.ct, cbind(temp1,temp2))  }
   } # end for   mat.by.ct is 15 columns - means for each type of control probe
+}
+
+
+if(FALSE){
+  # Unfinished idea to go faster ...
+  # construct control probe summaries, averages by type of control probe
+  # then specifically create columns by cell type
+  r=data.table(controlred,cp.types)
+  r$col="red"
+  g=data.table(controlgrn,cp.types)
+  g$col="grn"
+  t=rbind(r,g)[, lapply(.SD, mean), by=c(cp.types,col)]
+  # end for   mat.by.ct is 30 columns - means for each type of control probe
+}
+
+
+
   
-  ind=matrix(FALSE,ncol=length(cell_type),nrow=length(unique(cell_type)))
-  for(j in 1:length(unique(cell_type))){
-    ind[j,]<- (cell_type==names(table(cell_type))[j])
+
+  # now add additional sets of 30 columns, each specific to one cell type
+  ctl.covmat <- mat.by.ct
+  for(ct in rev(unique(cell_type))){
+    ctl.covmat <- cbind(ctl.covmat, apply(mat.by.ct, 2, mult1, c(cell_type==ct)))
   }
-  # now add additional sets of 15 columns, each specific to one cell type
-  ctl.covmat <- cbind(mat.by.ct, apply(mat.by.ct, 2, mult1, ind[1,]))
-  for(j in 2:length(unique(cell_type))){
-    ctl.covmat <- cbind(ctl.covmat, apply(mat.by.ct, 2, mult1, ind[j,]))
-  }
+  
   
   svd.ctlcovmat <- svd(ctl.covmat)
   numcomp <- min(c(which(cumsum(svd.ctlcovmat$d)/sum(svd.ctlcovmat$d)>=0.98),8))  # set max to 8
@@ -223,7 +234,14 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   }
   if (!save.quant)  {
     load("svd.ctlcovmat.RData")
-  }
+
+  
+  
+  
+  
+  
+  
+  
   
   ######################################################################################
   #validation chunk
