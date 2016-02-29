@@ -6,17 +6,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
 {
   ####################################################################################
   # functions
-  logitfn <- function(x) { log(x/(1-x)) }
-  ##
   mult1 <- function(x, vec1) return(x*vec1)
-  ##
-  sum1 <- function(x, v2) { return(x + v2) }
-  ##
-  calcbeta <- function(A,B,offset) {
-    return((2^B-1)/(2^A + 2^B-2 + offset))
-  }
-  extractqnt <- function(x, i, AB, ncmp)  { 
-    return(x$fitted.values[i,AB,ncmp])  }
   ##
   NotNumeric<-function(a){
     return(any(!is.finite(as.matrix(a)))) 
@@ -41,30 +31,21 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     rankmatB.grn <- (apply(sigB[wh.grn,],2,  rank) - 0.5)/length(wh.grn)
     rankmatB.II <- (apply(sigB[wh.II,],2,  rank) - 0.5)/length(wh.II)
     
-    predmatA.red <- matrix(NA, nrow=nrow(rankmatA.red), ncol = ncol(rankmatA.red))
-    predmatA.grn <- matrix(NA, nrow=nrow(rankmatA.grn), ncol = ncol(rankmatA.grn))
-    predmatA.II <- matrix(NA, nrow=nrow(rankmatA.II), ncol = ncol(rankmatA.II))
-    predmatB.red <- matrix(NA, nrow=nrow(rankmatB.red), ncol = ncol(rankmatB.red))
-    predmatB.grn <- matrix(NA, nrow=nrow(rankmatB.grn), ncol = ncol(rankmatB.grn))
-    predmatB.II <- matrix(NA, nrow=nrow(rankmatB.II), ncol = ncol(rankmatB.II))
+    predmatA <- matrix(NA, nrow(sigA), ncol(sigA))
+    predmatB <- matrix(NA, nrow(sigA), ncol(sigA))
     for (i in (1:ncol(predmatA.red)))  {
-      predmatA.red[,i]<-approx(qntllist,lfits[[1]][i,],xout=rankmatA.red[,i])$y
-      predmatA.grn[,i]<-approx(qntllist,lfits[[2]][i,],xout=rankmatA.grn[,i])$y
-      predmatA.II[,i]<-approx(qntllist,lfits[[3]][i,],xout=rankmatA.II[,i])$y
-      predmatB.red[,i]<-approx(qntllist,lfits[[4]][i,],xout=rankmatB.red[,i])$y
-      predmatB.grn[,i]<-approx(qntllist,lfits[[5]][i,],xout=rankmatB.grn[,i])$y
-      predmatB.II[,i]<-approx(qntllist,lfits[[6]][i,],xout=rankmatB.II[,i])$y
+      predmatA[wh.red,i]<-approx(qntllist,lfits[[1]][i,],xout=rankmatA.red[,i])$y
+      predmatA[wh.grn,i]<-approx(qntllist,lfits[[2]][i,],xout=rankmatA.grn[,i])$y
+      predmatA[wh.II,i]<-approx(qntllist,lfits[[3]][i,],xout=rankmatA.II[,i])$y
+      predmatB[wh.red,i]<-approx(qntllist,lfits[[4]][i,],xout=rankmatB.red[,i])$y
+      predmatB[wh.grn,i]<-approx(qntllist,lfits[[5]][i,],xout=rankmatB.grn[,i])$y
+      predmatB[wh.II,i]<-approx(qntllist,lfits[[6]][i,],xout=rankmatB.II[,i])$y
     }
-    predmatA <- matrix(NA, nrow(sigA), ncol(predmatA.red))
-    predmatB <- predmatA
-    predmatA[wh.red,] <- predmatA.red
-    predmatA[wh.grn,] <- predmatA.grn
-    predmatA[wh.II,] <- predmatA.II
-    predmatB[wh.red,] <- predmatB.red
-    predmatB[wh.grn,] <- predmatB.grn
-    predmatB[wh.II,] <- predmatB.II
     
-    newBeta <- calcbeta(predmatA, predmatB, denom.offset)        
+    newBeta <- calcbeta(predmatA, predmatB, denom.offset)
+    calcbeta <- function(A,B,offset) {
+      return((2^B-1)/(2^A + 2^B-2 + offset))
+    }
     origBeta <- as.matrix(calcbeta(sigA, sigB, denom.offset))
     rownames(newBeta) <- rownames(origBeta)
     colnames(newBeta) <- colnames(origBeta)
@@ -140,11 +121,14 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
   if (!logged2.data) {        # log transformation if data are not already logged at input
     sigA <- log2(1 + sigA)
     sigB <- log2(1 + sigB)
+    controlgrn <- log2(1 + controlgrn)
+    controlred <- log2(1 + controlred)
   }
   
   wh.red <- which(Annot$Type=='I' & Annot$Color=="Red")
   wh.grn <- which(Annot$Type=='I' & Annot$Color=="Grn")
   wh.II <- which(Annot$Type=='II')
+  
   
   nr <- nrow(sigA)  
   qntllist <- c(seq((0.5)/nr, 0.0009, 0.0001), seq(0.001, 0.009, 0.001), seq(0.01,0.99,0.002), 
@@ -172,8 +156,7 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     save(quantilesB.red, file="quantilesB.red.RData")
     save(quantilesB.grn, file="quantilesB.grn.RData")
     save(quantilesB.II, file="quantilesB.II.RData")
-  }  # if save.quant
-  if (!save.quant)  {
+  }  else  {
     load("quantilesA.red.RData")
     load("quantilesA.grn.RData")
     load("quantilesA.II.RData")
@@ -182,10 +165,6 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     load("quantilesB.II.RData")
   }
   
-  if (!logged2.data) {   # same assumption as for signalA, signalB w.r.t. log transformation
-    controlgrn <- log2(1 + controlgrn)
-    controlred <- log2(1 + controlred)
-  }
   
   # construct control probe summaries, averages by type of control probe
   # then specifically create columns by cell type
@@ -197,8 +176,8 @@ funtoonorm <- function(sigA, sigB, Annot=NULL,
     if (k==1) {
       mat.by.ct <- cbind(temp1,temp2)  }
     if (k>1) {  mat.by.ct <- cbind(mat.by.ct, cbind(temp1,temp2))  }
-  } # end for   mat.by.ct is 15 columns - means for each type of control probe
-}
+  } # end for   mat.by.ct is 30 columns - means for each type of control probe
+
 
 
 if(FALSE){
@@ -231,10 +210,9 @@ if(FALSE){
   
   if (save.quant)  {
     save(svd.ctlcovmat, file="svd.ctlcovmat.RData")
-  }
-  if (!save.quant)  {
+  } else  {
     load("svd.ctlcovmat.RData")
-
+  }
   
   
   
@@ -463,20 +441,17 @@ if(FALSE){
   #########################
   
   # could add in here different values of ncmp for different probe types  
-  predA.red <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  predA.grn <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  predA.II <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  predB.red <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  predB.grn <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  predB.II <- matrix(NA, nrow = ncol(sigA), ncol = nqnt)
-  for (j in (1:nqnt)) {
-    predA.red[,j] <- mvr(quantilesA.red[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-    predB.red[,j] <- mvr(quantilesB.red[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-    predA.grn[,j] <- mvr(quantilesA.grn[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-    predB.grn[,j] <- mvr(quantilesB.grn[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-    predA.II[,j] <- mvr(quantilesA.II[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-    predB.II[,j] <- mvr(quantilesB.II[,j] ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp]
-  } # for j
+  
+  regression <- function(x) return(mvr(x ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp])
+  
+  predA.red <- apply(quantilesA.red,2,regression)
+  predA.grn <- apply(quantilesA.grn,2,regression)
+  predA.II <- apply(quantilesA.II,2,regression)
+  predB.red <- apply(quantilesB.red,2,regression)
+  predB.grn <- apply(quantilesB.grn,2,regression)
+  predB.II <- apply(quantilesB.II,2,regression)
+
+  
   
   lfits <- list(predA.red, predA.grn, predA.II, 
                 predB.red, predB.grn, predB.II)
