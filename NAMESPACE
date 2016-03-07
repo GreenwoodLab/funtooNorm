@@ -1,2 +1,2 @@
-import('pls')
+import('pls','matrixStats')
 export('funtoonorm', 'agreement')
