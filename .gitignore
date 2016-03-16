@@ -7,3 +7,4 @@ funtooNorm.Rproj
 *.pdf
 vignettes/*
 !vignettes/funtooNorm.Rnw
+!vignettes/funtooNorm.pdf
