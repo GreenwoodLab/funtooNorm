@@ -1,4 +1,4 @@
-
+################################################################################
 ## Here we define a way to read manifest files and datasets
 ## chipType can be 450K or 850K
 ## Most of the complexity is handdled in the way the manifest file is organised
@@ -57,7 +57,8 @@ readManifestFile <- function(chipType = "450K",manifestFile= NULL,minimal=TRUE) 
                          skip = assay.line + 1L, colClasses = colClasses,
                          nrows = control.line - assay.line - 2L)
   
-  snpPositions=grep("^rs", manifest$Name)
+  # TOCHECK  There is also some ch2.141432 that are still in the methylations positions .
+  snpPositions=grep("^rs", manifest$Name) 
   SNP=manifest[snpPositions,]
   CpG=manifest[-snpPositions,]
   
@@ -104,7 +105,7 @@ readManifestFile <- function(chipType = "450K",manifestFile= NULL,minimal=TRUE) 
   list(chipType=chipType,CpG=CpG,SNP=SNP,controls=controls)
 }
 
-manifest450K=readManifestFile("450K")
+#manifest450K=readManifestFile("450K")
 manifest850K=readManifestFile("850K")
 
 
