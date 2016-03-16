@@ -6,10 +6,8 @@ agreement <- function(Beta, individualID) {
     if(pt.table[j]==1) {next()}
     which.pt <- which(individualID == names(pt.table)[j])
     mat.temp <- Beta[,which.pt]
-    mat.diffs <- apply(mat.temp, 1,
-                       function(x) { tmp <- outer(x,x,"-")^2
-                       sum(tmp[upper.tri(tmp)])/
-                         sum(upper.tri(tmp) )   } )
+    combs=combn(1:ncol(mat.temp),2)
+    mat.diffs=rowSums(apply(combs,2,function(x){(mat.temp[,x[1]]-mat.temp[,x[2]])^2}))/ncol(combs)
     
     sum.over.pt <- sum.over.pt + mat.diffs
   } 
