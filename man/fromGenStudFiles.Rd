@@ -11,13 +11,17 @@ fromGenStudFiles(controlProbeFile, signalFile, cell_type)
 
 \item{signalFile}{file exported from GenomeStudio with the exact same samples}
 
-\item{cell_type}{vector should have names matching the 2 files from genome
-studios, and at least 2 cell types.}
+\item{cell_type}{this vector should have names matching all the sample in the
+files from genome studios, and at least 2 different cell types.}
 }
 \value{
 a SampleSet object
 }
 \description{
 create a sample set from GenomeStudio files
+}
+\examples{
+ myNewSampleSet <- fromRGChannelSet("ControlProbeProfile.txt",
+"SignalIntensity.txt",cell_type)
 }
 

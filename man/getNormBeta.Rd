@@ -12,10 +12,13 @@ getNormBeta(object, offset = 100)
 \item{offset}{default is 100 as Illumina standard}
 }
 \value{
-a matrix containing beta after normalization value for each position
-and each samples
+a matrix containing beta after normalization value for each CpG 
+position and each samples
 }
 \description{
 compute the beta value after normalization for each position and each sample
+}
+\examples{
+myNormBetaMatrix  <-getNormBeta(mySampleSet)
 }
 

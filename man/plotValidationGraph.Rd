@@ -16,4 +16,7 @@ plotValidationGraph(object, type.fits = "PCR", file = "")
 \description{
 Plot a series of graphs with different numbers of components for each signal
 }
+\examples{
+plotValidationGraph(mySampleSet,file="myPlots.pdf")
+}
 

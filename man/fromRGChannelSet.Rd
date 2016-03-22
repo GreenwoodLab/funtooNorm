@@ -16,4 +16,7 @@ a SampleSet object
 \description{
 create a SampleSet from RGSet from minfi package
 }
+\examples{
+myNewSampleSet <- fromRGChannelSet(objectOfTypeRGChannelSet)
+}
 

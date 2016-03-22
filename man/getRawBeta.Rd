@@ -17,4 +17,7 @@ a matrix containing beta value for each position and each samples
 \description{
 compute the beta value of the raw signal for each position and each sample
 }
+\examples{
+myRawBetaMatrix  <- getRawBeta(mySampleSet)
+}
 

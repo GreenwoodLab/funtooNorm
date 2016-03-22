@@ -14,7 +14,8 @@ funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE)
 
 \item{ncmp}{number of component use for anaysis (default 4)}
 
-\item{force}{tu re-compute the normalisation whent it is already done}
+\item{force}{set it to TRUE in order to re-compute the normalisation whent 
+it is already done}
 }
 \value{
 a SampleSet containing the normalised signal
@@ -22,5 +23,8 @@ a SampleSet containing the normalised signal
 \description{
 This function apply the normalization method central to the package on each
 signal
+}
+\examples{
+mySampleSet  <- funtooNorm(mySampleSet)
 }
 

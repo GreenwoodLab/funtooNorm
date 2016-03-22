@@ -12,4 +12,7 @@
 \description{
 Print information about the SampleSet
 }
+\examples{
+mySampleSet
+}
 
