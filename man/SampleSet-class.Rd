@@ -4,10 +4,19 @@
 \name{SampleSet-class}
 \alias{SampleSet-class}
 \title{SampleSet are S3 objects define for the purpose of runing funtooNorm
-algorithm}
+algorithm, they are list containing signal data and different variables
+usefull for funtooNorm. The data is separated into the 3 probes type, having
+2 channels (methylated and unmethylated ie : A and B.
+We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII}
+\value{
+a SampleSet object
+}
 \description{
 SampleSet are S3 objects define for the purpose of runing funtooNorm
-algorithm
+algorithm, they are list containing signal data and different variables
+usefull for funtooNorm. The data is separated into the 3 probes type, having
+2 channels (methylated and unmethylated ie : A and B.
+We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
 }
 \section{Slots}{
 
@@ -15,7 +24,7 @@ algorithm
 \item{\code{type}}{character: is 'minfi' or 'GenomeStudio'}
 
 \item{\code{sampleNames}}{character vector:
-contain the list of sample names in the order used}
+contain the list of sample names in order used}
 
 \item{\code{sampleSize}}{numeric: the number of samples}
 
@@ -31,4 +40,8 @@ contain the list of sample names in the order used}
 
 \item{\code{signal}}{numeric: list of 6 signal tables the 6 type of signals}
 }}
+\examples{
+showClass("SampleSet")
+
+}
 
