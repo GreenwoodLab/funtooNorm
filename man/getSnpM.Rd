@@ -4,7 +4,7 @@
 \alias{getSnpM}
 \title{compute the M value after normalization for each SNP position and each sample}
 \usage{
-getSnpM(object, offset = 100)
+getSnpM(object)
 }
 \arguments{
 \item{object}{of type SampleSet}
