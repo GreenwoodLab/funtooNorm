@@ -3,19 +3,19 @@
 \docType{class}
 \name{SampleSet-class}
 \alias{SampleSet-class}
-\title{SampleSet are S3 objects define for the purpose of runing funtooNorm
-algorithm, they are list containing signal data and different variables
-usefull for funtooNorm. The data is separated into the 3 probes type, having
-2 channels (methylated and unmethylated ie : A and B.
+\title{SampleSet is an S3 class defined for the purpose of running the funtooNorm
+algorithm. They are lists containing signal data and different variables
+useful for funtooNorm. The data is separated into the 3 probes types, each 
+having 2 channels (methylated and unmethylated ie : A and B)
 We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII}
 \value{
 a SampleSet object
 }
 \description{
-SampleSet are S3 objects define for the purpose of runing funtooNorm
-algorithm, they are list containing signal data and different variables
-usefull for funtooNorm. The data is separated into the 3 probes type, having
-2 channels (methylated and unmethylated ie : A and B.
+SampleSet is an S3 class defined for the purpose of running the funtooNorm
+algorithm. They are lists containing signal data and different variables
+useful for funtooNorm. The data is separated into the 3 probes types, each 
+having 2 channels (methylated and unmethylated ie : A and B)
 We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
 }
 \section{Slots}{
@@ -30,11 +30,14 @@ contain the list of sample names in order used}
 
 \item{\code{nPos}}{numeric: the number of positions in the ILLUMINA chip}
 
+\item{\code{annotation}}{IlluminaMethylationAnnotation: the annotation object from
+mnfi package}
+
 \item{\code{cell_type}}{list: list matching each sample to define the categories}
 
 \item{\code{qntllist}}{numeric: vector of ordered quantiles}
 
-\item{\code{quantiles}}{numeric: list of  6 auqntiles tables for 6 type of signals}
+\item{\code{quantiles}}{numeric: list of  6 quantiles tables for 6 type of signals}
 
 \item{\code{ctl.covmat}}{numeric: covariance matrix for the model fit}
 

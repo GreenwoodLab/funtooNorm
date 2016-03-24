@@ -2,27 +2,37 @@
 % Please edit documentation in R/SampleSet.R
 \name{funtooNorm}
 \alias{funtooNorm}
-\title{This function apply the normalization method central to the package on each
-signal}
+\title{This function applies the normalization method central to the package to each
+signal.
+The chrY have a deserve a specific treatment, male are asses using the median
+beta estimation on the raw data positions with a cutoff at 60%. We perform
+on the males a quantile normalization and we do not change the female values.}
 \usage{
-funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE)
+funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
+  sex = NULL)
 }
 \arguments{
 \item{object}{of type SampleSet}
 
 \item{type.fits}{can be "PCR" or "PLS" (default "PCR")}
 
-\item{ncmp}{number of component use for anaysis (default 4)}
+\item{ncmp}{number of components used in the analysis (default 4)}
 
 \item{force}{set it to TRUE in order to re-compute the normalisation whent 
 it is already done}
+
+\item{sex}{boolean vector: when not null force the chrY normalization to use 
+treat the TRUE values as males}
 }
 \value{
 a SampleSet containing the normalised signal
 }
 \description{
-This function apply the normalization method central to the package on each
-signal
+This function applies the normalization method central to the package to each
+signal.
+The chrY have a deserve a specific treatment, male are asses using the median
+beta estimation on the raw data positions with a cutoff at 60%. We perform
+on the males a quantile normalization and we do not change the female values.
 }
 \examples{
 mySampleSet  <- funtooNorm(mySampleSet)

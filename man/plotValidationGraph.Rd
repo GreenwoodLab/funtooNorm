@@ -11,7 +11,8 @@ plotValidationGraph(object, type.fits = "PCR", file = "")
 
 \item{type.fits}{can be "PCR" or "PLS" (default "PCR")}
 
-\item{file}{if not empty will writte a pdf at this place}
+\item{file}{if not empty will write a pdf using this name, path can be
+included}
 }
 \description{
 Plot a series of graphs with different numbers of components for each signal

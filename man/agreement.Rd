@@ -8,7 +8,7 @@ agreement(Beta, individualID)
 }
 \arguments{
 \item{individualID}{: a vector where 2 replicates have the exact same value
-for two technical replicate. Order of samples should nmatch the samples
+for two technical replicates. Order of samples should nmatch the samples
 (columns) in Beta}
 
 \item{Matrix}{with beta-values, rows corresponding to probes, columns

@@ -10,12 +10,12 @@ funtooNorm
 \tabular{ll}{
 Package: \tab funtooNorm\cr
 Type: \tab Package\cr
-Version: \tab 0.99.3\cr
+Version: \tab 0.99.4\cr
 Date: \tab 2016-03-28\cr
 License: \tab GPL-3\cr
 }
 }
-%%\author{Celia Greenwood, Stepan Grinek, Kathleen Oros Klein}
+%%\author{Celia Greenwood, Raphael Poujol, Stepan Grinek, Kathleen Oros Klein}
 
 %\references{
 %Literature or other references for background information

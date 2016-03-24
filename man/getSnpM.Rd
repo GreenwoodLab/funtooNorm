@@ -13,7 +13,7 @@ getSnpM(object)
 }
 \value{
 a matrix containing M after normalization value for each SNP of the 
-chip and each sample log(Meth/Unmeth)
+chip and each sample log2(Meth/Unmeth)
 }
 \description{
 compute the M value after normalization for each SNP position and each sample

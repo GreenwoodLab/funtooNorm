@@ -5,28 +5,17 @@
 \title{compute the M value after normalization for each position and each sample}
 \usage{
 getNormM(object, offset = 100)
-
-getNormM(object, offset = 100)
 }
 \arguments{
-\item{object}{of type SampleSet}
-
-\item{offset}{default is 100 as Illumina standard}
-
 \item{object}{of type SampleSet}
 
 \item{offset}{default is 100 as Illumina standard}
 }
 \value{
 a matrix containing M after normalization value for each position
-and each samples log(Meth/Unmeth)
-
-a matrix containing M after normalization value for each position
-and each samples
+and each samples log2(Meth/Unmeth)
 }
 \description{
 compute the M value after normalization for each position and each sample
-
-compute the beta value after normalization for each position and each sample
 }
 

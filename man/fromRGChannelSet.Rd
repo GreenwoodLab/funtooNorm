@@ -7,7 +7,7 @@
 fromRGChannelSet(myRGChannelSet)
 }
 \arguments{
-\item{myRGChannelSet, }{from mini package, should contain a cell_type vector
+\item{myRGChannelSet, }{from minfi package, should contain a cell_type vector
 in it s phenotypes data pData}
 }
 \value{
