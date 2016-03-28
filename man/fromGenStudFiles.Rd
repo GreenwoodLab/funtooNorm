@@ -21,8 +21,4 @@ a SampleSet object
 \description{
 create a SampleSet from GenomeStudio files
 }
-\examples{
- myNewSampleSet <- fromRGChannelSet("ControlProbeProfile.txt",
-"SignalIntensity.txt",cell_type)
-}
 

@@ -4,9 +4,9 @@
 \alias{funtooNorm}
 \title{This function applies the normalization method central to the package to each
 signal.
-The chrY have a deserve a specific treatment, male are asses using the median
+The chrY have a deserve a specific treatment, men are asses using the median
 beta estimation on the raw data positions with a cutoff at 60%. We perform
-on the males a quantile normalization and we do not change the female values.}
+on the mens a quantile normalization and we do not change the women values}
 \usage{
 funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
   sex = NULL)
@@ -22,7 +22,7 @@ funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
 it is already done}
 
 \item{sex}{boolean vector: when not null force the chrY normalization to use 
-treat the TRUE values as males}
+treat the TRUE values as mens}
 }
 \value{
 a SampleSet containing the normalised signal
@@ -30,11 +30,13 @@ a SampleSet containing the normalised signal
 \description{
 This function applies the normalization method central to the package to each
 signal.
-The chrY have a deserve a specific treatment, male are asses using the median
+The chrY have a deserve a specific treatment, men are asses using the median
 beta estimation on the raw data positions with a cutoff at 60%. We perform
-on the males a quantile normalization and we do not change the female values.
+on the mens a quantile normalization and we do not change the women values
 }
 \examples{
-mySampleSet  <- funtooNorm(mySampleSet)
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
+mySampleSet=funtooNorm(mySampleSet)
 }
 

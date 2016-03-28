@@ -18,4 +18,9 @@ chip and each sample log2(Meth/Unmeth)
 \description{
 compute the M value after normalization for each SNP position and each sample
 }
+\examples{
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
+getSnpM(mySampleSet)
+}
 

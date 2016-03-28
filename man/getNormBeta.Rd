@@ -19,6 +19,8 @@ position and each samples
 compute the beta value after normalization for each position and each sample
 }
 \examples{
-myNormBetaMatrix  <-getNormBeta(mySampleSet)
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
+getNormBeta(mySampleSet)
 }
 

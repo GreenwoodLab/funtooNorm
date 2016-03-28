@@ -12,12 +12,15 @@ getRawBeta(object, offset = 100)
 \item{offset}{default is 100 as Illumina standard}
 }
 \value{
-a matrix containing the raw beta value for each position and each samples
+a matrix containing the raw beta value for each position and each
+samples
 }
 \description{
 compute the beta value of the raw signal for each position and each sample
 }
 \examples{
-myRawBetaMatrix  <- getRawBeta(mySampleSet)
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
+getRawBeta(mySampleSet)
 }
 

@@ -13,6 +13,8 @@
 Print information about the SampleSet
 }
 \examples{
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet
 }
 

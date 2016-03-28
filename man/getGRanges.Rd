@@ -15,4 +15,9 @@ a GRange object of all the methylated positions
 \description{
 Return a list
 }
+\examples{
+require(minfiData)
+mySampleSet=fromRGChannelSet(RGsetEx)
+getGRanges(mySampleSet)
+}
 
