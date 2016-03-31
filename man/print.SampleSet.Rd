@@ -16,5 +16,6 @@ Print information about the SampleSet
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet
+
 }
 

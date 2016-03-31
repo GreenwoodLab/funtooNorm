@@ -15,8 +15,8 @@ for two technical replicates. Order of samples should nmatch the samples
 corresponding to samples.}
 }
 \value{
-The average value of the square distance between replicates: a measure
-of agreement between replicates in methylation data.
+The average value of the square distance between replicates: 
+a measure of agreement between replicates in methylation data.
 }
 \description{
 Function to measure intra-replicate agreement in methylation data.
@@ -24,5 +24,9 @@ Function to measure intra-replicate agreement in methylation data.
 \details{
 We expect that the values returned by the agreement function after
  normalization by funtooNorm to be smaller than before.
+}
+\examples{
+agreement(cbind(rnorm(n = 10),rnorm(n = 10),rnorm(n = 10)),c(1,1,1))
+
 }
 

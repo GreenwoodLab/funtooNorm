@@ -11,12 +11,14 @@
 constructProbCovMat <- function(controlred, controlgrn, cp.types,cell_type){
   
   
-  #This function force the array to be bidimmensionnal in case of a single control probe for a type.
-  getMeanProbesIntensity <- function(x) cbind(colMeans(array(controlred[cp.types==x,])),
-                                              colMeans(array(controlgrn[cp.types==x,])))
-  
-  ## mat.by.ct is 30 columns - means for each of the 2 signals and the 15 type of control probe                          
-  mat.by.ct <- do.call(cbind,lapply(unique(cp.types),getMeanProbesIntensity))    
+  ## For one control type, return the mean signal intensity per color per sample
+  getMeanProbesIntensity <- function(x){
+    cbind(colMeans(array(controlred[cp.types==x,])),
+          colMeans(array(controlgrn[cp.types==x,])))}
+    
+  ## means for each of the 2 signals and the 15 type of control probe
+  ## mat.by.ct is 30 columns
+  mat.by.ct <- do.call(cbind,lapply(unique(cp.types),getMeanProbesIntensity))
   
   ## now add additional sets of 30 columns, each specific to one cell type
   ctl.covmat <- mat.by.ct
@@ -55,53 +57,93 @@ calcBeta <- function(A,B,offset=100) {
 ## Validation graphs allowing to choose the number of components
 ## look better with no more than 8 components
 ## ncv.fold correspond to 
-plotValidate <- function(quantiles, qntllist, ctl.covmat, numcompmax, signaltype,
-                         ncv.fold=10, type.fits="PCR"){
-    if (type.fits!="PCR" & type.fits!="PLS") {stop("type.fits must be PCR or PLS")}
+plotValidate <- function(quantiles, qntllist, ctl.covmat, numcompmax,
+                         signaltype, ncv.fold=10, type.fits="PCR"){
+
     if (type.fits=="PCR") method.mvr <- "svdpc"
-    if (type.fits=="PLS") method.mvr <- "kernelpls"
+    else if (type.fits=="PLS") method.mvr <- "kernelpls"
+    else stop("type.fits must be PCR or PLS")
     
     nqnt=ncol(quantiles)
     ns=nrow(quantiles)
-    ncv.fold=min(as.integer(ns/2),ncv.fold) # in case there is a small number of sample
+    # TODO determine a minimum number of sample
+    ncv.fold=min(as.integer(ns/2),ncv.fold) 
     mat <- array(NA, dim=c(ns, ncol=nqnt, numcompmax))
     ## potential for speedup by using an apply function here somehow?   
     for (j in (1:ncol(quantiles)))  {
-      cvindex <- sample(ceiling((1:ns)/(ns/ncv.fold)))   ## cross validation groups
+      cvindex <- sample(ceiling((1:ns)/(ns/ncv.fold)))   
       for (k in (1:ncv.fold)) {
         wh.cv <- which(cvindex==k) ## Here is a list of unique samples
-        tempfit <- mvr(quantiles[-wh.cv,j] ~ ctl.covmat[-wh.cv,],ncomp=numcompmax, method = method.mvr)
+        tempfit <- pls::mvr(quantiles[-wh.cv,j] ~ ctl.covmat[-wh.cv,],
+                       ncomp=numcompmax,
+                       method = method.mvr)
         mat[wh.cv, j, ] <- predict(tempfit, newdat = ctl.covmat[wh.cv,])
       }
     }
     rmse <- t(apply(mat, 3, function(x) sqrt(colSums((x-quantiles)^2))))
     
     sq <- 2; while (max(rmse[,sq])>1.3*max(rmse[,0.4*nqnt])) sq<-sq+1
-    matplot(qntllist[sq:nqnt], sqrt(t(rmse)[sq:nqnt,]), type='l', lty=1, col=rainbow(numcompmax), xlab = 'Percentiles', ylab='RMSE')
-    text(0.6, max(sqrt(rmse[,sq:nqnt])), paste(type.fits,", ",signaltype,sep=" "), cex=1.0)
+    matplot(qntllist[sq:nqnt], sqrt(t(rmse)[sq:nqnt,]),
+            type='l', lty=1, col=rainbow(numcompmax),
+            xlab = 'Percentiles', ylab='RMSE')
+    text(0.6, max(sqrt(rmse[,sq:nqnt])), cex=1.0,
+         paste(type.fits,", ",signaltype,sep=" "))
 }
+
+
+################################################################################
+## on a numeric matrix return the quantile normalized matrix
+## http://davetang.org/muse/2014/07/07/quantile-normalisation-in-r 
+quantileNormalization <- function(mat){
+  averagePerQuantiles=rowMeans(data.frame(apply(mat, 2, sort)))
+  mat_ranked=apply(mat,2,rank,ties.method="min")
+  return(apply(mat_ranked,2,function(x) averagePerQuantiles[x]))
+}
+
+
 
 ################################################################################
 ## Main function of the package, apply a fit to a signal according to a number 
 ## of component 
 ##  !! TO DO  !! Add special treatment of Y chromosome.  See Fortin et al.
-funtoonormApply <- function(signal, quantiles, qntllist, ctl.covmat, ncmp=4, type.fits="PCR"){
-  if (type.fits!="PCR" & type.fits!="PLS") {stop("type.fits must be either PCR or PLS", "\n")}
+funtooNormApply <- function(signal, quantiles, qntllist,
+                            ctl.covmat, ncmp=4, type.fits="PCR"){
+  
   if (type.fits=="PCR") method.mvr <- "svdpc"
-  if (type.fits=="PLS") method.mvr <- "kernelpls"
+  else if (type.fits=="PLS") method.mvr <- "kernelpls"
+  else stop("type.fits must be PCR or PLS")
   
   ## Fitting the model
-  regression <- function(x) return(mvr(x ~ ctl.covmat, ncomp=ncmp, method=method.mvr)$fitted.values[,1,ncmp])
+  regression <- function(x) pls::mvr(x ~ ctl.covmat,
+                                ncomp=ncmp,
+                                method=method.mvr)$fitted.values[,1,ncmp]
   prediction <- apply(quantiles,2,regression)
   rankmat <- (apply(signal,2,  rank) - 0.5)/nrow(signal)
-  predmat <- sapply(1:ncol(signal),function(x) approx(qntllist,prediction[x,],xout=rankmat[,x])$y)
+  predmat <- sapply(1:ncol(signal),function(x){
+    stats::approx(qntllist,prediction[x,],xout=rankmat[,x])$y
+  })
   return(predmat)
 }
 
 ################################################################################
-## Function to measure intra-replicate agreement in methylation data.
-## individualID should be order like the column in the Beta matrix
-## replicates should have the same value in individualID
+#' Function to measure intra-replicate agreement in methylation data.
+#'
+#' @param Matrix with beta-values, rows corresponding to probes, columns
+#' corresponding to samples.  
+#' @param individualID : a vector where 2 replicates have the exact same value
+#' for two technical replicates. Order of samples should nmatch the samples
+#' (columns) in Beta
+#'
+#' @details We expect that the values returned by the agreement function after
+#'  normalization by funtooNorm to be smaller than before.
+#' @return The average value of the square distance between replicates: 
+#' a measure of agreement between replicates in methylation data.
+#' @export
+#'
+#'
+#' @examples 
+#' agreement(cbind(rnorm(n = 10),rnorm(n = 10),rnorm(n = 10)),c(1,1,1))
+#' 
 agreement <- function(Beta, individualID) {
   # List of duplicated values
   listOfReplicates=unique(individualID[duplicated(individualID)])
@@ -112,7 +154,7 @@ agreement <- function(Beta, individualID) {
     # Subtable of replicate
     mat.temp <- Beta[, which(individualID == id.rep)]
     # tall pair of columns for general case
-    combs=combn(1:ncol(mat.temp),2)
+    combs=utils::combn(1:ncol(mat.temp),2)
     # square differece beween each pair of value
     mat.diffs=apply(combs,2,function(x){(mat.temp[,x[1]]-mat.temp[,x[2]])^2})
     

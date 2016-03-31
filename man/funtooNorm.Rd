@@ -38,5 +38,6 @@ on the mens a quantile normalization and we do not change the women values
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet=funtooNorm(mySampleSet)
+
 }
 

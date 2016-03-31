@@ -22,5 +22,6 @@ compute the M value after normalization for each SNP position and each sample
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 getSnpM(mySampleSet)
+
 }
 

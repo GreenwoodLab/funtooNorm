@@ -22,5 +22,6 @@ compute the beta value of the raw signal for each position and each sample
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 getRawBeta(mySampleSet)
+
 }
 

@@ -21,5 +21,6 @@ Plot a series of graphs with different numbers of components for each signal
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 plotValidationGraph(mySampleSet)
+
 }
 

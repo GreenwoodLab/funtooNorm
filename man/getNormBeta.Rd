@@ -22,5 +22,6 @@ compute the beta value after normalization for each position and each sample
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 getNormBeta(mySampleSet)
+
 }
 

@@ -19,5 +19,6 @@ Return a list
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
 getGRanges(mySampleSet)
+
 }
 

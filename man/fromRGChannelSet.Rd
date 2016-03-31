@@ -2,22 +2,23 @@
 % Please edit documentation in R/SampleSet.R
 \name{fromRGChannelSet}
 \alias{fromRGChannelSet}
-\title{create a SampleSet from RGSet from minfi package}
+\title{create a SampleSet from RGChannelSet from minfi package}
 \usage{
 fromRGChannelSet(myRGChannelSet)
 }
 \arguments{
-\item{myRGChannelSet, }{from minfi package, should contain a cell_type vector
+\item{RGChannelSet, }{from minfi package, should contain a cell_type vector
 in it s phenotypes data pData}
 }
 \value{
 a SampleSet object
 }
 \description{
-create a SampleSet from RGSet from minfi package
+create a SampleSet from RGChannelSet from minfi package
 }
 \examples{
 require(minfiData)
 mySampleSet=fromRGChannelSet(RGsetEx)
+
 }
 
