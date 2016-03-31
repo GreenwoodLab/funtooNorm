@@ -55,113 +55,111 @@ In a subsequent version of the package we will address this issue.
 \section{Package use}
 \label{sec:package-use}
 
-The user needs to provide the following information:
+\subsection{Terminology}
+
+As the \texttt{minfi} vignette describes nicely, the 450k array
+contains two types of probes:
+\begin{quote}
+  CpGs measured using a Type I design are measured using a single
+  color, with two different probes in the same color channel providing
+  the methylated and the unmethylated measurements. CpGs measured
+  using a Type II design are measured using a single probe, and two
+  different colors provide the methylated and the unmethylated 
+  measurements.
+\end{quote}
+Therefore, we dissociate the 6 types of signals in our method :
+\texttt{AIGrn},  \texttt{BIGrn},  \texttt{AIRed},  \texttt{BIRed},  \texttt{AII}  and  \texttt{BII},
+where the \textbf{A} (methylated) and \textbf{B} (unmethylated) are on \textbf{Green} or \textbf{Red} chanel depending \textbf{Type I} (Red or Green) and \textbf{Type II}. We will carefully talk about position when refering to a CpG and not about probe since the number of probe per position depend on the type of these position.
+
+
+The \textbf{beta} value is computed with an offset of \texttt{100}
+ like ILLUMINA standard but can be easily change.
+ 
+
+  ... add something about the MValue ?? minfi propose it \[log(A \div B)\] ...
+ 
+\subsection{Reading Data}
+
+The package use a \texttt{SampleSet} on which you can apply functions.
+It will contain your chip data and a matching cell type for each sample.
+The first step will be to provide your data to a new \texttt{SampleSet}.
+There is two way to load your data to the package. Using the output of \texttt{GenomeStudio}
+or using raw \texttt{IDAT} files and use \texttt{minfi} package:
 \begin{itemize}
-  \item \texttt{sigA, sigB:} Two matrices containing the signal A and signal B information from the IDAT files.
-  These matrices should have columns representing each sample, and rows for each probe.  
-  The probe names should index the rows, and the sample names should index the columns.
-  These can be obtained from the Illumina IDAT files using Genome Studio  (http://www.illumina.com/applications/microarrays/microarray-software/genomestudio.html) by extracting Signal_A and Signal_B from the Sample Methylation Profile, or these can be obtained directly from the IDAT files with Bioconductor packages such as \texttt{illuminaio} and \texttt{IlluminaDataTestFiles}, \cite{Smith2013}. \texttt{illuminaio} provides the function readIDAT to extract signals from the IDAT files. Control probe signals can be extracted using probe summaries provided in file 4343238080_A_ProbeSummary.txt.gz of \texttt{IlluminaDataTestFiles}.
-   \item \texttt{controlred, controlgrn:}  Two matrices containing the control probe signals, separately for the red and green channels. 
-  The column labels (sample names) for each matrix should match the column labels of the signal A and signal B matrices.
-  This information can also be extracted from the IDAT files using Genome Studio, by extracting Signal_Grn and Signal_Red from the Control Probe Profile or extracted directly from the IDAT files as described above.
-   \item \texttt{cell\_type:} A list of the cell types or tissues, in the order corresponding to the columns of the signal A and signal B matrices.  
+  \item \texttt{GenomeStudio:} The function \texttt{fromGenStudFiles} take three arguments, the control probes file, the signal intensity file (we should add some specific information about gGenomeStudio if necessary here), and the cell_type vector.
+  There is two way to pass your data to the package.
+  \item \texttt{From IDAT:}  Using of \texttt{minfi} package, you should create a \texttt{RGChannelSet} object containing all your samples and use the function \texttt{fromRGChannelSet} to create your \texttt{SampleSet}. Please reffer to \texttt{minfi} vignette on how to create a \texttt{RGChannelSet}. The phenotype data of your object should contain a column name \texttt{cell_type}, you can access it via \texttt{pData()} .
   There must be at least two different cell or tissue types in the data or the program will terminate with a warning.
 \end{itemize}
 
-The program also requires the following information, but default matrices are provided and used if the parameters are set to NULL in the function call.
+\subsection{DataSet}
 
-\begin{itemize}
-\item \texttt{Annot:} An annotation table, containing information on probe names, probe type, and color (for probes of type I).  
-This can be extracted from the Illumina annotation information for the Infinium BeadChip.
-A default annotation table is provided if not supplied including all probes on the 450K array.
-\item  \texttt{cp.types:}  A list of the types of control probes to be used in the normalization.  This may be obtainable from the row names of the control probe matrices (controlred, controlgrn).
-\end{itemize}
+We have provided a small data set containing $N=129$ samples from chip 450K to demonstrate the usage of the package. 
+The samples are  from different types plasma cells.
 
-Finally, a number of parameters control whether intermediate calculations should be stored, simply so that the analysis can be performed in stages if desired.
-
-We have provided a small data set containing $N=93$ individuals and 20,000 probes to demonstrate the usage of the package. 
-The samples are either from cord blood or fetal placental tissue. 
-
-Here is a basic call to normalize this sample data set: 
  %The code to be inserted
 %\begin{Verbatim}
 <<>>= 
-    library(funtooNorm)
-    ncmp <-4
-    funtoonormout <- funtoonorm(sigA=sigAsample, sigB=sigBsample, Annot=NULL, 
-                      controlred=matred, controlgrn=matgrn, 
-                      cp.types=NULL, cell_type = cell_type,
-                      ncmp=4, ncv.fold=10, logged2.data=FALSE, save.quant=TRUE, 
-                      type.fits="PCR", apply.fits=TRUE, validate=FALSE)
+    #require(funtooNorm)
+    require(matrixStats)
+    require(pls)
+    source("../R/SampleSet.R")
+    source("../R/funtoonorm.R")
+    load("testData.rda")
+    #mySampleSet=fromRGChannelSet(ctrlFile,signalFile,cell_type)
+    #mySampleSet
 
 @
 %\end{Verbatim}
-FuntooNorm will fit either principal component regression (PCR) or partial least squares regression (PLS) by specifying \texttt{type.fits="PCR"} or \texttt{type.fits="PLS"}.  The default is set to "PCR" to match funNorm. 
-An important user-chosen parameter is  \texttt{ncmp}, the number of components to be included in either of these two models; these components are calculated from the control probe data and cell type data.
 
-Choice of the number of components can be facilitated by examining a series of fits with different numbers of components. 
-When \texttt{validate=TRUE}, funtooNorm produces two files showing the root mean squared errors from cross-validated fits, for different numbers of components. Results are displayed across the quantiles of the signal distributions, separately for A and B signals, and for type I red, type I green, and type II probes.
-By default, funtooNorm will perform 10-fold cross-validation, but this can be changed with the parameter \texttt{ncv.fold}.
+Now you get the sampleSet ready for normalisation, you can already get the Beta value before normalization/
 
-Other parameters include: \\
-\texttt{save.quant:} When \texttt{TRUE}, the quantiles should be saved. When \texttt{FALSE}, saved quantiles from a previous run will be loaded and used. \\
-\texttt{apply.fits:} When \texttt{TRUE}, the results of the model fitting process should be used - i.e. the original data should be normalized. This parameter can be set fo \texttt{FALSE} when exploring the desired number of components. \\
-\texttt{logged2.data:} If \texttt{TRUE}, the \texttt{sigA} and \texttt{sigB} matrices, as well as the control probe data matrices (controlred, controlgrn) are assumed to have been previously log2 transformed prior to sending the data
-into the algorithm.  If \texttt{logged2.data=FALSE}, then these data will be log2 transformed (log2(1+x)) inside the algorithm. \\
-
-The following call performs cross-validation to assess the performance of the model fitting.  
-Note that here the \texttt{ncmp} parameter does not need to be specified.
+ %The code to be inserted
 %\begin{Verbatim}
 <<>>= 
-    #This call  will perform cross validation to find optimal value 
-    #of parameter ncmp for PLS regression:
-    funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
-                      controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
-                      ncv.fold=10, logged2.data=FALSE, save.quant=TRUE, 
-                      type.fits="PCR", apply.fits=FALSE, validate = TRUE)
-
-
+    #origBeta <- getRawBeta(mySampleSet)
 @
 %\end{Verbatim}
 
-Calling the funtoonorm function with \texttt{validate = TRUE} produces two files, corresponding to PCR and PLS regressions, where each file contains a set of plots, one for each type of probe and colour (probe type I red, signal A, ... probe type II, signal B).  By looking at figures \ref{val1} and \ref{val2} the goal is to choose the smallest value of \texttt{ncmp} where the cross-validated root mean squared error is fairly small across the quantiles.
-We have set 4 as the default value for \texttt{ncmp}.
-%%Add graph and explanations of its meaning.
+Before normalizing you need to choose the ideal number of component for your data, we have set 4 as the default value for \texttt{ncmp}.
 
+Choice of the number of components can be facilitated by examining a series of fits with different numbers of components : Calling the \texttt{plotValidationGraph} function with \texttt{type.fits = "PCR"} produces a set of plots, showing the root mean squared errors from cross-validated fits, for different numbers of components, SEPARATELY for each type of signal ("AIGrn" "BIGrn" "AIRed" "BIRed" "AII"  and "BII").  By looking at figures \ref{valPCR} the goal is to choose the smallest value of \texttt{ncmp} where the cross-validated root mean squared error is fairly small across the quantiles.
+By default, funtooNorm will perform 10-fold cross-validation, but this can be changed with the parameter \texttt{ncv.fold}. You can set \texttt{type.fits = "validationcurve.pdf"} or change the type of fit to \texttt{"PLS"}
+ %The code to be inserted
+%\begin{Verbatim}
+<<>>= 
+    
+    #plotValidationGraph(mySampleSet, type.fits="PCR")
+@
+%\end{Verbatim}
 
 \begin{figure}[]
 \centering
 \includegraphics[width=10cm,height=10cm]{validationcurvesPCRlow.jpg}
 \caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PCR components.  
-Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val1}
+Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{valPCR}
 \end{figure}
 
-\begin{figure}[]
-\centering
-\includegraphics[width=10cm,height=10cm]{validationcurvesPLSlow.jpg}
-\caption{Cross-validated root mean squared errors across percentiles of the signal distributions for different numbers of PLS components.  
-Top: signal A; Bottom: signal B;  Left: probe type I red; Middle: probe type I green; Right: probe type II.} \label{val2}
-\end{figure}
+Here is a basic call to normalize this sample data set: 
+funTooNorm will fit either principal component regression (PCR) or partial least squares regression (PLS) by specifying \texttt{type.fits="PCR"} or \texttt{type.fits="PLS"}.  The default is set to "PCR" to match funNorm. 
+An important user-chosen parameter is  \texttt{ncmp}, the number of components to be included in either of these two models; these components are calculated from the control probe data and cell type data.
 
-
-After choosing a desired number of components, in order to run the program to normalize the data, 
 %\begin{Verbatim}
 <<>>= 
-    #This call  will normalize the data, using parameter ncmp for the number of components
-    # and PLR regresion
-    funtoonormmout <- funtoonorm(sigA=sigAsample, sigB=sigBsample,
-                      controlred=matred, controlgrn=matgrn, cp.type = cp.types, cell_type = cell_type,
-                      logged2.data=FALSE, save.quant=FALSE, ncmp=4, 
-                      type.fits="PLS", apply.fits=TRUE, validate = FALSE)
+    #This call  will perform cross validation to find optimal value 
+    #of parameter ncmp for PLS regression:
+    #mySampleSet=funTooNorm(mySampleSet,type.fits="PCR",ncmp=4)
+    #mySampleSet
+    #normBeta <- getNormBeta(mySampleSet)
 
 @
 %\end{Verbatim}
 
-To access the performance of normalization function one can use a measure of intra-replicate differences \texttt{M}, described in \cite{funtooNorm}. We provide a function \texttt{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of individual ID's. For the function to work some elements of individual's vector, obviously, should be identical. The returned value of \texttt{M} is expected to be similar for the data before and after normalization:
+To assess the performance of normalization function one can use a measure of intra-replicate differences \texttt{M}, described in \cite{funtooNorm}. We provide a function \texttt{agreement} implementing this measure. It takes as arguments a matrix of beta values and a vector of individual ID's. For the function to work some elements of individual's vector, obviously, should be identical. The returned value of \texttt{M} is expected to be similar for the data before and after normalization:
 %\begin{Verbatim}
 <<>>= 
-agreement(funtoonormout$origBeta, individualID) # M for data before the normalization
-agreement(funtoonormout$newBeta, individualID)  # M for data after normalization
+#agreement(origBeta, individualID) # M for data before the normalization
+#agreement(normBeta, individualID)  # M for data after normalization
 @
 %\end{Verbatim} 
 \section{FuntooNorm and the minfi package}
@@ -191,22 +189,22 @@ so the following creates a \texttt{DataFrame}\footnote{The
   package on Bioconductor, which is loaded by \texttt{minfi}} with
 (random) gender information.
 <<>>=
-phenoData <- DataFrame(Sample_Name=colnames(funtoonormout$newBeta),
-                       sex=sample(c("M", "F"), 93, replace=TRUE))
-rownames(phenoData) <- phenoData$Sample_Name
+#phenoData <- DataFrame(Sample_Name=colnames(funtoonormout$newBeta),
+#                       sex=sample(c("M", "F"), 93, replace=TRUE))
+#rownames(phenoData) <- phenoData$Sample_Name
 
 @
 
 <<>>=
-includedProbes <- Annot[which(Annot$probe %in%
-                              rownames(funtoonormout$newBeta)),]
-genomerange <- GRanges(seqnames=includedProbes$probe,
-                       ranges=includedProbes$Mapinfo, strand=NA)
+#includedProbes <- Annot[which(Annot$probe %in%
+#                              rownames(funtoonormout$newBeta)),]
+#genomerange <- GRanges(seqnames=includedProbes$probe,
+#                       ranges=includedProbes$Mapinfo, strand=NA)
 
-grs <- GenomicRatioSet(gr=genomerange,
-                       Beta=funtoonormout$newBeta,
-                       preprocessMethod="funtooNorm",
-                       pData=phenoData)
+#grs <- GenomicRatioSet(gr=genomerange,
+#                       Beta=funtoonormout$newBeta,
+#                       preprocessMethod="funtooNorm",
+#                       pData=phenoData)
 
 @
 
@@ -214,10 +212,16 @@ The default print method of a \texttt{GenomicRatioSet} object shows
 basic information of that object. In this example things were kept
 simple in order to show the bare necessities.
 <<>>=
-grs
+#grs
 @
 
 
+
+
+
+
+
+library(minfiData)
 \subsection{Using the example data from \texttt{minfi}}
 Here we will show how to use the FuntooNorm functions on the
 \texttt{RGsetEx} example data of the \texttt{minfi} package.
@@ -232,98 +236,20 @@ The \texttt{IlluminaHumanMethylation450kmanifest} object contains
 information on the array, which we need to extract various types of
 information from.
 <<>>=
-manifest <- getManifest(RGsetEx)
+pData(RGsetEx)$cell_type=rep(c("type1","type2"),3)
 @
 
 Information on the type of control probes on the array can be found
 like this:
 <<>>=
-ctrlInfo <- getProbeInfo(manifest, type="Control")
-unique(ctrlInfo$Type)
+mySampleSet=fromRGChannelSet(RGsetEx)
 @
 
 Next, let's load the \texttt{RGsetEx} data set and have a look at the
 summary of its contents:
 <<>>=
-data(RGsetEx)
-RGsetEx
+mySampleSet
 @
-The matrices with red and green signals need to be extracted first.
-<<>>=
-matRed <- getRed(RGsetEx)
-matGrn <- getGreen(RGsetEx)
-@
-
-The following code extracts the control probe data from the red and
-green matrices.
-<<>>=
-ctrlRed <- matRed[rownames(matRed) %in% ctrlInfo$Address,]
-ctrlGrn <- matGrn[rownames(matGrn) %in% ctrlInfo$Address,]
-cp.types<-ctrlInfo$Type[match(rownames(ctrlRed),ctrlInfo$Address)]
-@
-
-As the \texttt{minfi} vignette describes nicely, the 450k array
-contains two types of probes:
-\begin{quote}
-  CpGs measured using a Type I design are measured using a single
-  color, with two different probes in the same color channel providing
-  the methylated and the unmethylated measurements. CpGs measured
-  using a Type II design are measured using a single probe, and two different colors provide the methylated and the unmethylated 
-  measurements.
-\end{quote}
-Therefore, the procedure to extract the A (methylated) and B
-(unmethylated) signals from the \texttt{matRed} and \texttt{matGrn}
-matrices is slightly different for the Type I and Type II probes. The
-following code first extracts the information on the two probe Types
-from the manifest and then creates the signal A matrix for Type I
-probes. Note that \texttt{funtooNorm} requires the row names of the
-signal matrices to be the probe names whereas the \texttt{matRed} and
-\texttt{matGrn} matrices have the position as rownames.
-<<>>=
-typeI_info <- getProbeInfo(manifest, type="I")
-typeII_info <- getProbeInfo(manifest, type="II")
-snpI_info <- getProbeInfo(manifest, type="SnpI")
-snpII_info <- getProbeInfo(manifest, type="SnpII")
-
-probeID <-c(typeI_info$Name, typeII_info$Name, snpI_info$Name, snpII_info$Name) 
-address<- c(typeI_info$AddressA, typeII_info$AddressA, snpI_info$AddressA, snpII_info$AddressA)  
-
-  
-
-@
-
-Extraction of the signal A matrix and signal B matrix:
-<<>>=
-sigA<-matRed[rownames(matRed) %in% address,]
-    rownames(sigA)=probeID[match(rownames(sigA),address)]
-sigB<-matGrn[rownames(matGrn) %in% address,]
-    rownames(sigB)=probeID[match(rownames(sigB),address)]
-@
-
-\texttt{funtooNorm} requires a vector with the cell type of each of
-the 6 amples in the RGsetEx data set.
-<<>>=
-cellType <- as.factor(c(rep("cellTypeA", 2), rep("cellTypeB", 4)))
-@
-
-For the \texttt{Annot} option of \texttt{funtooNorm} we set up the
-annotations selecting only the probes that are in the example data set
-and then order those according to the order in the signal matrices.
-<<>>=
-data(Annot)
-annot <- Annot[rownames(Annot) %in% rownames(sigA),]
-annot <- annot[match(rownames(sigA), rownames(annot)),]
-@
-
-After these conversion steps, we can run \texttt{funtooNorm()} on the
-\texttt{RgsetEx} data:
-<<>>=
-ftRGsetExOut <- funtoonorm(sigA=sigA, sigB=sigB, controlred=ctrlRed,
-                           controlgrn=ctrlGrn, logged2.data=FALSE,
-                           cp.types=cp.types,cell_type=cellType,
-                           Annot=annot)
-@
-
 
 
 \begin{thebibliography}{}
