@@ -9,8 +9,6 @@ getSnpM(object)
 }
 \arguments{
 \item{object}{of type SampleSet}
-
-\item{offset}{default is 100 as Illumina standard}
 }
 \value{
 a matrix containing M after normalization value for each SNP of the 

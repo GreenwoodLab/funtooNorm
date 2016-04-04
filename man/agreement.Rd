@@ -7,12 +7,12 @@
 agreement(Beta, individualID)
 }
 \arguments{
+\item{Beta}{: Matrix with beta-values, rows corresponding to probes, columns
+corresponding to samples.}
+
 \item{individualID}{: a vector where 2 replicates have the exact same value
 for two technical replicates. Order of samples should nmatch the samples
 (columns) in Beta}
-
-\item{Matrix}{with beta-values, rows corresponding to probes, columns
-corresponding to samples.}
 }
 \value{
 The average value of the square distance between replicates: 

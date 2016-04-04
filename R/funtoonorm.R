@@ -128,7 +128,7 @@ funtooNormApply <- function(signal, quantiles, qntllist,
 ################################################################################
 #' Function to measure intra-replicate agreement in methylation data.
 #'
-#' @param Matrix with beta-values, rows corresponding to probes, columns
+#' @param Beta : Matrix with beta-values, rows corresponding to probes, columns
 #' corresponding to samples.  
 #' @param individualID : a vector where 2 replicates have the exact same value
 #' for two technical replicates. Order of samples should nmatch the samples

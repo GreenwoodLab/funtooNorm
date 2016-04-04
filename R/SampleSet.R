@@ -56,7 +56,7 @@ setClass("SampleSet", representation(type="character",
 ################################################################################
 #' create a SampleSet from RGChannelSet from minfi package
 #'
-#' @param RGChannelSet, from minfi package, should contain a cell_type vector
+#' @param myRGChannelSet : RGChannelSet, from minfi package, should contain a cell_type vector
 #' in it s phenotypes data pData
 #'
 #' @return a SampleSet object
@@ -342,8 +342,8 @@ getLogSigB <- function(signal){
 }
 
 ################################################################################
-#' internal function to get the position names returning a vector of
-#' position names the preserving the order define by this package
+## internal function to get the position names returning a vector of
+## position names the preserving the order define by this package
 getPositionNames <- function(names){
   return(c(names$IGrn,
            names$IRed,
@@ -459,7 +459,6 @@ getNormM <- function(object,offset=100){
 #' each sample
 #'
 #' @param object  of type SampleSet
-#' @param offset default is 100 as Illumina standard
 #'
 #' @return a matrix containing M after normalization value for each SNP of the 
 #' chip and each sample log2(Meth/Unmeth)
@@ -484,8 +483,9 @@ getSnpM <- function(object){
 #' This function applies the normalization method central to the package
 #' to each signal.
 #' The chrY have a deserve a specific treatment, men are asses using the median
-#' beta estimation on the raw data positions with a cutoff at 60%. We perform
-#' on the mens a quantile normalization and we do not change the women values
+#' beta estimation on the raw data positions with a cutoff at 60 percent. 
+#' We perform on the mens a quantile normalization and we do not change the 
+#' women values
 #'
 #' @param object of type SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")

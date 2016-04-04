@@ -5,8 +5,9 @@
 \title{This function applies the normalization method central to the package
 to each signal.
 The chrY have a deserve a specific treatment, men are asses using the median
-beta estimation on the raw data positions with a cutoff at 60%. We perform
-on the mens a quantile normalization and we do not change the women values}
+beta estimation on the raw data positions with a cutoff at 60 percent. 
+We perform on the mens a quantile normalization and we do not change the 
+women values}
 \usage{
 funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
   sex = NULL)
@@ -31,8 +32,9 @@ a SampleSet containing the normalised signal
 This function applies the normalization method central to the package
 to each signal.
 The chrY have a deserve a specific treatment, men are asses using the median
-beta estimation on the raw data positions with a cutoff at 60%. We perform
-on the mens a quantile normalization and we do not change the women values
+beta estimation on the raw data positions with a cutoff at 60 percent. 
+We perform on the mens a quantile normalization and we do not change the 
+women values
 }
 \examples{
 require(minfiData)
