@@ -17,7 +17,9 @@ a SampleSet object
 create a SampleSet from RGChannelSet from minfi package
 }
 \examples{
+require(funtooNorm)
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
 
 }

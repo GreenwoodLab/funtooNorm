@@ -2,7 +2,8 @@
 % Please edit documentation in R/SampleSet.R
 \name{plotValidationGraph}
 \alias{plotValidationGraph}
-\title{Plot a series of graphs with different numbers of components for each signal}
+\title{Plot a series of graphs with different numbers of components for
+each signal}
 \usage{
 plotValidationGraph(object, type.fits = "PCR", file = "")
 }
@@ -15,10 +16,12 @@ plotValidationGraph(object, type.fits = "PCR", file = "")
 included}
 }
 \description{
-Plot a series of graphs with different numbers of components for each signal
+Plot a series of graphs with different numbers of components for
+each signal
 }
 \examples{
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
 plotValidationGraph(mySampleSet)
 

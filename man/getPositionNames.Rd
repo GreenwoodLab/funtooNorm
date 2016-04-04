@@ -2,13 +2,13 @@
 % Please edit documentation in R/SampleSet.R
 \name{getPositionNames}
 \alias{getPositionNames}
-\title{internal function to get the position names returning a vector of position
-names the preserving the order define by this package}
+\title{internal function to get the position names returning a vector of
+position names the preserving the order define by this package}
 \usage{
 getPositionNames(names)
 }
 \description{
-internal function to get the position names returning a vector of position
-names the preserving the order define by this package
+internal function to get the position names returning a vector of
+position names the preserving the order define by this package
 }
 

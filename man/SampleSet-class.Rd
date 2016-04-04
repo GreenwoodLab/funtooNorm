@@ -3,19 +3,19 @@
 \docType{class}
 \name{SampleSet-class}
 \alias{SampleSet-class}
-\title{SampleSet is an S3 class defined for the purpose of running the funtooNorm
-algorithm. They are lists containing signal data and different variables
-useful for funtooNorm. The data is separated into the 3 probes types, each 
-having 2 channels (methylated and unmethylated ie : A and B)
+\title{SampleSet is an S3 class defined for the purpose of running the
+funtooNorm algorithm. They are lists containing signal data and different
+variables useful for funtooNorm. The data is separated into the 3 probes
+types, each having 2 channels (methylated and unmethylated ie : A and B)
 We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII}
 \value{
 a SampleSet object
 }
 \description{
-SampleSet is an S3 class defined for the purpose of running the funtooNorm
-algorithm. They are lists containing signal data and different variables
-useful for funtooNorm. The data is separated into the 3 probes types, each 
-having 2 channels (methylated and unmethylated ie : A and B)
+SampleSet is an S3 class defined for the purpose of running the
+funtooNorm algorithm. They are lists containing signal data and different
+variables useful for funtooNorm. The data is separated into the 3 probes
+types, each having 2 channels (methylated and unmethylated ie : A and B)
 We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
 }
 \section{Slots}{

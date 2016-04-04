@@ -2,8 +2,8 @@
 % Please edit documentation in R/SampleSet.R
 \name{funtooNorm}
 \alias{funtooNorm}
-\title{This function applies the normalization method central to the package to each
-signal.
+\title{This function applies the normalization method central to the package
+to each signal.
 The chrY have a deserve a specific treatment, men are asses using the median
 beta estimation on the raw data positions with a cutoff at 60%. We perform
 on the mens a quantile normalization and we do not change the women values}
@@ -28,14 +28,15 @@ treat the TRUE values as mens}
 a SampleSet containing the normalised signal
 }
 \description{
-This function applies the normalization method central to the package to each
-signal.
+This function applies the normalization method central to the package
+to each signal.
 The chrY have a deserve a specific treatment, men are asses using the median
 beta estimation on the raw data positions with a cutoff at 60%. We perform
 on the mens a quantile normalization and we do not change the women values
 }
 \examples{
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet=funtooNorm(mySampleSet)
 

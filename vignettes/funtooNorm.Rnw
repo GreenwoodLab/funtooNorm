@@ -129,7 +129,6 @@ different cell type, this example will not produce meaningfull results.
     require(minfiData)
     # Here some fictive cell types are given for demonstration
     pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
-    
     mySampleSet=fromRGChannelSet(RGsetEx)
 @
 %\end{Verbatim}
