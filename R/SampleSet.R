@@ -362,7 +362,7 @@ getPositionNames <- function(names){
 #' @examples require(minfiData)
 #' pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 #' mySampleSet=fromRGChannelSet(RGsetEx)
-#' getGRanges(mySampleSet)
+#' gr=getGRanges(mySampleSet)
 #' 
 getGRanges <- function(object){
   methWithoutSNPs=getPositionNames(object$names)
@@ -389,7 +389,7 @@ getGRanges <- function(object){
 #' @examples require(minfiData)
 #' pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 #' mySampleSet=fromRGChannelSet(RGsetEx)
-#' getRawBeta(mySampleSet)
+#' r=getRawBeta(mySampleSet)
 #' 
 getRawBeta <- function(object,offset=100){
   mat=funtooNorm:::calcBeta(getLogSigA(object$signal),
