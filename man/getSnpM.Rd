@@ -2,25 +2,27 @@
 % Please edit documentation in R/SampleSet.R
 \name{getSnpM}
 \alias{getSnpM}
-\title{compute the M value after normalization for each SNP position and each sample}
+\title{compute the M value after normalization for each SNP position and
+each sample}
 \usage{
 getSnpM(object)
 }
 \arguments{
 \item{object}{of type SampleSet}
-
-\item{offset}{default is 100 as Illumina standard}
 }
 \value{
 a matrix containing M after normalization value for each SNP of the 
 chip and each sample log2(Meth/Unmeth)
 }
 \description{
-compute the M value after normalization for each SNP position and each sample
+compute the M value after normalization for each SNP position and
+each sample
 }
 \examples{
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
-getSnpM(mySampleSet)
+snp=getSnpM(funtooNorm(mySampleSet))
+
 }
 

@@ -2,7 +2,8 @@
 % Please edit documentation in R/SampleSet.R
 \name{getNormM}
 \alias{getNormM}
-\title{compute the M value after normalization for each position and each sample}
+\title{compute the M value after normalization for each position and each
+sample}
 \usage{
 getNormM(object, offset = 100)
 }
@@ -16,11 +17,14 @@ a matrix containing M after normalization value for each position
 and each samples log2(Meth/Unmeth)
 }
 \description{
-compute the M value after normalization for each position and each sample
+compute the M value after normalization for each position and each
+sample
 }
 \examples{
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
-getNormM(mySampleSet)
+m=getNormM(funtooNorm(mySampleSet))
+
 }
 

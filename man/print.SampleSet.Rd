@@ -14,7 +14,9 @@ Print information about the SampleSet
 }
 \examples{
 require(minfiData)
+pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet
+
 }
 
