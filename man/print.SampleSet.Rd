@@ -4,10 +4,12 @@
 \alias{print.SampleSet}
 \title{Print information about the SampleSet}
 \usage{
-\method{print}{SampleSet}(object)
+\method{print}{SampleSet}(x, ...)
 }
 \arguments{
-\item{object}{of type SampleSet}
+\item{x}{an object of class SampleSet}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \description{
 Print information about the SampleSet

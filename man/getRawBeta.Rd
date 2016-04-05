@@ -8,7 +8,7 @@ sample}
 getRawBeta(object, offset = 100)
 }
 \arguments{
-\item{object}{of type SampleSet}
+\item{object}{object of class SampleSet}
 
 \item{offset}{default is 100 as Illumina standard}
 }

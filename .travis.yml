@@ -1,6 +1,9 @@
 language: r
 sudo: required
 
+r_build_args: --compact-vignettes=gs+qpdf
+r_check_args: --as-cran 
+
 bioc_packages:
   - BiocStyle
   - illuminaio

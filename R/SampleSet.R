@@ -21,18 +21,18 @@
 #' @slot sampleSize numeric: the number of samples
 #' @slot nPos numeric: the number of positions in the ILLUMINA chip
 #' @slot annotation IlluminaMethylationAnnotation: the annotation object from
-#' mnfi package
+#' minfi package
 #' @slot cell_type list: list matching each sample to define the categories
 #' @slot qntllist numeric: vector of ordered quantiles
 #' @slot quantiles numeric: list of  6 quantiles tables for 6 type of signals
 #' @slot ctl.covmat numeric: covariance matrix for the model fit
 #' @slot signal numeric: list of 6 signal tables the 6 type of signals
 #'
-#'
 #' @return a SampleSet object
 #' @export
 #'
 #' @examples showClass("SampleSet")
+#' @importClassesFrom minfi IlluminaMethylationAnnotation
 #' 
 setClass("SampleSet", representation(type="character",
                                      sampleNames="character",
@@ -67,6 +67,7 @@ setClass("SampleSet", representation(type="character",
 #' pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' 
+#' @importClassesFrom minfi RGChannelSet
 fromRGChannelSet <- function(myRGChannelSet){
   object <- list(type="minfi")
   class(object) <- "SampleSet"
@@ -105,7 +106,7 @@ fromRGChannelSet <- function(myRGChannelSet){
   
   controlgrn <- log2(1 + controlgrn)
   controlred <- log2(1 + controlred)
-  object$ctl.covmat=funtooNorm:::constructProbCovMat(controlred,controlgrn,
+  object$ctl.covmat=constructProbCovMat(controlred,controlgrn,
                                         cp.types,object$cell_type)
   message("A covariance Matrix was build")
 
@@ -173,7 +174,7 @@ fromRGChannelSet <- function(myRGChannelSet){
   message("Signal data loaded")
   
   
-  object$qntllist=funtooNorm:::buildQuantileList(object$nPos)
+  object$qntllist=buildQuantileList(object$nPos)
   object$quantiles=list()
   for(i in names(object$signal)[!grepl("Y",names(object$signal))]){
     object$quantiles[[i]]=matrixStats::colQuantiles(object$signal[[i]],
@@ -232,7 +233,7 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
   
   controlgrn <- log2(1 + controlgrn)
   controlred <- log2(1 + controlred)
-  object$ctl.covmat=funtooNorm:::constructProbCovMat(controlred,controlgrn,
+  object$ctl.covmat=constructProbCovMat(controlred,controlgrn,
                                         cp.types,object$cell_type)
   message("A covariance Matrix was build")
   
@@ -263,9 +264,7 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
   
   object$nPos=nrow(sigA)
   
-  data("Order_450K")
-  
- object$signal=list(AIGrn=sigA[orderIGrn,],
+  object$signal=list(AIGrn=sigA[orderIGrn,],
                     BIGrn=sigB[orderIGrn,],
                     AIRed=sigA[orderIRed,],
                     BIRed=sigB[orderIRed,],
@@ -273,22 +272,20 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
                     BII=sigB[orderII,],
                     AchrY=sigA[orderchrY,],
                     BchrY=sigB[orderchrY,])
- 
- object$names=list(IGrn=names[orderIGrn],
+  
+  object$names=list(IGrn=names[orderIGrn],
                    IRed=names[orderIRed],
                    II=names[orderII],
                    chrY=names[orderchrY])
  
  
   message("Signal data loaded")
-  rm(sigA);rm(sigB)
-  
 
   for(i in names(object$signal)){
     object$signal[[i]]=log2(1 + object$signal[[i]])
   }
   
-  object$qntllist=funtooNorm:::buildQuantileList(object$nPos)
+  object$qntllist=buildQuantileList(object$nPos)
   object$quantiles=list()
   object$quantiles=list()
   for(i in names(object$signal)[!grepl("Y",names(object$signal))]){
@@ -304,7 +301,8 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 ################################################################################
 #' Print information about the SampleSet
 #'
-#' @param object  of type SampleSet
+#' @param x an object of class SampleSet
+#' @param ... further arguments passed to or from other methods.
 #'
 #' @export
 #'
@@ -313,13 +311,13 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' mySampleSet
 #' 
-print.SampleSet <- function(object){
-  cat("SampleSet object built from ",object$type,'\n')
-  cat("Data: ",object$nPos,"positions ")
-  cat("and ",object$sampleSize, "samples",'\n')
-  cat("   cell type:",levels(object$cell_type),'\n')
-  cat("  ",length(object$qntllist),"quantiles",'\n')
-  if(is.null(object$predmat)){
+print.SampleSet <- function(x, ...){
+  cat("SampleSet object built from ",x$type,'\n')
+  cat("Data: ",x$nPos,"positions ")
+  cat("and ",x$sampleSize, "samples",'\n')
+  cat("   cell type:",levels(x$cell_type),'\n')
+  cat("  ",length(x$qntllist),"quantiles",'\n')
+  if(is.null(x$predmat)){
     cat("funtooNorm Normalization was not applied",'\n')
   }else{
     cat("funtooNorm Normalization was applied",'\n')
@@ -354,7 +352,7 @@ getPositionNames <- function(names){
     
 #' Return a list
 #'
-#' @param object 
+#' @param object object of class SampleSet
 #'
 #' @return a GRange object of all the methylated positions
 #' @export
@@ -379,7 +377,7 @@ getGRanges <- function(object){
 #' compute the beta value of the raw signal for each position and each
 #' sample
 #'
-#' @param object  of type SampleSet
+#' @param object object of class SampleSet
 #' @param offset default is 100 as Illumina standard
 #'
 #' @return a matrix containing the raw beta value for each position and each
@@ -392,9 +390,9 @@ getGRanges <- function(object){
 #' r=getRawBeta(mySampleSet)
 #' 
 getRawBeta <- function(object,offset=100){
-  mat=funtooNorm:::calcBeta(getLogSigA(object$signal),
-                            getLogSigB(object$signal),
-                            offset)
+  mat=calcBeta(getLogSigA(object$signal),
+               getLogSigB(object$signal),
+               offset)
   colnames(mat)=object$sampleNames
   rownames(mat)=getPositionNames(object$names)
   return(mat[!grepl("^rs",rownames(mat)),])
@@ -420,9 +418,9 @@ getNormBeta <- function(object,offset=100){
   if(any(is.null(object$predmat))){
     stop("WARNING: please call funtooNorm")
   }
-  mat=funtooNorm:::calcBeta(getLogSigA(object$predmat),
-                            getLogSigB(object$predmat),
-                            offset)
+  mat=calcBeta(getLogSigA(object$predmat),
+               getLogSigB(object$predmat),
+               offset)
   colnames(mat)=object$sampleNames
   rownames(mat)=getPositionNames(object$names)
   return(mat[!grepl("^rs",rownames(mat)),])
@@ -514,8 +512,8 @@ funtooNorm <- function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL){
   
   ######## this part deal with chrY
   if(is.null(sex)){
-    mens=matrixStats::colMedians(funtooNorm:::calcBeta(object$signal$AchrY,
-                                                       object$signal$BchrY))<0.6
+    mens=matrixStats::colMedians(calcBeta(object$signal$AchrY,
+                                          object$signal$BchrY))<0.6
     message("we found ",sum(mens)," men and ",
             sum(!mens)," women in your data set base on Y probes only")
   }else{
@@ -528,9 +526,9 @@ funtooNorm <- function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL){
   object$predmat$BchrY=object$signal$BchrY
   if(1<sum(mens)){
     object$predmat$AchrY[,mens]=
-      funtooNorm:::quantileNormalization(object$signal$AchrY[,mens])
+      quantileNormalization(object$signal$AchrY[,mens])
     object$predmat$BchrY[,mens]=
-      funtooNorm:::quantileNormalization(object$signal$BchrY[,mens])
+      quantileNormalization(object$signal$BchrY[,mens])
   }
   
   
@@ -538,11 +536,11 @@ funtooNorm <- function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL){
     if(force | is.null(object$predmat[[signal]])){
       message("Normalization of signal : ",signal)
       object$predmat[[signal]]=
-        funtooNorm:::funtooNormApply(object$signal[[signal]],
-                                    object$quantiles[[signal]],
-                                    object$qntllist,
-                                    object$ctl.covmat,
-                                    ncmp,type.fits)
+        funtooNormApply(object$signal[[signal]],
+                        object$quantiles[[signal]],
+                        object$qntllist,
+                        object$ctl.covmat,
+                        ncmp,type.fits)
       colnames(object$predmat[[signal]])=object$sampleNames
     }else{
       message("Already done : ",signal)
@@ -596,8 +594,8 @@ matrix: number of components needed is either>20 or missing', "\n")
   
   
   for(i in names(object$quantiles)){
-    funtooNorm:::plotValidate(object$quantiles[[i]],object$qntllist,
-                              object$ctl.covmat,numcomp,i)
+    plotValidate(object$quantiles[[i]],object$qntllist,
+                 object$ctl.covmat,numcomp,i)
   }
   
   
@@ -614,6 +612,9 @@ matrix: number of components needed is either>20 or missing', "\n")
   
 }
 
-
+#' @import IlluminaHumanMethylation450kmanifest 
+#' @import IlluminaHumanMethylation450kanno.ilmn12.hg19
+#' @import methods
+NULL
 
 
