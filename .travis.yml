@@ -1,6 +1,9 @@
 language: r
 sudo: required
 
+env:
+  - RGL_USE_NULL=TRUE
+
 r_build_args: --compact-vignettes=gs+qpdf
 r_check_args: --as-cran 
 

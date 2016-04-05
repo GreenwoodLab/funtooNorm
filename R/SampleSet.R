@@ -85,22 +85,22 @@ fromRGChannelSet <- function(myRGChannelSet){
     
 
   if (any(cell_type == '' | is.na(cell_type))) {
-    stop("There are NA values in cell_type", '\n')
+    stop("There are NA values in cell_type")
   }
   if (length(unique(cell_type))<2) {
-    stop("There should be AT LEAST 2 cell type in cell_type variable", '\n')
+    stop("There should be AT LEAST 2 cell types in cell_type variable")
   }
   
   ## Formating the control probes data for the covariance matrix
-  controlTable <- getProbeInfo(getManifest(myRGChannelSet), type="Control")
+  controlTable <- minfi::getProbeInfo(minfi::getManifest(myRGChannelSet), type="Control")
   
   #Here we have to remove the 2 probes that are absent from the Chip
   controlTable=controlTable[!controlTable$Address%in%c("21630339","24669308"),]
   #Here we remove the 15 probes that cannot be in the GenomeStudio output
   controlTable=controlTable[controlTable$Color!="-99",]
-  controlred=as.data.frame(getRed(myRGChannelSet)[controlTable$Address,])
+  controlred=as.data.frame(minfi::getRed(myRGChannelSet)[controlTable$Address,])
   
-  controlgrn=as.data.frame(getGreen(myRGChannelSet)[controlTable$Address,])
+  controlgrn=as.data.frame(minfi::getGreen(myRGChannelSet)[controlTable$Address,])
   
   cp.types=controlTable$Type
   
@@ -110,53 +110,53 @@ fromRGChannelSet <- function(myRGChannelSet){
                                         cp.types,object$cell_type)
   message("A covariance Matrix was build")
 
-  loc=getLocations(sprintf("%sanno.%s",
+  loc=minfi::getLocations(sprintf("%sanno.%s",
                            object$annotation["array"],
                            object$annotation["annotation"]),
                    orderByLocation = FALSE)
-  pos=cbind(names(loc),as.character(seqnames(loc)),start(loc))
+  pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
   
-  chrYnames=names(loc)[as.character(seqnames(loc))=="chrY"]
+  chrYnames=names(loc)[as.character(GenomeInfoDb::seqnames(loc))=="chrY"]
   
   object$signal=list()
   object$names=list()
   
-  SnpI <- getProbeInfo(object$annotation, type = "SnpI")
+  SnpI <- minfi::getProbeInfo(object$annotation, type = "SnpI")
   
   ## Type I Green
-  TypeI.Green <- rbind(getProbeInfo(object$annotation, type = "I-Green"),
+  TypeI.Green <- rbind(minfi::getProbeInfo(object$annotation, type = "I-Green"),
                        SnpI[SnpI$Color == "Grn",])
   sub=TypeI.Green$Name %in% chrYnames
   object$names$IGrn=TypeI.Green$Name[!sub]
   object$names$chrY=TypeI.Green$Name[sub]
-  sigA=getGreen(myRGChannelSet)[TypeI.Green$AddressA,]
-  sigB=getGreen(myRGChannelSet)[TypeI.Green$AddressB,]
+  sigA=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressA,]
+  sigB=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressB,]
   object$signal$AIGrn=sigA[!sub,]
   object$signal$BIGrn=sigB[!sub,]
   object$signal$BchrY=sigB[sub,]
   object$signal$AchrY=sigA[sub,]
   
   ## Type I Red
-  TypeI.Red <- rbind(getProbeInfo(object$annotation, type = "I-Red"),
+  TypeI.Red <- rbind(minfi::getProbeInfo(object$annotation, type = "I-Red"),
                      SnpI[SnpI$Color == "Red",])
   sub=TypeI.Red$Name %in% chrYnames
   object$names$IRed=TypeI.Red$Name[!sub]
   object$names$chrY=c(object$names$chrY,TypeI.Red$Name[sub])
-  sigA=getRed(myRGChannelSet)[TypeI.Red$AddressA,]
-  sigB=getRed(myRGChannelSet)[TypeI.Red$AddressB,]
+  sigA=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressA,]
+  sigB=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressB,]
   object$signal$AIRed=sigA[!sub,]
   object$signal$BIRed=sigB[!sub,]
   object$signal$AchrY=rbind(object$signal$AchrY,sigA[sub,])
   object$signal$BchrY=rbind(object$signal$BchrY,sigB[sub,])
   
   ## Type II
-  TypeII <- rbind(getProbeInfo(object$annotation, type = "II"),
-                  getProbeInfo(object$annotation, type = "SnpII"))
+  TypeII <- rbind(minfi::getProbeInfo(object$annotation, type = "II"),
+                  minfi::getProbeInfo(object$annotation, type = "SnpII"))
   sub=TypeII$Name %in% chrYnames
   object$names$II=TypeII$Name[!sub]
   object$names$chrY=c(object$names$chrY,TypeII$Name[sub])
-  sigA=getRed(myRGChannelSet)[TypeII$AddressA,]
-  sigB=getGreen(myRGChannelSet)[TypeII$AddressA,]
+  sigA=minfi::getRed(myRGChannelSet)[TypeII$AddressA,]
+  sigB=minfi::getGreen(myRGChannelSet)[TypeII$AddressA,]
   object$signal$AII=sigA[!sub,]
   object$signal$BII=sigB[!sub,]
   object$signal$AchrY=rbind(object$signal$AchrY,sigA[sub,])
@@ -365,7 +365,7 @@ getPositionNames <- function(names){
 getGRanges <- function(object){
   methWithoutSNPs=getPositionNames(object$names)
   methWithoutSNPs=methWithoutSNPs[!grepl("^rs",methWithoutSNPs)]
-  loc=getLocations(sprintf("%sanno.%s",
+  loc=minfi::getLocations(sprintf("%sanno.%s",
                            object$annotation["array"],
                            object$annotation["annotation"]),
                    orderByLocation = FALSE)

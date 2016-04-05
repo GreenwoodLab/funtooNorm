@@ -4,4 +4,4 @@
 ^R/ReadFiles.R$
 ^funtooNorm_0\.99\.4\.tar\.gz$
 .\.RData$
-.\.pdf$
+\.(PCR|PLS)\.pdf$

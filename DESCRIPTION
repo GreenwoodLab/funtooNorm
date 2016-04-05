@@ -16,7 +16,8 @@ Imports:
     minfi,
     methods,
     IlluminaHumanMethylation450kmanifest,
-    IlluminaHumanMethylation450kanno.ilmn12.hg19
+    IlluminaHumanMethylation450kanno.ilmn12.hg19,
+    GenomeInfoDb
 Suggests:
     BiocStyle,
     minfiData
