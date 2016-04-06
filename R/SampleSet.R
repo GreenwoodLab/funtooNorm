@@ -615,6 +615,9 @@ matrix: number of components needed is either>20 or missing', "\n")
 #' @import IlluminaHumanMethylation450kmanifest 
 #' @import IlluminaHumanMethylation450kanno.ilmn12.hg19
 #' @import methods
+#' @importFrom stats predict start
+#' @importFrom graphics matplot text layout legend par plot.new
+#' @importFrom grDevices rainbow dev.off pdf
 NULL
 
 
