@@ -7,7 +7,7 @@
 getGRanges(object)
 }
 \arguments{
-\item{object}{}
+\item{object}{object of class SampleSet}
 }
 \value{
 a GRange object of all the methylated positions

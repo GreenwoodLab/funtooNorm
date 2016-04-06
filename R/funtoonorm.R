@@ -140,7 +140,6 @@ funtooNormApply <- function(signal, quantiles, qntllist,
 #' a measure of agreement between replicates in methylation data.
 #' @export
 #'
-#'
 #' @examples 
 #' agreement(cbind(rnorm(n = 10),rnorm(n = 10),rnorm(n = 10)),c(1,1,1))
 #' 

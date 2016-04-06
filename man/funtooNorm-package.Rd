@@ -1,5 +1,5 @@
-\name{funtooNorm}
-\alias{funtooNorm}
+\name{funtooNorm-package}
+\alias{funtooNorm-package}
 \docType{package}
 \title{
 funtooNorm

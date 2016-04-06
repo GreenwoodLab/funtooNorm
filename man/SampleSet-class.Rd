@@ -31,7 +31,7 @@ contain the list of sample names in order used}
 \item{\code{nPos}}{numeric: the number of positions in the ILLUMINA chip}
 
 \item{\code{annotation}}{IlluminaMethylationAnnotation: the annotation object from
-mnfi package}
+minfi package}
 
 \item{\code{cell_type}}{list: list matching each sample to define the categories}
 
@@ -45,6 +45,5 @@ mnfi package}
 }}
 \examples{
 showClass("SampleSet")
-
 }
 
