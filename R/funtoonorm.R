@@ -9,25 +9,24 @@
 ## construct control probe summaries, averages by type of control probe
 ## then specifically create columns by cell type
 constructProbCovMat <- function(controlred, controlgrn, cp.types,cell_type){
-  
-  
-  ## For one control type, return the mean signal intensity per color per sample
-  getMeanProbesIntensity <- function(x){
+    ## For one control type, return the mean signal intensity 
+    ## per color per sample
+    getMeanProbesIntensity <- function(x){
     cbind(colMeans(array(controlred[cp.types==x,])),
           colMeans(array(controlgrn[cp.types==x,])))}
     
-  ## means for each of the 2 signals and the 15 type of control probe
-  ## mat.by.ct is 30 columns
-  mat.by.ct <- do.call(cbind,lapply(unique(cp.types),getMeanProbesIntensity))
-  
-  ## now add additional sets of 30 columns, each specific to one cell type
-  ctl.covmat <- mat.by.ct
-  for(ct in unique(cell_type)){
-   copy=mat.by.ct
-   copy[cell_type!=ct,]=0
-   ctl.covmat <- cbind(ctl.covmat, copy)
-  }
-  return(ctl.covmat)
+    ## means for each of the 2 signals and the 15 type of control probe
+    ## mat.by.ct is 30 columns
+    mat.by.ct <- do.call(cbind,lapply(unique(cp.types),getMeanProbesIntensity))
+    
+    ## now add additional sets of 30 columns, each specific to one cell type
+    ctl.covmat <- mat.by.ct
+    for(ct in unique(cell_type)){
+    copy=mat.by.ct
+    copy[cell_type!=ct,]=0
+    ctl.covmat <- cbind(ctl.covmat, copy)
+    }
+    return(ctl.covmat)
 }
 
 
@@ -35,11 +34,11 @@ constructProbCovMat <- function(controlred, controlgrn, cp.types,cell_type){
 ## This function  allow to get a list of quantile between  0 and 1 that are more
 ## densely distributed at the extremes
 buildQuantileList <- function(nCpG){
-  qntllist <- c(seq((0.5)/nCpG, 0.0009, 0.0001), seq(0.001, 0.009, 0.001),
+    qntllist <- c(seq((0.5)/nCpG, 0.0009, 0.0001), seq(0.001, 0.009, 0.001),
                 seq(0.01,0.99,0.002), seq(0.991,0.999,0.001),
                 seq(0.9991 ,(nCpG-0.5)/nCpG,0.0001 ))
-  qntllist <- c(qntllist, (nCpG - 0.5)/nCpG)  ## add one more at the top end!
-  return(qntllist[order(qntllist)])
+    qntllist <- c(qntllist, (nCpG - 0.5)/nCpG)  ## add one more at the top end!
+    return(qntllist[order(qntllist)])
 }
 
 
@@ -95,9 +94,9 @@ plotValidate <- function(quantiles, qntllist, ctl.covmat, numcompmax,
 ## on a numeric matrix return the quantile normalized matrix
 ## http://davetang.org/muse/2014/07/07/quantile-normalisation-in-r 
 quantileNormalization <- function(mat){
-  averagePerQuantiles=rowMeans(data.frame(apply(mat, 2, sort)))
-  mat_ranked=apply(mat,2,rank,ties.method="min")
-  return(apply(mat_ranked,2,function(x) averagePerQuantiles[x]))
+    averagePerQuantiles=rowMeans(data.frame(apply(mat, 2, sort)))
+    mat_ranked=apply(mat,2,rank,ties.method="min")
+    return(apply(mat_ranked,2,function(x) averagePerQuantiles[x]))
 }
 
 
@@ -109,20 +108,20 @@ quantileNormalization <- function(mat){
 funtooNormApply <- function(signal, quantiles, qntllist,
                             ctl.covmat, ncmp=4, type.fits="PCR"){
   
-  if (type.fits=="PCR") method.mvr <- "svdpc"
-  else if (type.fits=="PLS") method.mvr <- "kernelpls"
-  else stop("type.fits must be PCR or PLS")
-  
-  ## Fitting the model
-  regression <- function(x) pls::mvr(x ~ ctl.covmat,
+    if (type.fits=="PCR") method.mvr <- "svdpc"
+    else if (type.fits=="PLS") method.mvr <- "kernelpls"
+    else stop("type.fits must be PCR or PLS")
+    
+    ## Fitting the model
+    regression <- function(x) pls::mvr(x ~ ctl.covmat,
                                 ncomp=ncmp,
                                 method=method.mvr)$fitted.values[,1,ncmp]
-  prediction <- apply(quantiles,2,regression)
-  rankmat <- (apply(signal,2,  rank) - 0.5)/nrow(signal)
-  predmat <- sapply(1:ncol(signal),function(x){
+    prediction <- apply(quantiles,2,regression)
+    rankmat <- (apply(signal,2,  rank) - 0.5)/nrow(signal)
+    predmat <- sapply(1:ncol(signal),function(x){
     stats::approx(qntllist,prediction[x,],xout=rankmat[,x])$y
-  })
-  return(predmat)
+    })
+    return(predmat)
 }
 
 ################################################################################
@@ -144,12 +143,12 @@ funtooNormApply <- function(signal, quantiles, qntllist,
 #' agreement(cbind(rnorm(n = 10),rnorm(n = 10),rnorm(n = 10)),c(1,1,1))
 #' 
 agreement <- function(Beta, individualID) {
-  # List of duplicated values
-  listOfReplicates=unique(individualID[duplicated(individualID)])
-  listOfReplicates=listOfReplicates[!is.na(listOfReplicates)]
-  sum.over.pt <- 0
-  nbpairs=0
-  for (id.rep in listOfReplicates)  {
+    # List of duplicated values
+    listOfReplicates=unique(individualID[duplicated(individualID)])
+    listOfReplicates=listOfReplicates[!is.na(listOfReplicates)]
+    sum.over.pt <- 0
+    nbpairs=0
+    for (id.rep in listOfReplicates)  {
     # Subtable of replicate
     mat.temp <- Beta[, which(individualID == id.rep)]
     # tall pair of columns for general case
@@ -160,7 +159,7 @@ agreement <- function(Beta, individualID) {
     #Adding a score for each pair
     nbpairs=nbpairs+ncol(combs)
     sum.over.pt <- sum.over.pt + sum(colMeans(mat.diffs))
-  }
-  return(sum.over.pt)
+    }
+    return(sum.over.pt)
 }
 
