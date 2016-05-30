@@ -449,11 +449,11 @@ getNormBeta <- function(object,offset=100){
 getNormM <- function(object,offset=100){
     if(any(is.null(object$predmat))){
     stop("WARNING: please call funtooNorm")
-    }
-    mat=getLogSigA(object$predmat)-getLogSigB(object$predmat)
-    colnames(mat)=object$sampleNames
-    rownames(mat)=getPositionNames(object$names)
-    return(mat[!grepl("^rs",rownames(mat)),])
+  }
+  mat=getLogSigB(object$predmat)-getLogSigA(object$predmat)
+  colnames(mat)=object$sampleNames
+  rownames(mat)=getPositionNames(object$names)
+  return(mat[!grepl("^rs",rownames(mat)),])
 }
 
 ################################################################################
