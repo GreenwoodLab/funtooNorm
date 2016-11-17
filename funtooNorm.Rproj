@@ -16,3 +16,5 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageBuildArgs: --compact-vignettes=gs+qpdf
+PackageBuildBinaryArgs: R CMD Rd2pdf --title='funtooNorm Package' man/funtooNorm-package.Rd man/*-class.Rd $(ls man/*.Rd | grep -v package | grep -v class.Rd); mv man/Rd2.pdf man/manual_funtooNorm.pdf
+PackageRoxygenize: rd,collate

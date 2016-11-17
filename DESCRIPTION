@@ -1,14 +1,28 @@
 Package: funtooNorm
 Type: Package
 Title: Normalization Procedure for Infinium HumanMethylation450 BeadChip Kit
-Version: 0.99.1
-Date: 2015-05-19
-Author: Celia Greenwood <celia.greenwood@mcgill.ca>, Stepan Grinek <stepan.grinek@ladydavis.ca>
-Maintainer: Stepan Grinek <stepan.grinek@ladydavis.ca>
-Description: Provides a function to normalize Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K), correcting for tissue and/or cell type.
+Version: 0.99.3
+Date: 2016-04-06
+Author: Celia Greenwood <celia.greenwood@mcgill.ca>, Kathleen Klein <kathleen.klein@mail.mcgill.ca, Stepan Grinek
+    <stepan.grinek@ladydavis.ca>
+Maintainer: Kathleen Klein <kathleen.klein@mail.mcgill.ca>
+Description: Provides a function to normalize Illumina Infinium Human
+    Methylation 450 BeadChip (Illumina 450K), correcting for tissue and/or cell
+    type.
 License: GPL-3
-Imports: pls
-Suggests: BiocStyle, illuminaio, minfi, minfiData
-Depends: R(>= 2.10.0)
+Imports:
+    pls,
+    matrixStats,
+    minfi,
+    methods,
+    IlluminaHumanMethylation450kmanifest,
+    IlluminaHumanMethylation450kanno.ilmn12.hg19,
+    GenomeInfoDb
+Suggests:
+    BiocStyle,
+    minfiData
+Depends:
+    R(>= 3.2)
 LazyData: true
-biocViews: DNAMethylation, Preprocessing, Normalization 
+biocViews: DNAMethylation, Preprocessing, Normalization
+RoxygenNote: 5.0.1.9000

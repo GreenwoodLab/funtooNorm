@@ -4,6 +4,8 @@
 funtooNorm.Rproj
 .Rbuildignore
 # files created during vignette building
-*.pdf
 vignettes/*
 !vignettes/funtooNorm.Rnw
+!vignettes/funtooNorm.pdf
+
+
