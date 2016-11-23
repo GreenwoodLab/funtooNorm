@@ -273,14 +273,6 @@ grs
 
 
 
-\section{EPIC dataset}
-
-The last version of this code is previous to the release of monfi that include 
-
-
-
-
-
 \begin{thebibliography}{}
 \bibitem{Fortin2014} Fortin, J.-P., et al. (2014). Functional normalization
 of 450K methylation array data improves replication in large cancer studies.
