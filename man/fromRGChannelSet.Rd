@@ -7,8 +7,8 @@
 fromRGChannelSet(myRGChannelSet)
 }
 \arguments{
-\item{myRGChannelSet}{: RGChannelSet, from minfi package, should contain a cell_type vector
-in it s phenotypes data pData}
+\item{myRGChannelSet}{: RGChannelSet, from minfi package, should contain a
+cell_type vector in it s phenotypes data pData}
 }
 \value{
 a SampleSet object
@@ -17,7 +17,6 @@ a SampleSet object
 create a SampleSet from RGChannelSet from minfi package
 }
 \examples{
-require(funtooNorm)
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 mySampleSet=fromRGChannelSet(RGsetEx)
