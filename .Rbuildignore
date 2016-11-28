@@ -5,4 +5,4 @@
 ^funtooNorm_0\.99\.4\.tar\.gz$
 .\.RData$
 \.(PCR|PLS)\.pdf$
-^vignettes/funtooNorm_old\.Rnw$
+^funtooNorm_old\.Rnw$
