@@ -20,3 +20,9 @@
     \item New version from Raphael Poujol
   }
 }
+
+\section{Version 0.100.1}{
+  \itemize{
+    \item Release to Bioconductor.
+    }
+}
