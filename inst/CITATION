@@ -10,7 +10,7 @@ citEntry(entry = "Article",
                    as.person("Colmegna, I"),
                    as.person("Fortin, J. P."),
                    as.person("Gao, L"),
-                   as.person("Celia M.T. Greenwood"))
+                   as.person("Celia M.T. Greenwood")),
   journal      = "Bioinformatics",
   year         = "2016",
   volume       = "32",
