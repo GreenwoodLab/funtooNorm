@@ -7,6 +7,11 @@ author: "\\
 date: "`r Sys.Date()`"
 bibliography: MyEndnoteLibrary.bib
 csl: nature.csl
+output:
+  BiocStyle::html_document:
+    toc: true
+  BiocStyle::pdf_document:
+    toc: true
 vignette: >
   %\VignetteIndexEntry{Normalizing Illumina Infinium Human Methylation 450k for multiple cell types with funtooNorm}
   %\VignetteEngine{knitr::rmarkdown}
