@@ -6,12 +6,13 @@ author: "\\
       [1] Lady Davis Institute of Research, Montreal Quebec. [2] McGill University, Montreal Quebec."
 date: "`r Sys.Date()`"
 bibliography: MyEndnoteLibrary.bib
-csl: nature.csl
-output: rmarkdown::html_vignette
+output:
+      BiocStyle::html_document:
+            toc: true
 vignette: >
   %\VignetteIndexEntry{Normalizing Illumina Infinium Human Methylation 450k for multiple cell types with funtooNorm}
   %\VignetteEngine{knitr::rmarkdown}
-  %\usepackage[utf8]{inputenc} 
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r style, echo=FALSE, results="asis", message=FALSE}
