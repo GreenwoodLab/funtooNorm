@@ -1,0 +1,24 @@
+citHeader("To cite pcev in publications use:")
+
+citEntry(entry = "Article",
+  title        = "funtooNorm: an R package for normalization of DNA methylation data when there are multiple cell or tissue types",
+  author       = personList(as.person("Oros Klein, K."),
+                   as.person("Grinek, S."),
+                   as.person("Bernatsky, S"),
+                   as.person("Bouchard, L"),
+                   as.person("Ciampi, A"),
+                   as.person("Colmegna, I"),
+                   as.person("Fortin, J. P."),
+                   as.person("Gao, L"),
+                   as.person("Celia M.T. Greenwood")),
+  journal      = "Bioinformatics",
+  year         = "2016",
+  volume       = "32",
+  number       = "4",
+  pages        = "593-5",
+  url          = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4743629/",
+
+  textVersion  =
+  paste("Oros Klein, K. et al.",
+        "funtooNorm: an R package for normalization of DNA methylation data when there are multiple cell or tissue types")
+)
