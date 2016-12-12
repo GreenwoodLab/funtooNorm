@@ -21,7 +21,7 @@
   }
 }
 
-\section{Version 0.100.1}{
+\section{Version 0.99.5}{
   \itemize{
     \item Release to Bioconductor.
     }

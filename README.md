@@ -10,7 +10,7 @@ when there are samples from multiple tissues or cell types.
 ## Installation options
 Download the current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 ``` shell
-$ R CMD INSTALL funtooNorm_0.99.4.tar.gz
+$ R CMD INSTALL funtooNorm_0.99.5.tar.gz
 ```
 
 Or, if you want to build from source, you can also install from GitHub using the [devtools](https://cran.r-project.org/package=devtools)
@@ -25,7 +25,7 @@ and install from source using the commands ```R CMD build``` and ```install```:
 ``` shell
 $ git clone https://github.com/GreenwoodLab/funtooNorm.git
 $ R CMD build ./funtooNorm
-$ R CMD INSTALL funtooNorm_0.99.4.tar.gz
+$ R CMD INSTALL funtooNorm_0.99.5.tar.gz
 =======
 install_github('greenwoodLab/funtooNorm')
 ```
