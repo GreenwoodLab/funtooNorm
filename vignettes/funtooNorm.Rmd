@@ -7,6 +7,8 @@ author: "\\
 date: "`r Sys.Date()`"
 bibliography: MyEndnoteLibrary.bib
 output:
+      BiocStyle::pdf_document:
+            toc: true
       BiocStyle::html_document:
             toc: true
 vignette: >
