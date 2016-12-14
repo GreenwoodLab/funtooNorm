@@ -10,7 +10,7 @@ when there are samples from multiple tissues or cell types.
 ## Installation options
 Download the current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 ``` shell
-$ R CMD INSTALL funtooNorm_0.99.5.tar.gz
+$ R CMD INSTALL funtooNorm_0.99.6.tar.gz
 ```
 
 Or, if you want to build from source, you can also install from GitHub using the [devtools](https://cran.r-project.org/package=devtools)
@@ -25,7 +25,7 @@ and install from source using the commands ```R CMD build``` and ```install```:
 ``` shell
 $ git clone https://github.com/GreenwoodLab/funtooNorm.git
 $ R CMD build ./funtooNorm
-$ R CMD INSTALL funtooNorm_0.99.5.tar.gz
+$ R CMD INSTALL funtooNorm_0.99.6.tar.gz
 =======
 install_github('greenwoodLab/funtooNorm')
 ```
@@ -39,6 +39,6 @@ The output of ```funtoonorm``` is two matrices: both a normalized methylation da
 The function agreement accesses the performance of normalization measuring intra-replicate differences before and after normalization. It takes the output of funtoonorm as an input.
 
 For more details, see the vignette provided with the package or download the pdf file from
-<a href="https://github.com/RaphaelRaphael/funtooNorm/blob/march2016/vignettes/funtooNorm.pdf">
+<a href="https://github.com/GreenwoodLab/funtooNorm/blob/master/vignettes/funtooNorm.pdf">
 <b>here</b></a>.
 
