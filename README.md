@@ -39,6 +39,6 @@ The output of ```funtoonorm``` is two matrices: both a normalized methylation da
 The function agreement accesses the performance of normalization measuring intra-replicate differences before and after normalization. It takes the output of funtoonorm as an input.
 
 For more details, see the vignette provided with the package or download the pdf file from
-<a href="https://github.com/RaphaelRaphael/funtooNorm/blob/march2016/vignettes/funtooNorm.pdf">
+<a href="https://github.com/GreenwoodLab/funtooNorm/tree/master/vignettes/Normalizing%20Illumina%20Infinium%20Human%20Methylation%20450k%20for%20multiple%20cell%20types%20with%20funtooNorm_files">
 <b>here</b></a>.
 
