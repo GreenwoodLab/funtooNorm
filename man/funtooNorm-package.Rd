@@ -14,8 +14,6 @@ contains samples fom multiple different tissues or cell types.
 \tabular{ll}{
 Package: \tab funtooNorm\cr
 Type: \tab Package\cr
-Version: \tab 0.99.4\cr
-Date: \tab 2016-11-29\cr
 License: \tab GPL-3\cr
 }
 }
