@@ -482,12 +482,9 @@ getSnpM <- function(object){
 }
 
 ################################################################################
-#' This function applies the normalization method central to the package
-#' to each signal.
-#' The chrY have a deserve a specific treatment, men are asses using the median
-#' beta estimation on the raw data positions with a cutoff at 60 percent. 
-#' We perform on the mens a quantile normalization and we do not change the 
-#' women values
+#' This is the main normalization function which applies to autosomes and the X chromosome.  
+#' Chromosome Y requires separate analysis, since there are few probes on Y.  
+#' Therefore we use a straightforward quantile normalization applied to males only.
 #'
 #' @param object of type SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
