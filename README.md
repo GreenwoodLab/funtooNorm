@@ -8,8 +8,9 @@ Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data
 when there are samples from multiple tissues or cell types.
 
 ## Installation options
-Install from bioconductor
-source("http://www.bioconductor.org/biocLite.R")
+Install from bioconductor  
+
+source("http://www.bioconductor.org/biocLite.R")  
 biocLite("funtooNorm")
 
 Download the current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
