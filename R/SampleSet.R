@@ -1,6 +1,7 @@
 ################################################################################
-## This file allow to create some 'SampleSet' objects, they are list containing
-## signal data and different variables usefull for funtooNorm
+## This file illustrates how to create a 'SampleSet' object,
+## which are list containing
+## signal data and other covariables utilized by funtooNorm.  
 ## The data is separated into the 3 kind positions are quantified
 ## Each way have then 2 channel (methylated and unmethylated ie : A and B
 ## We define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
