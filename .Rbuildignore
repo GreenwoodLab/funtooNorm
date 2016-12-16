@@ -8,3 +8,4 @@
 ^funtooNorm_old\.Rnw$
 ^\.travis\.yml$
 ^\.gitignore$
+^.git
