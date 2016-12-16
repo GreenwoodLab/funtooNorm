@@ -156,7 +156,7 @@ genomerange <- getGRanges(mySampleSet)
 grs <- GenomicRatioSet(gr=genomerange,
                        Beta=normBeta,
                        preprocessMethod="funtooNorm",
-                       pData=phenoData)
+                       metadata=list(pData=phenoData))
 grs
 ```
 
