@@ -9,10 +9,10 @@ when there are samples from multiple tissues or cell types.
 
 ## Installation options
 Install from bioconductor  
-
+```shell
 source("http://www.bioconductor.org/biocLite.R")  
 biocLite("funtooNorm")
-
+```  
 Download the current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 ``` shell
 $ R CMD INSTALL funtooNorm_0.99.6.tar.gz
