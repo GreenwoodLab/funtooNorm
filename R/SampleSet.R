@@ -1,6 +1,7 @@
 ################################################################################
-## This file allow to create some 'SampleSet' objects, they are list containing
-## signal data and different variables usefull for funtooNorm
+## This file illustrates how to create a 'SampleSet' object,
+## which are list containing
+## signal data and other covariables utilized by funtooNorm.  
 ## The data is separated into the 3 kind positions are quantified
 ## Each way have then 2 channel (methylated and unmethylated ie : A and B
 ## We define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
@@ -482,12 +483,9 @@ getSnpM <- function(object){
 }
 
 ################################################################################
-#' This function applies the normalization method central to the package
-#' to each signal.
-#' The chrY have a deserve a specific treatment, men are asses using the median
-#' beta estimation on the raw data positions with a cutoff at 60 percent. 
-#' We perform on the mens a quantile normalization and we do not change the 
-#' women values
+#' This is the main normalization function which applies to autosomes and the X chromosome.  
+#' Chromosome Y requires separate analysis, since there are few probes on Y.  
+#' Therefore we use a straightforward quantile normalization applied to males only.
 #'
 #' @param object of type SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
