@@ -1,15 +1,14 @@
 ################################################################################
-## This file illustrates how to create a 'SampleSet' object,
-## which are list containing
-## signal data and other covariables utilized by funtooNorm.  
-## The data is separated into the 3 kind positions are quantified
-## Each way have then 2 channel (methylated and unmethylated ie : A and B
-## We define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
+## This function creates a S4 object of class 'SampleSet'.
+## SampleSet object contain both signal data as well as
+## other covariables needed for the funtooNorm function.  
+## The data is divided by colour and probe type.
+## Each type have 2 channels (methylated and unmethylated ie : A and B
+## We define the six groups as (2*3): AIGrn BIGrn AIRed BIRed AII BII
 
-
-## This file allow to create some 'SampleSet' objects, they are list containing
-
-#' SampleSet is an S3 class defined for the purpose of running the
+#' @title S4 class object SampleSet
+#'
+#' @description SampleSet is an S4 class defined for the purpose of running the
 #' funtooNorm algorithm. They are lists containing signal data and different
 #' variables useful for funtooNorm. The data is separated into the 3 probes
 #' types, each having 2 channels (methylated and unmethylated ie : A and B)
@@ -23,28 +22,31 @@
 #' @slot nPos numeric: the number of positions in the ILLUMINA chip
 #' @slot annotation IlluminaMethylationAnnotation: the annotation object from
 #' minfi package
-#' @slot cell_type list: list matching each sample to define the categories
-#' @slot qntllist numeric: vector of ordered quantiles
-#' @slot quantiles numeric: list of  6 quantiles tables for 6 type of signals
-#' @slot ctl.covmat numeric: covariance matrix for the model fit
-#' @slot signal numeric: list of 6 signal tables the 6 type of signals
+#' @slot cell_type factor: vector of the cell type for each sample as factors
+#' @slot qntllist list: vector of ordered quantiles
+#' @slot quantiles list: list of  6 quantiles tables for the 6 signal types
+#' @slot ctl.covmat matrix: covariance matrix for the model fit
+#' @slot signal list: list of the values for all 6 probe types.
+#' @slot names list: list of probes for each type
 #'
-#' @return a SampleSet object
+#' @return a S4 object of class SampleSet
 #' @export
 #'
 #' @examples showClass("SampleSet")
 #' @importClassesFrom minfi IlluminaMethylationAnnotation
 #' 
-setClass("SampleSet", representation(type="character",
-                                     sampleNames="character",
-                                     sampleSize="numeric",
-                                     nPos="numeric",
-                                     annotation="IlluminaMethylationAnnotation",
-                                     cell_type="list",
-                                     qntllist="numeric",
-                                     quantiles="numeric",
-                                     ctl.covmat="numeric",
-                                     signal="numeric")
+setClass("SampleSet", representation(type = "character",
+                                     sampleNames = "character",
+                                     sampleSize = "numeric",
+                                     nPos = "numeric",
+                                     annotation = "character",
+                                     cell_type = "factor",
+                                     qntllist = "numeric",
+                                     quantiles = "list",
+                                     ctl.covmat = "matrix",
+                                     signal = "list",
+                                     names = "list",
+                                     predmat = "list")
          )
 
 
@@ -56,12 +58,14 @@ setClass("SampleSet", representation(type="character",
 
 ################################################################################
 
-#' create a SampleSet from RGChannelSet from minfi package
+#' @title  Creates an object of class SampleSet from a RGChannelSet {minfi}
+#' 
+#' @description Creates a object of class SampleSet from the raw unprocessed data in RGChannelSet
 #' 
 #' @param myRGChannelSet : RGChannelSet, from minfi package, should contain a
-#'   cell_type vector in it s phenotypes data pData
+#'   cell_type vector in pData
 #'   
-#' @return a SampleSet object
+#' @return a class 'SampleSet' object
 #' @export
 #' 
 #' @examples require(minfiData)
@@ -70,19 +74,19 @@ setClass("SampleSet", representation(type="character",
 #' 
 #' @importClassesFrom minfi RGChannelSet
 fromRGChannelSet <- function(myRGChannelSet){
-    object <- list(type="minfi")
-    class(object) <- "SampleSet"
-    
+    object = new("SampleSet")
+    object@type = "minfi"
+
     if(! "cell_type" %in% colnames(minfi::pData(myRGChannelSet))){
     stop("Your object should contain a field \"cell_type\" in it's phenotype
          data minfi::pData(rgset) in order to use funtooNorm")
     }
     
     cell_type <- minfi::pData(myRGChannelSet)$cell_type
-    object$sampleSize=length(cell_type)
-    object$cell_type=cell_type
-    object$sampleNames=rownames(minfi::pData(myRGChannelSet))
-    object$annotation=myRGChannelSet@annotation
+    object@sampleSize=length(cell_type)
+    object@cell_type=as.factor(cell_type)
+    object@sampleNames=rownames(minfi::pData(myRGChannelSet))
+    object@annotation=myRGChannelSet@annotation
     
     
     if (any(cell_type == '' | is.na(cell_type))) {
@@ -111,80 +115,76 @@ fromRGChannelSet <- function(myRGChannelSet){
     
     controlgrn <- log2(1 + controlgrn)
     controlred <- log2(1 + controlred)
-    object$ctl.covmat=constructProbCovMat(controlred,controlgrn,
-                                        cp.types,object$cell_type)
+    object@ctl.covmat=constructProbCovMat(controlred,controlgrn,
+                                        cp.types,object@cell_type)
     message("A covariance Matrix was build")
     
     loc=minfi::getLocations(sprintf("%sanno.%s",
-                           object$annotation["array"],
-                           object$annotation["annotation"]),
+                           object@annotation["array"],
+                           object@annotation["annotation"]),
                    orderByLocation = FALSE)
     pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
     
     chrYnames=names(loc)[as.character(GenomeInfoDb::seqnames(loc))=="chrY"]
     
-    object$signal=list()
-    object$names=list()
-    
-    SnpI <- minfi::getProbeInfo(object$annotation, type = "SnpI")
+    SnpI <- minfi::getProbeInfo(object@annotation, type = "SnpI")
     
     ## Type I Green
-    TypeI.Green <- rbind(minfi::getProbeInfo(object$annotation, 
+    TypeI.Green <- rbind(minfi::getProbeInfo(object@annotation, 
                                              type = "I-Green"),
                        SnpI[SnpI$Color == "Grn",])
     sub=TypeI.Green$Name %in% chrYnames
-    object$names$IGrn=TypeI.Green$Name[!sub]
-    object$names$chrY=TypeI.Green$Name[sub]
+    object@names$IGrn=TypeI.Green$Name[!sub]
+    object@names$chrY=TypeI.Green$Name[sub]
     sigA=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressA,]
     sigB=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressB,]
-    object$signal$AIGrn=sigA[!sub,]
-    object$signal$BIGrn=sigB[!sub,]
-    object$signal$BchrY=sigB[sub,]
-    object$signal$AchrY=sigA[sub,]
+    object@signal$AIGrn=sigA[!sub,]
+    object@signal$BIGrn=sigB[!sub,]
+    object@signal$BchrY=sigB[sub,]
+    object@signal$AchrY=sigA[sub,]
     
     ## Type I Red
-    TypeI.Red <- rbind(minfi::getProbeInfo(object$annotation, type = "I-Red"),
+    TypeI.Red <- rbind(minfi::getProbeInfo(object@annotation, type = "I-Red"),
                      SnpI[SnpI$Color == "Red",])
     sub=TypeI.Red$Name %in% chrYnames
-    object$names$IRed=TypeI.Red$Name[!sub]
-    object$names$chrY=c(object$names$chrY,TypeI.Red$Name[sub])
+    object@names$IRed=TypeI.Red$Name[!sub]
+    object@names$chrY=c(object@names$chrY,TypeI.Red$Name[sub])
     sigA=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressA,]
     sigB=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressB,]
-    object$signal$AIRed=sigA[!sub,]
-    object$signal$BIRed=sigB[!sub,]
-    object$signal$AchrY=rbind(object$signal$AchrY,sigA[sub,])
-    object$signal$BchrY=rbind(object$signal$BchrY,sigB[sub,])
+    object@signal$AIRed=sigA[!sub,]
+    object@signal$BIRed=sigB[!sub,]
+    object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
+    object@signal$BchrY=rbind(object@signal$BchrY,sigB[sub,])
     
     ## Type II
-    TypeII <- rbind(minfi::getProbeInfo(object$annotation, type = "II"),
-                  minfi::getProbeInfo(object$annotation, type = "SnpII"))
+    TypeII <- rbind(minfi::getProbeInfo(object@annotation, type = "II"),
+                  minfi::getProbeInfo(object@annotation, type = "SnpII"))
     sub=TypeII$Name %in% chrYnames
-    object$names$II=TypeII$Name[!sub]
-    object$names$chrY=c(object$names$chrY,TypeII$Name[sub])
+    object@names$II=TypeII$Name[!sub]
+    object@names$chrY=c(object@names$chrY,TypeII$Name[sub])
     sigA=minfi::getRed(myRGChannelSet)[TypeII$AddressA,]
     sigB=minfi::getGreen(myRGChannelSet)[TypeII$AddressA,]
-    object$signal$AII=sigA[!sub,]
-    object$signal$BII=sigB[!sub,]
-    object$signal$AchrY=rbind(object$signal$AchrY,sigA[sub,])
-    object$signal$BchrY=rbind(object$signal$BchrY,sigB[sub,])
+    object@signal$AII=sigA[!sub,]
+    object@signal$BII=sigB[!sub,]
+    object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
+    object@signal$BchrY=rbind(object@signal$BchrY,sigB[sub,])
     
-    object$nPos=sum(length(object$names$chrY),
-                  length(object$names$II),
-                  length(object$names$IRed),
-                  length(object$names$IGrn))
+    object@nPos=sum(length(object@names$chrY),
+                  length(object@names$II),
+                  length(object@names$IRed),
+                  length(object@names$IGrn))
     
-    for(i in names(object$signal)){
-    object$signal[[i]]=log2(1 + object$signal[[i]])
+    for(i in names(object@signal)){
+    object@signal[[i]]=log2(1 + object@signal[[i]])
     }
     
     message("Signal data loaded")
     
     
-    object$qntllist=buildQuantileList(object$nPos)
-    object$quantiles=list()
-    for(i in names(object$signal)[!grepl("Y",names(object$signal))]){
-    object$quantiles[[i]]=matrixStats::colQuantiles(object$signal[[i]],
-                                                    prob=object$qntllist)
+    object@qntllist=buildQuantileList(object@nPos)
+    for(i in names(object@signal)[!grepl("Y",names(object@signal))]){
+    object@quantiles[[i]]=matrixStats::colQuantiles(object@signal[[i]],
+                                                    prob=object@qntllist)
     }
     message("Quantiles done")
     
@@ -193,7 +193,7 @@ fromRGChannelSet <- function(myRGChannelSet){
 
 
 ################################################################################
-#' create a SampleSet from GenomeStudio files
+#' Creates a S4 object of class 'SampleSet' from GenomeStudio files
 #'
 #' @param controlProbeFile file of control probe data exported from GenomeStudio
 #' @param signalFile file exported from GenomeStudio with the exact same samples
@@ -213,44 +213,44 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
     if (length(unique(cell_type))<2) {
     stop("There should be at least 2 cell types\n")
     }
-    class(object) <- "SampleSet"
-    object$sampleSize=length(cell_type)
-    object$cell_type=cell_type
-    object$annotation=c(array="IlluminaHumanMethylation450k",
+    object <- new("SampleSet")
+    object@sampleSize=length(cell_type)
+    object@cell_type=cell_type
+    object@annotation=c(array="IlluminaHumanMethylation450k",
                       annotation="ilmn12.hg19")
     
     
     ## Construct the control Table
     controlTable=utils::read.table(controlProbeFile,sep='\t',header=TRUE)
-    object$sampleNames=unlist(strsplit(colnames(controlTable)
-                                     [1:object$sampleSize*3+1],".Signal_Grn"))
+    object@sampleNames=unlist(strsplit(colnames(controlTable)
+                                     [1:object@sampleSize*3+1],".Signal_Grn"))
     
-    controlred=controlTable[,paste(object$sampleName,".Signal_Red",sep="")]
-    controlgrn=controlTable[,paste(object$sampleName,".Signal_Grn",sep="")]
+    controlred=controlTable[,paste(object@sampleName,".Signal_Red",sep="")]
+    controlgrn=controlTable[,paste(object@sampleName,".Signal_Grn",sep="")]
     cp.types=controlTable$TargetID
     
-    if(any(! object$sampleNames %in% names(object$cell_type))){
-    i=which(! object$sampleNames%in%names(object$cell_type))[1]
-    stop("STOP: ",object$sampleNames[i],"from file ",controlProbeFile,
+    if(any(! object@sampleNames %in% names(object@cell_type))){
+    i=which(! object@sampleNames%in%names(object@cell_type))[1]
+    stop("STOP: ",object@sampleNames[i],"from file ",controlProbeFile,
          " should be present in the cell_types names:\n")
     }
-    object$cell_type=object$cell_type[object$sampleNames]
+    object@cell_type=object@cell_type[object@sampleNames]
     
     controlgrn <- log2(1 + controlgrn)
     controlred <- log2(1 + controlred)
-    object$ctl.covmat=constructProbCovMat(controlred,controlgrn,
-                                        cp.types,object$cell_type)
+    object@ctl.covmat=constructProbCovMat(controlred,controlgrn,
+                                        cp.types,object@cell_type)
     message("A covariance Matrix was build")
     
     
     ## Building the colClasses to help reading the file
-    colClasses <- rep("double", object$sampleSize*2+4)
+    colClasses <- rep("double", object@sampleSize*2+4)
     colClasses[1:4]=list(NULL)
     colClasses[2]="character"
     signalTable=utils::read.table(signalFile,sep='\t',
                          header=TRUE,colClasses=colClasses)
-    sigA=signalTable[,1:object$sampleSize*2]
-    sigB=signalTable[,1:object$sampleSize*2+1]
+    sigA=signalTable[,1:object@sampleSize*2]
+    sigB=signalTable[,1:object@sampleSize*2+1]
     names=signalTable[,1]
     rm(signalTable)
     
@@ -259,17 +259,17 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
     stop("There are non-numeric values in the matrix", '\n')}
     if (any(!is.finite(as.matrix(sigB)))){
     stop("There are non-numeric values in the matrix", '\n')}
-    if(any(unlist(strsplit(colnames(sigA),".Signal_A"))!=object$sampleNames)){
+    if(any(unlist(strsplit(colnames(sigA),".Signal_A"))!=object@sampleNames)){
     stop("Those two files should contain the same samples in the same order:\n",
          controlProbeFile,signalFile)}
     
     #Naming the column consistently
-    colnames(sigA)=object$sampleNames
-    colnames(sigB)=object$sampleNames
+    colnames(sigA)=object@sampleNames
+    colnames(sigB)=object@sampleNames
     
-    object$nPos=nrow(sigA)
+    object@nPos=nrow(sigA)
     
-    object$signal=list(AIGrn=sigA[orderIGrn,],
+    object@signal=list(AIGrn=sigA[orderIGrn,],
                     BIGrn=sigB[orderIGrn,],
                     AIRed=sigA[orderIRed,],
                     BIRed=sigB[orderIRed,],
@@ -278,7 +278,7 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
                     AchrY=sigA[orderchrY,],
                     BchrY=sigB[orderchrY,])
     
-    object$names=list(IGrn=names[orderIGrn],
+    object@names=list(IGrn=names[orderIGrn],
                    IRed=names[orderIRed],
                    II=names[orderII],
                    chrY=names[orderchrY])
@@ -286,16 +286,16 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
     
     message("Signal data loaded")
     
-    for(i in names(object$signal)){
-    object$signal[[i]]=log2(1 + object$signal[[i]])
+    for(i in names(object@signal)){
+    object@signal[[i]]=log2(1 + object@signal[[i]])
     }
     
-    object$qntllist=buildQuantileList(object$nPos)
-    object$quantiles=list()
-    object$quantiles=list()
-    for(i in names(object$signal)[!grepl("Y",names(object$signal))]){
-    object$quantiles[[i]]=matrixStats::colQuantiles(object$signal[[i]],
-                                                    prob=object$qntllist)
+    object@qntllist=buildQuantileList(object@nPos)
+    object@quantiles=list()
+    object@quantiles=list()
+    for(i in names(object@signal)[!grepl("Y",names(object@signal))]){
+    object@quantiles[[i]]=matrixStats::colQuantiles(object@signal[[i]],
+                                                    prob=object@qntllist)
     }
     message("Quantiles done")
     
@@ -304,10 +304,11 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 
 
 ################################################################################
-#' Print information about the SampleSet
+#' Show Object SampleSet
 #'
+#' @description Display informations about the SampleSet object
 #' @param x an object of class SampleSet
-#' @param ... further arguments passed to or from other methods.
+#' @param ... optional arguments passed to or from other methods.
 #'
 #' @export
 #'
@@ -316,43 +317,64 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' mySampleSet
 #' 
-print.SampleSet <- function(x, ...){
-    cat("SampleSet object built from ",x$type,'\n')
-    cat("Data: ",x$nPos,"positions ")
-    cat("and ",x$sampleSize, "samples",'\n')
-    cat("   cell type:",levels(x$cell_type),'\n')
-    cat("  ",length(x$qntllist),"quantiles",'\n')
-    if(is.null(x$predmat)){
-    cat("funtooNorm Normalization was not applied",'\n')
-    }else{
-    cat("funtooNorm Normalization was applied",'\n')
-    }
-}
 
+setMethod(f="show",
+          signature = "SampleSet",
+          definition = function(object){
+              cat("SampleSet object built from ",object@type,'\n')
+              cat("Data: ",object@nPos,"positions ")
+              cat("and ",object@sampleSize, "samples",'\n')
+              cat("   cell type:",levels(object@cell_type),'\n')
+              cat("  ",length(object@qntllist),"quantiles",'\n')
+              if(length(object@predmat)==0){
+                  cat("funtooNorm Normalization was not applied",'\n')}else{
+                      cat("funtooNorm Normalization was applied",'\n')
+                  }
+              }
+)
 
-getLogSigA <- function(signal){
-    return(rbind(signal$AIGrn,
-               signal$AIRed,
-               signal$AII,
-               signal$AchrY))
-}
+setGeneric(name="getLogSigA",
+           def=function(object) standardGeneric("getLogSigA")
+)
+setMethod("getLogSigA",
+          signature = "SampleSet",
+          definition = function(object){
+              return(rbind(object@signal$AIGrn,
+                           object@signal$AIRed,
+                           object@signal$AII,
+                           object@signal$AchrY))
+          }
+)
 
-getLogSigB <- function(signal){
-    return(rbind(signal$BIGrn,
-               signal$BIRed,
-               signal$BII,
-               signal$BchrY))
-}
+setGeneric(name="getLogSigB",
+           def=function(object) standardGeneric("getLogSigB")
+)
+setMethod("getLogSigB",
+          signature = "SampleSet",
+          definition = function(object){
+              return(rbind(object@signal$BIGrn,
+                           object@signal$BIRed,
+                           object@signal$BII,
+                           object@signal$BchrY))
+          }
+)
 
 ################################################################################
 ## internal function to get the position names returning a vector of
 ## position names the preserving the order define by this package
-getPositionNames <- function(names){
-    return(c(names$IGrn,
-           names$IRed,
-           names$II,
-           names$chrY))
-}
+setGeneric(name="getPositionNames",
+           def=function(object) standardGeneric("getPositionNames")
+)
+
+setMethod("getPositionNames",
+          signature =  "SampleSet",
+          definition = function(object){
+              return(c(object@names$IGrn,
+                       object@names$IRed,
+                       object@names$II,
+                       object@names$chrY))
+          }
+)
 
     
 #' Return a list
@@ -367,19 +389,26 @@ getPositionNames <- function(names){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' gr=getGRanges(mySampleSet)
 #' 
-getGRanges <- function(object){
-    methWithoutSNPs=getPositionNames(object$names)
-    methWithoutSNPs=methWithoutSNPs[!grepl("^rs",methWithoutSNPs)]
-    loc=minfi::getLocations(sprintf("%sanno.%s",
-                           object$annotation["array"],
-                           object$annotation["annotation"]),
-                   orderByLocation = FALSE)
+setGeneric(name="getGRanges",
+           def=function(object) standardGeneric("getGRanges")
+)
+
+setMethod("getGRanges",
+          signature = "SampleSet",
+          definition = function(object){
+              methWithoutSNPs=getPositionNames(object)
+              methWithoutSNPs=methWithoutSNPs[!grepl("^rs",methWithoutSNPs)]
+              loc=minfi::getLocations(sprintf("%sanno.%s",
+                                              object@annotation["array"],
+                                              object@annotation["annotation"]),
+                                      orderByLocation = FALSE)
     return(loc[methWithoutSNPs])
-}
+          }
+)
 
 
 ################################################################################
-#' compute the beta value of the raw signal for each position and each
+#' Computes the beta value from the raw signal at each position for each
 #' sample
 #'
 #' @param object object of class SampleSet
@@ -394,17 +423,24 @@ getGRanges <- function(object){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' r=getRawBeta(mySampleSet)
 #' 
-getRawBeta <- function(object,offset=100){
-    mat=calcBeta(getLogSigA(object$signal),
-               getLogSigB(object$signal),
-               offset)
-    colnames(mat)=object$sampleNames
-    rownames(mat)=getPositionNames(object$names)
-    return(mat[!grepl("^rs",rownames(mat)),])
-}
+setGeneric(name="getRawBeta",
+           def=function(object, offset=100) standardGeneric("getRawBeta")
+)
+
+setMethod("getRawBeta",
+          signature = "SampleSet",
+          definition = function(object,offset){
+              mat=calcBeta(getLogSigA(object),
+                           getLogSigB(object),
+                           offset)
+              colnames(mat)=object@sampleNames
+              rownames(mat)=getPositionNames(object)
+              return(mat[!grepl("^rs",rownames(mat)),])
+          }
+)
 
 ################################################################################
-#' compute the beta value after normalization for each position and each
+#' Computes the beta value after normalization at each position for each
 #' sample
 #'
 #' @param object  of type SampleSet
@@ -419,52 +455,65 @@ getRawBeta <- function(object,offset=100){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' b=getNormBeta(funtooNorm(mySampleSet))
 #' 
-getNormBeta <- function(object,offset=100){
-    if(any(is.null(object$predmat))){
-    stop("WARNING: please call funtooNorm")
-    }
-    mat=calcBeta(getLogSigA(object$predmat),
-               getLogSigB(object$predmat),
-               offset)
-    colnames(mat)=object$sampleNames
-    rownames(mat)=getPositionNames(object$names)
-    return(mat[!grepl("^rs",rownames(mat)),])
-}
+setGeneric(name="getNormBeta",
+           def=function(object, offset=100) standardGeneric("getNormBeta")
+)
+
+setMethod("getNormBeta",
+          signature = "SampleSet",
+          definition = function(object,offset){
+              if(length(object@predmat)==0){
+                  stop("WARNING: please call funtooNorm")
+                  }
+              mat=calcBeta(getLogSigA(object),
+                           getLogSigB(object),
+                           offset)
+              colnames(mat)=object@sampleNames
+              rownames(mat)=getPositionNames(object)
+              return(mat[!grepl("^rs",rownames(mat)),])
+          }
+)
 
 ################################################################################
-#' compute the M value after normalization for each position and each
+#' Computes the M value after normalization at each position for each
 #' sample
 #'
 #' @param object  of type SampleSet
 #' @param offset default is 100 as Illumina standard
 #'
-#' @return a matrix containing M after normalization value for each position
-#' and each samples log2(Meth/Unmeth)
+#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization at each position
+#' for each samples. 
 #' @export
 #' 
 #' @examples require(minfiData)
 #' pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' m=getNormM(funtooNorm(mySampleSet))
-#' 
-getNormM <- function(object,offset=100){
-    if(any(is.null(object$predmat))){
-    stop("WARNING: please call funtooNorm")
-  }
-  mat=getLogSigB(object$predmat)-getLogSigA(object$predmat)
-  colnames(mat)=object$sampleNames
-  rownames(mat)=getPositionNames(object$names)
-  return(mat[!grepl("^rs",rownames(mat)),])
-}
+#'
+setGeneric(name="getNormM",
+           def=function(object) standardGeneric("getNormM")
+)
+
+setMethod("getNormM",
+          signature = "SampleSet",
+          definition = function(object){
+              if(length(object@predmat)==0){
+                  stop("WARNING: please call funtooNorm")
+                  }
+              mat=getLogSigB(object)-getLogSigA(object)
+              colnames(mat)=object@sampleNames
+              rownames(mat)=getPositionNames(object)
+              return(mat[!grepl("^rs",rownames(mat)),])
+          }
+)
 
 ################################################################################
-#' compute the M value after normalization for each SNP position and
-#' each sample
+#' Computes the M value after normalization for each SNP.
 #'
-#' @param object  of type SampleSet
+#' @param object  of class SampleSet
 #'
-#' @return a matrix containing M after normalization value for each SNP of the 
-#' chip and each sample log2(Meth/Unmeth)
+#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization for each SNP 
+#'
 #' @export
 #'
 #' @examples require(minfiData)
@@ -472,93 +521,98 @@ getNormM <- function(object,offset=100){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' snp=getSnpM(funtooNorm(mySampleSet))
 #' 
-getSnpM <- function(object){
-    if(any(is.null(object$predmat))){
-    stop("WARNING: please call funtooNorm")
-    }
-    mat=getLogSigA(object$predmat)-getLogSigB(object$predmat)
-    colnames(mat)=object$sampleNames
-    rownames(mat)=getPositionNames(object$names)
-    return(mat[grepl("^rs",rownames(mat)),])
-}
+setGeneric(name="getSnpM",
+           def=function(object) standardGeneric("getSnpM")
+)
+
+setMethod("getSnpM",
+          signature = "SampleSet",
+          definition = function(object){
+              if(length(object@predmat)==0){
+                  stop("WARNING: please call funtooNorm")
+                  }
+              mat=getLogSigA(object)-getLogSigB(object)
+              colnames(mat)=object@sampleNames
+              rownames(mat)=getPositionNames(object)
+              return(mat[grepl("^rs",rownames(mat)),])
+          }
+)
 
 ################################################################################
 #' This is the main normalization function which applies to autosomes and the X chromosome.  
-#' Chromosome Y requires separate analysis, since there are few probes on Y.  
-#' Therefore we use a straightforward quantile normalization applied to males only.
+#' Chromosome Y requires separate analysis as there are few probes on Y.  
+#' We use a straightforward quantile normalization applied to males only.
 #'
-#' @param object of type SampleSet
+#' @param object of class SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
 #' @param ncmp number of components used in the analysis (default 4)
-#' @param force set it to TRUE in order to re-compute the normalisation whent 
-#' it is already done
-#' @param sex boolean vector: when not null force the chrY normalization to use 
-#' treat the TRUE values as mens
+#' @param force when set to TRUE forces the normalization procedure to re-compute
+#' @param sex boolean vector: if NULL Beta values from ChrY are used for classification.
 #'
-#' @return a SampleSet containing the normalised signal
+#' @return a S4 object of class SampleSet containing the normalized signal
 #' @export
 #'
 #' @examples require(minfiData)
 #' pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' mySampleSet=funtooNorm(mySampleSet)
-#' 
-funtooNorm <- function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL){
-  
-    if(force | is.null(object$predmat)){
-    object$predmat=list()
-    }else{
-    message("Normalization already exist")
-    }
-    
-    
-    ######## this part deal with chrY
-    if(is.null(sex)){
-    mens=matrixStats::colMedians(calcBeta(object$signal$AchrY,
-                                          object$signal$BchrY))<0.6
-    message("we found ",sum(mens)," men and ",
-            sum(!mens)," women in your data set base on Y probes only")
-    }else{
-    mens=sex
-    message("There is ",sum(mens)," men and ",
-            sum(!mens)," women")
-    }
-    # women will not have any corrections
-    object$predmat$AchrY=object$signal$AchrY 
-    object$predmat$BchrY=object$signal$BchrY
-    if(1<sum(mens)){
-    object$predmat$AchrY[,mens]=
-      quantileNormalization(object$signal$AchrY[,mens])
-    object$predmat$BchrY[,mens]=
-      quantileNormalization(object$signal$BchrY[,mens])
-    }
-    
-    
-    for(signal in names(object$quantiles)){
-    if(force | is.null(object$predmat[[signal]])){
-      message("Normalization of signal : ",signal)
-      object$predmat[[signal]]=
-        funtooNormApply(object$signal[[signal]],
-                        object$quantiles[[signal]],
-                        object$qntllist,
-                        object$ctl.covmat,
-                        ncmp,type.fits)
-      colnames(object$predmat[[signal]])=object$sampleNames
-    }else{
-      message("Already done : ",signal)
-    }
-    }
-    return(object)
-}
+#'
+setGeneric(name="funtooNorm",
+           def=function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL) standardGeneric("funtooNorm")
+)
+
+setMethod("funtooNorm",
+          signature = "SampleSet",
+          definition = function(object,type.fits,ncmp,force,sex)
+              {if(length(object@predmat)!=0)
+              {message("Normalization already exist")
+                  }
+              ###### this part deal with chrY
+              if(is.null(sex)){
+                  mens=matrixStats::colMedians(calcBeta(object@signal$AchrY,
+                                                        object@signal$BchrY))<0.6
+                  message("we found ",sum(mens)," men and ",
+                          sum(!mens)," women in your data set base on Y probes only")
+                  }else{
+                      mens=sex
+                      message("There is ",sum(mens)," men and ",
+                              sum(!mens)," women")
+                      }
+              # no correction for women
+              object@predmat$AchrY=object@signal$AchrY
+              object@predmat$BchrY=object@signal$BchrY
+              if(1<sum(mens)){
+                  object@predmat$AchrY[,mens]=
+                      quantileNormalization(object@signal$AchrY[,mens])
+                  object@predmat$BchrY[,mens]=
+                      quantileNormalization(object@signal$BchrY[,mens])
+                  }
+              for(signal in names(object@quantiles)){
+                  if(force | is.null(object@predmat[[signal]])){
+                      message("Normalization of signal : ",signal)
+                      object@predmat[[signal]]=
+                          funtooNormApply(object@signal[[signal]],
+                                          object@quantiles[[signal]],
+                                          object@qntllist,
+                                          object@ctl.covmat,
+                                          ncmp,type.fits)
+                      colnames(object@predmat[[signal]])=object@sampleNames
+                      }else{
+                          message("Already done : ",signal)
+                      }
+                  }
+              return(object)
+          }
+)
 
 
 ################################################################################
-#' Plot a series of graphs with different numbers of components for
-#' each signal
+#' Plot a series of graphs for each signal type, illustrating the effects
+#'  of the number of components included
 #'
-#' @param object of type SampleSet
+#' @param object of class SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
-#' @param file if not empty will write a pdf using this name, path can be
+#' @param file if not NULL will write a pdf using this name, path can be
 #' included
 #'
 #' @export
@@ -568,15 +622,20 @@ funtooNorm <- function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL){
 #' mySampleSet=fromRGChannelSet(RGsetEx)
 #' plotValidationGraph(mySampleSet)
 #' 
-plotValidationGraph <- function(object, type.fits="PCR",file=""){
+setGeneric(name="plotValidationGraph",
+           def=function(object, type.fits="PCR",file=NULL) standardGeneric("plotValidationGraph")
+)
+
+setMethod("plotValidationGraph",
+          signature = "SampleSet",
+          definition = function(object,type.fits,file){
     
-    if(file=="") message("Will plot in the usual output")
-    else if (!file.access(file, mode=2))
-    stop("cannot write in ",file)
-    else if (tools::file_ext(file)!="pdf")
-    stop("your file extension should be pdf for ",file)
+    if(is.null(file)){message("Will plot in the usual output")
+        }else if(!file.access(file, mode=2)){
+    stop("cannot write in ",file)}else if (tools::file_ext(file)!="pdf"){
+    stop("your file extension should be pdf for ",file)}
     
-    svd.ctlcovmat=svd(object$ctl.covmat)$d
+    svd.ctlcovmat=svd(object@ctl.covmat)$d
     ## set max is 8
     numcomp <- min(c(which(cumsum(svd.ctlcovmat)/sum(svd.ctlcovmat)>=0.98),8))
     if (!is.finite(numcomp) | numcomp>20)  {
@@ -586,7 +645,7 @@ plotValidationGraph <- function(object, type.fits="PCR",file=""){
     message("\nStarting validation with a max of ", numcomp , 
             " components...\n")
     
-    if(file!=""){
+    if(is.null(file)){
     message("plotting in the pdf file:",file)
     pdf(file = file, height=7, width=7)
     }
@@ -597,9 +656,9 @@ plotValidationGraph <- function(object, type.fits="PCR",file=""){
     par(omi=c(0,0,0,0),mar = c(2,2,0.2, 0.2), mgp = c(1,0,0))
     
     
-    for(i in names(object$quantiles)){
-    plotValidate(object$quantiles[[i]],object$qntllist,
-                 object$ctl.covmat,numcomp,i)
+    for(i in names(object@quantiles)){
+    plotValidate(object@quantiles[[i]],object@qntllist,
+                 object@ctl.covmat,numcomp,i)
     }
     
     
@@ -610,11 +669,12 @@ plotValidationGraph <- function(object, type.fits="PCR",file=""){
     legend(title='Number of components:', x = "top",inset = 0,
          legend = 1:numcomp, col=rainbow(numcomp), lty=ltylist,
          cex=1.1, horiz = TRUE)
-    if(file!=""){
+    if(!is.null(file)){
     dev.off()
     }
   
-}
+          }
+)
 
 #' @import IlluminaHumanMethylation450kmanifest 
 #' @import IlluminaHumanMethylation450kanno.ilmn12.hg19

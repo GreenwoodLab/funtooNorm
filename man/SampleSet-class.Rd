@@ -3,16 +3,12 @@
 \docType{class}
 \name{SampleSet-class}
 \alias{SampleSet-class}
-\title{SampleSet is an S3 class defined for the purpose of running the
-funtooNorm algorithm. They are lists containing signal data and different
-variables useful for funtooNorm. The data is separated into the 3 probes
-types, each having 2 channels (methylated and unmethylated ie : A and B)
-We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII}
+\title{S4 class object SampleSet}
 \value{
-a SampleSet object
+a S4 object of class SampleSet
 }
 \description{
-SampleSet is an S3 class defined for the purpose of running the
+SampleSet is an S4 class defined for the purpose of running the
 funtooNorm algorithm. They are lists containing signal data and different
 variables useful for funtooNorm. The data is separated into the 3 probes
 types, each having 2 channels (methylated and unmethylated ie : A and B)
@@ -33,15 +29,17 @@ contain the list of sample names in order used}
 \item{\code{annotation}}{IlluminaMethylationAnnotation: the annotation object from
 minfi package}
 
-\item{\code{cell_type}}{list: list matching each sample to define the categories}
+\item{\code{cell_type}}{factor: vector of the cell type for each sample as factors}
 
-\item{\code{qntllist}}{numeric: vector of ordered quantiles}
+\item{\code{qntllist}}{list: vector of ordered quantiles}
 
-\item{\code{quantiles}}{numeric: list of  6 quantiles tables for 6 type of signals}
+\item{\code{quantiles}}{list: list of  6 quantiles tables for the 6 signal types}
 
-\item{\code{ctl.covmat}}{numeric: covariance matrix for the model fit}
+\item{\code{ctl.covmat}}{matrix: covariance matrix for the model fit}
 
-\item{\code{signal}}{numeric: list of 6 signal tables the 6 type of signals}
+\item{\code{signal}}{list: list of the values for all 6 probe types.}
+
+\item{\code{names}}{list: list of probes for each type}
 }}
 \examples{
 showClass("SampleSet")

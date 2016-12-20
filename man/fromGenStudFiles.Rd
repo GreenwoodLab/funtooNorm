@@ -2,7 +2,7 @@
 % Please edit documentation in R/SampleSet.R
 \name{fromGenStudFiles}
 \alias{fromGenStudFiles}
-\title{create a SampleSet from GenomeStudio files}
+\title{Creates a S4 object of class 'SampleSet' from GenomeStudio files}
 \usage{
 fromGenStudFiles(controlProbeFile, signalFile, cell_type)
 }
@@ -19,6 +19,6 @@ the files from genome studios, and at least 2 different cell types.}
 a SampleSet object
 }
 \description{
-create a SampleSet from GenomeStudio files
+Creates a S4 object of class 'SampleSet' from GenomeStudio files
 }
 

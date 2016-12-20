@@ -2,21 +2,18 @@
 % Please edit documentation in R/SampleSet.R
 \name{getSnpM}
 \alias{getSnpM}
-\title{compute the M value after normalization for each SNP position and
-each sample}
+\title{Computes the M value after normalization for each SNP.}
 \usage{
 getSnpM(object)
 }
 \arguments{
-\item{object}{of type SampleSet}
+\item{object}{of class SampleSet}
 }
 \value{
-a matrix containing M after normalization value for each SNP of the 
-chip and each sample log2(Meth/Unmeth)
+a matrix containing M values, log2(Meth/Unmeth), after normalization for each SNP
 }
 \description{
-compute the M value after normalization for each SNP position and
-each sample
+Computes the M value after normalization for each SNP.
 }
 \examples{
 require(minfiData)

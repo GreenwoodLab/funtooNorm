@@ -2,10 +2,10 @@
 % Please edit documentation in R/SampleSet.R
 \name{getNormM}
 \alias{getNormM}
-\title{compute the M value after normalization for each position and each
+\title{Computes the M value after normalization at each position for each
 sample}
 \usage{
-getNormM(object, offset = 100)
+getNormM(object)
 }
 \arguments{
 \item{object}{of type SampleSet}
@@ -13,11 +13,11 @@ getNormM(object, offset = 100)
 \item{offset}{default is 100 as Illumina standard}
 }
 \value{
-a matrix containing M after normalization value for each position
-and each samples log2(Meth/Unmeth)
+a matrix containing M values, log2(Meth/Unmeth), after normalization at each position
+for each samples.
 }
 \description{
-compute the M value after normalization for each position and each
+Computes the M value after normalization at each position for each
 sample
 }
 \examples{

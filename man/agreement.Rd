@@ -2,7 +2,7 @@
 % Please edit documentation in R/funtoonorm.R
 \name{agreement}
 \alias{agreement}
-\title{Function to measure intra-replicate agreement in methylation data.}
+\title{Function to measure intra-replicate agreement for methylation data.}
 \usage{
 agreement(Beta, individualID)
 }
@@ -19,7 +19,7 @@ The average value of the square distance between replicates:
 a measure of agreement between replicates in methylation data.
 }
 \description{
-Function to measure intra-replicate agreement in methylation data.
+Function to measure intra-replicate agreement for methylation data.
 }
 \details{
 We expect that the values returned by the agreement function after

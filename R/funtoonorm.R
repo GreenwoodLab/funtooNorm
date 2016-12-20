@@ -125,7 +125,7 @@ funtooNormApply <- function(signal, quantiles, qntllist,
 }
 
 ################################################################################
-#' Function to measure intra-replicate agreement in methylation data.
+#' Function to measure intra-replicate agreement for methylation data.
 #'
 #' @param Beta : Matrix with beta-values, rows corresponding to probes, columns
 #' corresponding to samples.  
