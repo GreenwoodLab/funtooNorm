@@ -6,3 +6,6 @@
 .\.RData$
 \.(PCR|PLS)\.pdf$
 ^funtooNorm_old\.Rnw$
+^\.travis\.yml$
+^\.gitignore$
+^.git

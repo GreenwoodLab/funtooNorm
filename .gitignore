@@ -3,9 +3,9 @@
 *.RData
 funtooNorm.Rproj
 .Rbuildignore
+inst/doc
 # files created during vignette building
 vignettes/*
 !vignettes/funtooNorm.Rnw
 !vignettes/funtooNorm.pdf
-
 

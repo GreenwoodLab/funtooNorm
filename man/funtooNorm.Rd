@@ -5,6 +5,7 @@
 \title{This is the main normalization function which applies to autosomes and the X chromosome.  
 Chromosome Y requires separate analysis as there are few probes on Y.  
 We use a straightforward quantile normalization applied to males only.}
+
 \usage{
 funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
   sex = NULL)
