@@ -2,39 +2,31 @@
 % Please edit documentation in R/SampleSet.R
 \name{funtooNorm}
 \alias{funtooNorm}
-\title{This function applies the normalization method central to the package
-to each signal.
-The chrY have a deserve a specific treatment, men are asses using the median
-beta estimation on the raw data positions with a cutoff at 60 percent. 
-We perform on the mens a quantile normalization and we do not change the 
-women values}
+\title{This is the main normalization function which applies to autosomes and the X chromosome.  
+Chromosome Y requires separate analysis as there are few probes on Y.  
+We use a straightforward quantile normalization applied to males only.}
 \usage{
 funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
   sex = NULL)
 }
 \arguments{
-\item{object}{of type SampleSet}
+\item{object}{of class SampleSet}
 
 \item{type.fits}{can be "PCR" or "PLS" (default "PCR")}
 
 \item{ncmp}{number of components used in the analysis (default 4)}
 
-\item{force}{set it to TRUE in order to re-compute the normalisation whent 
-it is already done}
+\item{force}{when set to TRUE forces the normalization procedure to re-compute}
 
-\item{sex}{boolean vector: when not null force the chrY normalization to use 
-treat the TRUE values as mens}
+\item{sex}{boolean vector: if NULL Beta values from ChrY are used for classification.}
 }
 \value{
-a SampleSet containing the normalised signal
+a S4 object of class SampleSet containing the normalized signal
 }
 \description{
-This function applies the normalization method central to the package
-to each signal.
-The chrY have a deserve a specific treatment, men are asses using the median
-beta estimation on the raw data positions with a cutoff at 60 percent. 
-We perform on the mens a quantile normalization and we do not change the 
-women values
+This is the main normalization function which applies to autosomes and the X chromosome.  
+Chromosome Y requires separate analysis as there are few probes on Y.  
+We use a straightforward quantile normalization applied to males only.
 }
 \examples{
 require(minfiData)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/SampleSet.R
 \name{getRawBeta}
 \alias{getRawBeta}
-\title{compute the beta value of the raw signal for each position and each
+\title{Computes the beta value from the raw signal at each position for each
 sample}
 \usage{
 getRawBeta(object, offset = 100)
@@ -17,7 +17,7 @@ a matrix containing the raw beta value for each position and each
 samples
 }
 \description{
-compute the beta value of the raw signal for each position and each
+Computes the beta value from the raw signal at each position for each
 sample
 }
 \examples{

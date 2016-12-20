@@ -25,7 +25,7 @@ knitr::opts_chunk$set(tidy = FALSE,
 ```
 
 ```{r library, echo=FALSE, results='hide', message=FALSE}
-library(minfi)
+require(minfi)
 ```
 
 #Introduction
@@ -48,7 +48,7 @@ Note that the current version of the package does not do a good job of normalizi
   different colors provide the methylated and the unmethylated 
   measurements.  
 ```  
-Therefore, we dissociate the 6 types of signals in our method :
+Therefore, we separate the 6 types of signals in our method :
 _AIGrn_, _BIGrn_, _AIRed_, _BIRed_, _AII_  and _BII_, where the __A__ (methylated) and
 __B__ (unmethylated) are on __Green__ or __Red__ channel
 depending on the 3 types : __Type I Red__, __Type I Green__ or

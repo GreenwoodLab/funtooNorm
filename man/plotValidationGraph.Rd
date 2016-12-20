@@ -2,22 +2,22 @@
 % Please edit documentation in R/SampleSet.R
 \name{plotValidationGraph}
 \alias{plotValidationGraph}
-\title{Plot a series of graphs with different numbers of components for
-each signal}
+\title{Plot a series of graphs for each signal type, illustrating the effects
+ of the number of components included}
 \usage{
-plotValidationGraph(object, type.fits = "PCR", file = "")
+plotValidationGraph(object, type.fits = "PCR", file = NULL)
 }
 \arguments{
-\item{object}{of type SampleSet}
+\item{object}{of class SampleSet}
 
 \item{type.fits}{can be "PCR" or "PLS" (default "PCR")}
 
-\item{file}{if not empty will write a pdf using this name, path can be
+\item{file}{if not NULL will write a pdf using this name, path can be
 included}
 }
 \description{
-Plot a series of graphs with different numbers of components for
-each signal
+Plot a series of graphs for each signal type, illustrating the effects
+ of the number of components included
 }
 \examples{
 require(minfiData)
