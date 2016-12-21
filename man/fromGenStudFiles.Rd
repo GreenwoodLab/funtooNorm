@@ -7,16 +7,16 @@
 fromGenStudFiles(controlProbeFile, signalFile, cell_type)
 }
 \arguments{
-\item{controlProbeFile}{file of control probe data exported from GenomeStudio}
+\item{controlProbeFile}{The control probe file exported from GenomeStudio}
 
-\item{signalFile}{file exported from GenomeStudio with the exact same samples
-as control probe File}
+\item{signalFile}{The signals exported from GenomeStudio samples must be in
+same order as the control probe File}
 
-\item{cell_type}{this vector should have names matching all the samples in
-the files from genome studios, and at least 2 different cell types.}
+\item{cell_type}{A vector of cell types, names must match control probes and
+signal files.}
 }
 \value{
-a SampleSet object
+An object of class 'SampleSet'.
 }
 \description{
 Creates a S4 object of class 'SampleSet' from GenomeStudio files

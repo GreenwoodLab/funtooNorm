@@ -8,7 +8,7 @@
 \S4method{show}{SampleSet}(object)
 }
 \arguments{
-\item{x}{an object of class SampleSet}
+\item{object}{an object of class SampleSet}
 
 \item{...}{optional arguments passed to or from other methods.}
 }

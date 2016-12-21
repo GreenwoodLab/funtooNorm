@@ -15,19 +15,20 @@
 #' We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
 #' 
 #'
-#' @slot type character: is 'minfi' or 'GenomeStudio'
+#' @slot type Character: is 'minfi' or 'GenomeStudio'
 #' @slot sampleNames character vector:
 #' contain the list of sample names in order used 
 #' @slot sampleSize numeric: the number of samples
 #' @slot nPos numeric: the number of positions in the ILLUMINA chip
-#' @slot annotation IlluminaMethylationAnnotation: the annotation object from
+#' @slot annotation character: the annotation object from
 #' minfi package
 #' @slot cell_type factor: vector of the cell type for each sample as factors
-#' @slot qntllist list: vector of ordered quantiles
+#' @slot qntllist numeric: vector of ordered quantiles
 #' @slot quantiles list: list of  6 quantiles tables for the 6 signal types
 #' @slot ctl.covmat matrix: covariance matrix for the model fit
 #' @slot signal list: list of the values for all 6 probe types.
 #' @slot names list: list of probes for each type
+#' @slot predmat list: list of the normalized values for all 6 probe types.
 #'
 #' @return a S4 object of class SampleSet
 #' @export
@@ -60,12 +61,13 @@ setClass("SampleSet", representation(type = "character",
 
 #' @title  Creates an object of class SampleSet from a RGChannelSet {minfi}
 #' 
-#' @description Creates a object of class SampleSet from the raw unprocessed data in RGChannelSet
+#' @description Creates a object of class SampleSet from the raw unprocessed
+#' data in RGChannelSet
 #' 
 #' @param myRGChannelSet : RGChannelSet, from minfi package, should contain a
 #'   cell_type vector in pData
 #'   
-#' @return a class 'SampleSet' object
+#' @return An object of class 'SampleSet'
 #' @export
 #' 
 #' @examples require(minfiData)
@@ -195,13 +197,13 @@ fromRGChannelSet <- function(myRGChannelSet){
 ################################################################################
 #' Creates a S4 object of class 'SampleSet' from GenomeStudio files
 #'
-#' @param controlProbeFile file of control probe data exported from GenomeStudio
-#' @param signalFile file exported from GenomeStudio with the exact same samples
-#' as control probe File
-#' @param cell_type this vector should have names matching all the samples in
-#' the files from genome studios, and at least 2 different cell types.
+#' @param controlProbeFile The control probe file exported from GenomeStudio
+#' @param signalFile The signals exported from GenomeStudio samples must be in
+#' same order as the control probe File
+#' @param cell_type A vector of cell types, names must match control probes and
+#'  signal files.
 #'
-#' @return a SampleSet object
+#' @return An object of class 'SampleSet'.
 #' @export
 #'
 fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
@@ -307,7 +309,7 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 #' Show Object SampleSet
 #'
 #' @description Display informations about the SampleSet object
-#' @param x an object of class SampleSet
+#' @param object an object of class SampleSet
 #' @param ... optional arguments passed to or from other methods.
 #'
 #' @export
@@ -377,11 +379,11 @@ setMethod("getPositionNames",
 )
 
     
-#' Return a list
+#' Build GRange object of methylation probes
 #'
-#' @param object object of class SampleSet
+#' @param object Object of class SampleSet.
 #'
-#' @return a GRange object of all the methylated positions
+#' @return A GRange object of the positions of each cpg.
 #' @export
 #'
 #' @examples require(minfiData)
@@ -392,7 +394,7 @@ setMethod("getPositionNames",
 setGeneric(name="getGRanges",
            def=function(object) standardGeneric("getGRanges")
 )
-
+#' @describeIn getGRanges Build GRange object of methylation probes
 setMethod("getGRanges",
           signature = "SampleSet",
           definition = function(object){
@@ -408,8 +410,7 @@ setMethod("getGRanges",
 
 
 ################################################################################
-#' Computes the beta value from the raw signal at each position for each
-#' sample
+#' Computes Beta value from raw signals
 #'
 #' @param object object of class SampleSet
 #' @param offset default is 100 as Illumina standard
@@ -426,7 +427,7 @@ setMethod("getGRanges",
 setGeneric(name="getRawBeta",
            def=function(object, offset=100) standardGeneric("getRawBeta")
 )
-
+#' @describeIn getRawBeta Computes Beta value from raw signals
 setMethod("getRawBeta",
           signature = "SampleSet",
           definition = function(object,offset){
@@ -440,8 +441,7 @@ setMethod("getRawBeta",
 )
 
 ################################################################################
-#' Computes the beta value after normalization at each position for each
-#' sample
+#' Computes Beta values from normalized signals
 #'
 #' @param object  of type SampleSet
 #' @param offset default is 100 as Illumina standard
@@ -458,7 +458,7 @@ setMethod("getRawBeta",
 setGeneric(name="getNormBeta",
            def=function(object, offset=100) standardGeneric("getNormBeta")
 )
-
+#' @describeIn getNormBeta Computes Beta values from normalized signals
 setMethod("getNormBeta",
           signature = "SampleSet",
           definition = function(object,offset){
@@ -475,14 +475,12 @@ setMethod("getNormBeta",
 )
 
 ################################################################################
-#' Computes the M value after normalization at each position for each
-#' sample
+#' Computes M values,log2(Meth/Unmeth), from normalized signals
 #'
-#' @param object  of type SampleSet
-#' @param offset default is 100 as Illumina standard
+#' @param object  An object of class SampleSet
+#' @param offset Default is 100 as Illumina standard
 #'
-#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization at each position
-#' for each samples. 
+#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization
 #' @export
 #' 
 #' @examples require(minfiData)
@@ -493,7 +491,8 @@ setMethod("getNormBeta",
 setGeneric(name="getNormM",
            def=function(object) standardGeneric("getNormM")
 )
-
+#' @describeIn getNormM Computes M values, log2(Meth/Unmeth),
+#'  from normalized signals 
 setMethod("getNormM",
           signature = "SampleSet",
           definition = function(object){
@@ -508,11 +507,12 @@ setMethod("getNormM",
 )
 
 ################################################################################
-#' Computes the M value after normalization for each SNP.
+#' Computes M values after normalization of SNP data.
 #'
 #' @param object  of class SampleSet
 #'
-#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization for each SNP 
+#' @return a matrix containing M values, log2(Meth/Unmeth), after normalization
+#' for SNP data
 #'
 #' @export
 #'
@@ -524,7 +524,8 @@ setMethod("getNormM",
 setGeneric(name="getSnpM",
            def=function(object) standardGeneric("getSnpM")
 )
-
+#' @describeIn getSnpM Computes M values, log2(Meth/Unmeth), for normalized
+#' SNP data
 setMethod("getSnpM",
           signature = "SampleSet",
           definition = function(object){
@@ -539,15 +540,20 @@ setMethod("getSnpM",
 )
 
 ################################################################################
-#' This is the main normalization function which applies to autosomes and the X chromosome.  
+#' The funtooNorm normalization function
+#' 
+#'  \code{funtooNorm}
+#'  
+#' This is a generic function which applies to autosomes and the X chromosome.  
 #' Chromosome Y requires separate analysis as there are few probes on Y.  
 #' We use a straightforward quantile normalization applied to males only.
 #'
-#' @param object of class SampleSet
-#' @param type.fits can be "PCR" or "PLS" (default "PCR")
-#' @param ncmp number of components used in the analysis (default 4)
-#' @param force when set to TRUE forces the normalization procedure to re-compute
-#' @param sex boolean vector: if NULL Beta values from ChrY are used for classification.
+#' @param object Object of class SampleSet
+#' @param type.fits Choice between "PCR" or "PLS" (default="PCR")
+#' @param ncmp Number of components included in the analysis (default=4)
+#' @param force When set to TRUE forces the normalization procedure to re-compute
+#' @param sex Boolean vector if male. if NULL Beta values from ChrY are used for
+#'  classification.
 #'
 #' @return a S4 object of class SampleSet containing the normalized signal
 #' @export
@@ -558,9 +564,10 @@ setMethod("getSnpM",
 #' mySampleSet=funtooNorm(mySampleSet)
 #'
 setGeneric(name="funtooNorm",
-           def=function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL) standardGeneric("funtooNorm")
+           def=function(object, type.fits="PCR",ncmp=4,force=FALSE,sex=NULL) 
+               standardGeneric("funtooNorm")
 )
-
+#' @describeIn funtooNorm The funtooNorm normalization function
 setMethod("funtooNorm",
           signature = "SampleSet",
           definition = function(object,type.fits,ncmp,force,sex)
@@ -570,9 +577,9 @@ setMethod("funtooNorm",
               ###### this part deal with chrY
               if(is.null(sex)){
                   mens=matrixStats::colMedians(calcBeta(object@signal$AchrY,
-                                                        object@signal$BchrY))<0.6
-                  message("we found ",sum(mens)," men and ",
-                          sum(!mens)," women in your data set base on Y probes only")
+                                                    object@signal$BchrY))<0.6
+                  message("we found ",sum(mens)," men and ",sum(!mens),
+                          " women in your data set base on Y probes only")
                   }else{
                       mens=sex
                       message("There is ",sum(mens)," men and ",
@@ -607,8 +614,9 @@ setMethod("funtooNorm",
 
 
 ################################################################################
-#' Plot a series of graphs for each signal type, illustrating the effects
-#'  of the number of components included
+#' @title plot of Validation Graph for determing number of components
+#' @description Plots a series of graphs for each signal type, to determine 
+#' the number of components to include in the normalization procedure.
 #'
 #' @param object of class SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
@@ -623,9 +631,12 @@ setMethod("funtooNorm",
 #' plotValidationGraph(mySampleSet)
 #' 
 setGeneric(name="plotValidationGraph",
-           def=function(object, type.fits="PCR",file=NULL) standardGeneric("plotValidationGraph")
+           def=function(object, type.fits="PCR",file=NULL) 
+               standardGeneric("plotValidationGraph")
 )
-
+#' @describeIn plotValidationGraph Plots a series of graphs for each 
+#' signal type, to determine the number of components to include 
+#' in the normalization procedure.
 setMethod("plotValidationGraph",
           signature = "SampleSet",
           definition = function(object,type.fits,file){

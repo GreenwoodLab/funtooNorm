@@ -17,7 +17,8 @@ Type: \tab Package\cr
 License: \tab GPL-3\cr
 }
 }
-\author{Celia Greenwood, Raphael Poujol, Stepan Grinek, Kathleen Oros Klein}
+\author{Celia Greenwood, Stepan Grinek, Raphael Poujol, Maxime Turgeon, 
+Kathleen Oros Klein}
 
 %\references{
 %Literature or other references for background information
