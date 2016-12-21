@@ -312,6 +312,8 @@ fromGenStudFiles <- function(controlProbeFile,signalFile,cell_type){
 #' @param object an object of class SampleSet
 #' @param ... optional arguments passed to or from other methods.
 #'
+#' @return No value is returned. The function prints the summary of object of 
+#' class SampleSet to screen
 #' @export
 #'
 #' @examples require(minfiData)
@@ -624,6 +626,7 @@ setMethod("funtooNorm",
 #' @param file if not NULL will write a pdf using this name, path can be
 #' included
 #'
+#' @return No value is returned.  The function prints the plots to a pdf file.
 #' @export
 #'
 #' @examples require(minfiData)
