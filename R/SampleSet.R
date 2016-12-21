@@ -478,7 +478,6 @@ setMethod("getNormBeta",
 #' Computes M values,log2(Meth/Unmeth), from normalized signals
 #'
 #' @param object  An object of class SampleSet
-#' @param offset Default is 100 as Illumina standard
 #'
 #' @return a matrix containing M values, log2(Meth/Unmeth), after normalization
 #' @export
@@ -543,7 +542,7 @@ setMethod("getSnpM",
 #' @title The funtooNorm normalization function
 #' 
 #' @description 
-#' \code{funtooNorm} returns the normalized signals to the SampleSet object
+#' \code{funtooNorm} Returns the normalized signals to the SampleSet object
 #' 
 #' @details
 #' This is a generic function which applies to autosomes and the X 

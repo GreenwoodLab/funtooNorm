@@ -28,7 +28,7 @@ classification.}
 a S4 object of class SampleSet containing the normalized signal
 }
 \description{
-\code{funtooNorm} returns the normalized signals to the SampleSet object
+\code{funtooNorm} Returns the normalized signals to the SampleSet object
 }
 \details{
 This is a generic function which applies to autosomes and the X 
