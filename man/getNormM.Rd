@@ -12,8 +12,6 @@ getNormM(object)
 }
 \arguments{
 \item{object}{An object of class SampleSet}
-
-\item{offset}{Default is 100 as Illumina standard}
 }
 \value{
 a matrix containing M values, log2(Meth/Unmeth), after normalization
