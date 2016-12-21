@@ -12,6 +12,10 @@
 
 \item{...}{optional arguments passed to or from other methods.}
 }
+\value{
+No value is returned. The function prints the summary of object of 
+class SampleSet to screen
+}
 \description{
 Display informations about the SampleSet object
 }

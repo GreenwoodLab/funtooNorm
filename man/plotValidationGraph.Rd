@@ -19,6 +19,9 @@ plotValidationGraph(object, type.fits = "PCR", file = NULL)
 \item{file}{if not NULL will write a pdf using this name, path can be
 included}
 }
+\value{
+No value is returned.  The function prints the plots to a pdf file.
+}
 \description{
 Plots a series of graphs for each signal type, to determine 
 the number of components to include in the normalization procedure.
