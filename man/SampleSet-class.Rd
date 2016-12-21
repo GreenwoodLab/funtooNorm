@@ -17,7 +17,7 @@ We then define then the 6 (2*3) labels: AIGrn BIGrn AIRed BIRed AII BII
 \section{Slots}{
 
 \describe{
-\item{\code{type}}{character: is 'minfi' or 'GenomeStudio'}
+\item{\code{type}}{Character: is 'minfi' or 'GenomeStudio'}
 
 \item{\code{sampleNames}}{character vector:
 contain the list of sample names in order used}
@@ -26,12 +26,12 @@ contain the list of sample names in order used}
 
 \item{\code{nPos}}{numeric: the number of positions in the ILLUMINA chip}
 
-\item{\code{annotation}}{IlluminaMethylationAnnotation: the annotation object from
+\item{\code{annotation}}{character: the annotation object from
 minfi package}
 
 \item{\code{cell_type}}{factor: vector of the cell type for each sample as factors}
 
-\item{\code{qntllist}}{list: vector of ordered quantiles}
+\item{\code{qntllist}}{numeric: vector of ordered quantiles}
 
 \item{\code{quantiles}}{list: list of  6 quantiles tables for the 6 signal types}
 
@@ -40,6 +40,8 @@ minfi package}
 \item{\code{signal}}{list: list of the values for all 6 probe types.}
 
 \item{\code{names}}{list: list of probes for each type}
+
+\item{\code{predmat}}{list: list of the normalized values for all 6 probe types.}
 }}
 \examples{
 showClass("SampleSet")

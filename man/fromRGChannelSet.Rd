@@ -11,10 +11,11 @@ fromRGChannelSet(myRGChannelSet)
 cell_type vector in pData}
 }
 \value{
-a class 'SampleSet' object
+An object of class 'SampleSet'
 }
 \description{
-Creates a object of class SampleSet from the raw unprocessed data in RGChannelSet
+Creates a object of class SampleSet from the raw unprocessed
+data in RGChannelSet
 }
 \examples{
 require(minfiData)
