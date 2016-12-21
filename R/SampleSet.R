@@ -553,7 +553,7 @@ setMethod("getSnpM",
 #' @param object Object of class SampleSet
 #' @param type.fits Choice between "PCR" or "PLS" (default="PCR")
 #' @param ncmp Number of components included in the analysis (default=4)
-#' @param force When set to TRUE forces the normalization procedure to re-compute
+#' @param force If set to TRUE, forces the normalization procedure to re-compute
 #' @param sex Boolean vector if male. if NULL Beta values from ChrY are used for
 #'  classification.
 #'
