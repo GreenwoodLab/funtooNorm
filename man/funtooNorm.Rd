@@ -19,7 +19,7 @@ funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
 
 \item{ncmp}{Number of components included in the analysis (default=4)}
 
-\item{force}{When set to TRUE forces the normalization procedure to re-compute}
+\item{force}{If set to TRUE, forces the normalization procedure to re-compute}
 
 \item{sex}{Boolean vector if male. if NULL Beta values from ChrY are used for
 classification.}
