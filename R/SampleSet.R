@@ -540,13 +540,15 @@ setMethod("getSnpM",
 )
 
 ################################################################################
-#' The funtooNorm normalization function
+#' @title The funtooNorm normalization function
 #' 
-#'  \code{funtooNorm}
-#'  
-#' This is a generic function which applies to autosomes and the X chromosome.  
-#' Chromosome Y requires separate analysis as there are few probes on Y.  
-#' We use a straightforward quantile normalization applied to males only.
+#' @description 
+#' \code{funtooNorm} returns the normalized signals to the SampleSet object
+#' 
+#' @details
+#' This is a generic function which applies to autosomes and the X 
+#' chromosome. Chromosome Y requires separate analysis as there are few probes 
+#' on Y.  We use a straightforward quantile normalization applied to males only.
 #'
 #' @param object Object of class SampleSet
 #' @param type.fits Choice between "PCR" or "PLS" (default="PCR")
