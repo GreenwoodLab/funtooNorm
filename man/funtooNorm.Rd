@@ -3,15 +3,8 @@
 \docType{methods}
 \name{funtooNorm}
 \alias{funtooNorm}
-<<<<<<< HEAD
 \alias{funtooNorm,SampleSet-method}
 \title{The funtooNorm normalization function}
-=======
-\title{This is the main normalization function which applies to autosomes and the X chromosome.  
-Chromosome Y requires separate analysis as there are few probes on Y.  
-We use a straightforward quantile normalization applied to males only.}
-
->>>>>>> 9e15e6d42974a0953ef22dc78fb91d6d4a9f81ef
 \usage{
 funtooNorm(object, type.fits = "PCR", ncmp = 4, force = FALSE,
   sex = NULL)
@@ -35,11 +28,12 @@ classification.}
 a S4 object of class SampleSet containing the normalized signal
 }
 \description{
-\code{funtooNorm}
- 
-This is a generic function which applies to autosomes and the X chromosome.  
-Chromosome Y requires separate analysis as there are few probes on Y.  
-We use a straightforward quantile normalization applied to males only.
+\code{funtooNorm} returns the normalized signals to the SampleSet object
+}
+\details{
+This is a generic function which applies to autosomes and the X 
+chromosome. Chromosome Y requires separate analysis as there are few probes 
+on Y.  We use a straightforward quantile normalization applied to males only.
 }
 \section{Methods (by class)}{
 \itemize{
