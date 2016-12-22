@@ -1,7 +1,7 @@
 Package: funtooNorm
 Type: Package
 Title: Normalization Procedure for Infinium HumanMethylation450 BeadChip Kit
-Version: 0.99.9
+Version: 0.99.10
 Date: 2016-12-14
 Author: Celia Greenwood <celia.greenwood@mcgill.ca>,Stepan Grinek
     <stepan.grinek@ladydavis.ca>, Maxime Turgeon <maxime.turgeon@mail.mcgill.ca>,
@@ -28,7 +28,7 @@ Suggests:
     knitr,
     rmarkdown
 Depends:
-    R(>= 3.2)
+    R(>= 3.4)
 LazyData: true
 VignetteBuilder: knitr
 biocViews: DNAMethylation, Preprocessing, Normalization
