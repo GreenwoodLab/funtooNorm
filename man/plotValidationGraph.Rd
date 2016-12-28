@@ -6,18 +6,18 @@
 \alias{plotValidationGraph,SampleSet-method}
 \title{plot of Validation Graph for determing number of components}
 \usage{
-plotValidationGraph(object, type.fits = "PCR", file = NULL)
+plotValidationGraph(object, type.fits = "PCR", pdf.file = NULL)
 
 \S4method{plotValidationGraph}{SampleSet}(object, type.fits = "PCR",
-  file = NULL)
+  pdf.file = NULL)
 }
 \arguments{
 \item{object}{of class SampleSet}
 
 \item{type.fits}{can be "PCR" or "PLS" (default "PCR")}
 
-\item{file}{if not NULL will write a pdf using this name, path can be
-included}
+\item{pdf.file}{if no file name is provided print pdf file 
+plotValidationGraph.pdf in working directory.}
 }
 \value{
 No value is returned.  The function prints the plots to a pdf file.
