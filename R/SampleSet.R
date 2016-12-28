@@ -623,8 +623,8 @@ setMethod("funtooNorm",
 #'
 #' @param object of class SampleSet
 #' @param type.fits can be "PCR" or "PLS" (default "PCR")
-#' @param file if not NULL will write a pdf using this name, path can be
-#' included
+#' @param pdf.file if no file name is provided print pdf file 
+#' plotValidationGraph.pdf in working directory.
 #'
 #' @return No value is returned.  The function prints the plots to a pdf file.
 #' @export
@@ -635,7 +635,7 @@ setMethod("funtooNorm",
 #' plotValidationGraph(mySampleSet)
 #' 
 setGeneric(name="plotValidationGraph",
-           def=function(object, type.fits="PCR",file=NULL) 
+           def=function(object, type.fits="PCR",pdf.file=NULL) 
                standardGeneric("plotValidationGraph")
 )
 #' @describeIn plotValidationGraph Plots a series of graphs for each 
@@ -643,12 +643,16 @@ setGeneric(name="plotValidationGraph",
 #' in the normalization procedure.
 setMethod("plotValidationGraph",
           signature = "SampleSet",
-          definition = function(object,type.fits,file){
+          definition = function(object,type.fits,pdf.file){
     
-    if(is.null(file)){message("Will plot in the usual output")
-        }else if(!file.access(file, mode=2)){
-    stop("cannot write in ",file)}else if (tools::file_ext(file)!="pdf"){
-    stop("your file extension should be pdf for ",file)}
+    if(is.null(pdf.file)){pdf.file=file.path(getwd(),"plotValidationGraph.pdf");
+    message("PDF file was not provided, will print plotValidationGraph.pdf
+            to working directory")}else {if(file.access(dirname(pdf.file), mode=2)==-1){
+    stop("cannot write in ",dirname(pdf.file))}else {if (tools::file_ext(pdf.file)!="pdf"){
+    stop("your file extension should be .pdf for ",file)} 
+    } 
+                }
+        
     
     svd.ctlcovmat=svd(object@ctl.covmat)$d
     ## set max is 8
@@ -660,11 +664,8 @@ setMethod("plotValidationGraph",
     message("\nStarting validation with a max of ", numcomp , 
             " components...\n")
     
-    if(is.null(file)){
-    message("plotting in the pdf file:",file)
-    pdf(file = file, height=7, width=7)
-    }
-    
+    message("writing to file:",pdf.file)
+    pdf(file = pdf.file, height=7, width=7)
     layout(mat =  matrix(c(1,2,3,4,5,6,7,7,7), nrow = 3, ncol = 3, 
                          byrow = TRUE),
            heights = c(0.3,0.3,0.15))
@@ -684,12 +685,11 @@ setMethod("plotValidationGraph",
     legend(title='Number of components:', x = "top",inset = 0,
          legend = 1:numcomp, col=rainbow(numcomp), lty=ltylist,
          cex=1.1, horiz = TRUE)
-    if(!is.null(file)){
     dev.off()
-    }
-  
+    
           }
-)
+
+    )
 
 #' @import IlluminaHumanMethylation450kmanifest 
 #' @import IlluminaHumanMethylation450kanno.ilmn12.hg19
