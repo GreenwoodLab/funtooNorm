@@ -1,0 +1,30 @@
+language: r
+r:
+  - release
+  - devel
+sudo: required
+
+env:
+  - RGL_USE_NULL=TRUE
+
+r_build_args: --compact-vignettes=gs+qpdf
+r_check_args: --as-cran 
+
+bioc_packages:
+  - BiocStyle
+  - illuminaio
+  - minfi
+  - minfiData
+
+r_binary_packages:
+  - knitr
+  - pls
+
+apt_packages:
+  - latex-xcolor
+
+notifications:
+  email:
+    - maxime.turgeon@mail.mcgill.ca
+    - kathleen.klein@mail.mcgill.ca
+    - raphael.poujol@gmail.com

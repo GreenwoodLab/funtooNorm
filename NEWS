@@ -1,0 +1,28 @@
+\name{funtooNormnews}
+\title{funtooNorm News}
+\encoding{UTF-8}
+
+\section{Version 0.99.0}{
+  \itemize{
+    \item Initial release to Bioconductor.
+    \item Added NEWS file.
+  }
+}
+
+\section{Version 0.99.1}{
+  \itemize{
+    \item Few corrections
+  }
+}
+
+\section{Version 0.99.4}{
+  \itemize{
+    \item New version from Raphael Poujol
+  }
+}
+
+\section{Version 0.99.5}{
+  \itemize{
+    \item Release to Bioconductor.
+    }
+}

@@ -1,0 +1,11 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.travis\.yml$
+^R/ReadFiles.R$
+^funtooNorm_0\.99\.4\.tar\.gz$
+.\.RData$
+\.(PCR|PLS)\.pdf$
+^funtooNorm_old\.Rnw$
+^\.travis\.yml$
+^\.gitignore$
+^.git
