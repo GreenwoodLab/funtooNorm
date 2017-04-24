@@ -2,7 +2,7 @@ Package: funtooNorm
 Type: Package
 Title: Normalization Procedure for Infinium HumanMethylation450
         BeadChip Kit
-Version: 1.0.0
+Version: 1.1.0
 Date: 2016-12-14
 Author: Celia Greenwood <celia.greenwood@mcgill.ca>,Stepan Grinek
         <stepan.grinek@ladydavis.ca>, Maxime Turgeon
