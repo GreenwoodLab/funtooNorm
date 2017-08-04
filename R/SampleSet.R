@@ -342,11 +342,18 @@ setGeneric(name="getLogSigA",
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
-          definition = function(object){
-              return(rbind(object@signal$AIGrn,
-                           object@signal$AIRed,
-                           object@signal$AII,
-                           object@signal$AchrY))
+          definition = function(object,type){
+              if (type="predmat"){
+              return(rbind(object@predmat$AIGrn,
+                           object@predmat$AIRed,
+                           object@predmat$AII,
+                           object@predmat$AchrY))}else{
+                               return(rbind(object@signal$AIGrn,
+                                            object@signal$AIRed,
+                                            object@signal$AII,
+                                            object@signal$AchrY))
+                               
+                           }
           }
 )
 
@@ -356,10 +363,17 @@ setGeneric(name="getLogSigB",
 setMethod("getLogSigB",
           signature = "SampleSet",
           definition = function(object){
-              return(rbind(object@signal$BIGrn,
-                           object@signal$BIRed,
-                           object@signal$BII,
-                           object@signal$BchrY))
+              if (type="predmat"){
+              return(rbind(object@predmat$BIGrn,
+                           object@predmat$BIRed,
+                           object@predmat$BII,
+                           object@predmat$BchrY))}else{
+                               return(rbind(object@signal$BIGrn,
+                                            object@signal$BIRed,
+                                            object@signal$BII,
+                                            object@signal$BchrY))
+                               
+                           }
           }
 )
 
@@ -433,8 +447,8 @@ setGeneric(name="getRawBeta",
 setMethod("getRawBeta",
           signature = "SampleSet",
           definition = function(object,offset){
-              mat=calcBeta(getLogSigA(object),
-                           getLogSigB(object),
+              mat=calcBeta(getLogSigA(object,type="signal"),
+                           getLogSigB(object,type="signal"),
                            offset)
               colnames(mat)=object@sampleNames
               rownames(mat)=getPositionNames(object)
@@ -467,8 +481,8 @@ setMethod("getNormBeta",
               if(length(object@predmat)==0){
                   stop("WARNING: please call funtooNorm")
                   }
-              mat=calcBeta(getLogSigA(object),
-                           getLogSigB(object),
+              mat=calcBeta(getLogSigA(object,"predmat"),
+                           getLogSigB(object,"predmat"),
                            offset)
               colnames(mat)=object@sampleNames
               rownames(mat)=getPositionNames(object)
@@ -500,7 +514,7 @@ setMethod("getNormM",
               if(length(object@predmat)==0){
                   stop("WARNING: please call funtooNorm")
                   }
-              mat=getLogSigB(object)-getLogSigA(object)
+              mat=getLogSigB(object,type="predmat")-getLogSigA(object,type="predmat")
               colnames(mat)=object@sampleNames
               rownames(mat)=getPositionNames(object)
               return(mat[!grepl("^rs",rownames(mat)),])
@@ -533,7 +547,7 @@ setMethod("getSnpM",
               if(length(object@predmat)==0){
                   stop("WARNING: please call funtooNorm")
                   }
-              mat=getLogSigA(object)-getLogSigB(object)
+              mat=getLogSigA(object,"signal")-getLogSigB(object,"signal")
               colnames(mat)=object@sampleNames
               rownames(mat)=getPositionNames(object)
               return(mat[grepl("^rs",rownames(mat)),])
