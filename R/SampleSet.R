@@ -343,10 +343,10 @@ setGeneric(name="getLogSigA",
 setMethod("getLogSigA",
           signature = "SampleSet",
           definition = function(object){
-              return(rbind(object@signal$AIGrn,
-                           object@signal$AIRed,
-                           object@signal$AII,
-                           object@signal$AchrY))
+              return(rbind(object@predmat$AIGrn,
+                           object@predmat$AIRed,
+                           object@predmat$AII,
+                           object@predmat$AchrY))
           }
 )
 
@@ -356,10 +356,10 @@ setGeneric(name="getLogSigB",
 setMethod("getLogSigB",
           signature = "SampleSet",
           definition = function(object){
-              return(rbind(object@signal$BIGrn,
-                           object@signal$BIRed,
-                           object@signal$BII,
-                           object@signal$BchrY))
+              return(rbind(object@predmat$BIGrn,
+                           object@predmat$BIRed,
+                           object@predmat$BII,
+                           object@predmat$BchrY))
           }
 )
 
@@ -674,7 +674,7 @@ setMethod("plotValidationGraph",
     
     for(i in names(object@quantiles)){
     plotValidate(object@quantiles[[i]],object@qntllist,
-                 object@ctl.covmat,numcomp,i)
+                 object@ctl.covmat,numcomp,i,type.fits=type.fits)
     }
     
     
