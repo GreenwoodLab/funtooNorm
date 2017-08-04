@@ -338,12 +338,12 @@ setMethod(f="show",
 )
 
 setGeneric(name="getLogSigA",
-           def=function(object) standardGeneric("getLogSigA")
+           def=function(object,type) standardGeneric("getLogSigA")
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
           definition = function(object,type){
-              if (type="predmat"){
+              if (type=="predmat"){
               return(rbind(object@predmat$AIGrn,
                            object@predmat$AIRed,
                            object@predmat$AII,
@@ -358,12 +358,12 @@ setMethod("getLogSigA",
 )
 
 setGeneric(name="getLogSigB",
-           def=function(object) standardGeneric("getLogSigB")
+           def=function(object,type) standardGeneric("getLogSigB")
 )
 setMethod("getLogSigB",
           signature = "SampleSet",
-          definition = function(object){
-              if (type="predmat"){
+          definition = function(object,type="signal"){
+              if (type=="predmat"){
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
                            object@predmat$BII,
