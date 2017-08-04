@@ -674,7 +674,7 @@ setMethod("plotValidationGraph",
     
     for(i in names(object@quantiles)){
     plotValidate(object@quantiles[[i]],object@qntllist,
-                 object@ctl.covmat,numcomp,i)
+                 object@ctl.covmat,numcomp,i,type.fits=type.fits)
     }
     
     
