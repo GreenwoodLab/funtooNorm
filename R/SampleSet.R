@@ -342,6 +342,7 @@ setGeneric(name="getLogSigA",
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
+<<<<<<< HEAD
           definition = function(object,type){
               if (type="predmat"){
               return(rbind(object@predmat$AIGrn,
@@ -354,6 +355,13 @@ setMethod("getLogSigA",
                                             object@signal$AchrY))
                                
                            }
+=======
+          definition = function(object){
+              return(rbind(object@predmat$AIGrn,
+                           object@predmat$AIRed,
+                           object@predmat$AII,
+                           object@predmat$AchrY))
+>>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
           }
 )
 
@@ -363,6 +371,7 @@ setGeneric(name="getLogSigB",
 setMethod("getLogSigB",
           signature = "SampleSet",
           definition = function(object){
+<<<<<<< HEAD
               if (type="predmat"){
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
@@ -374,6 +383,12 @@ setMethod("getLogSigB",
                                             object@signal$BchrY))
                                
                            }
+=======
+              return(rbind(object@predmat$BIGrn,
+                           object@predmat$BIRed,
+                           object@predmat$BII,
+                           object@predmat$BchrY))
+>>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
           }
 )
 
