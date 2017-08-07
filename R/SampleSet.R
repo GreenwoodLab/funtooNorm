@@ -374,7 +374,6 @@ setMethod("getLogSigB",
                                             object@signal$BchrY))
                                
                            }
-
           }
 )
 
