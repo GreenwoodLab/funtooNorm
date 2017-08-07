@@ -342,10 +342,6 @@ setGeneric(name="getLogSigA",
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
           definition = function(object,type){
               if (type=="predmat"){
               return(rbind(object@predmat$AIGrn,
@@ -358,16 +354,7 @@ setMethod("getLogSigA",
                                             object@signal$AchrY))
                                
                            }
-<<<<<<< HEAD
-=======
-=======
-          definition = function(object){
-              return(rbind(object@predmat$AIGrn,
-                           object@predmat$AIRed,
-                           object@predmat$AII,
-                           object@predmat$AchrY))
->>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
+
           }
 )
 
@@ -376,14 +363,8 @@ setGeneric(name="getLogSigB",
 )
 setMethod("getLogSigB",
           signature = "SampleSet",
-<<<<<<< HEAD
           definition = function(object,type="signal"){
               if (type=="predmat"){
-=======
-          definition = function(object){
-<<<<<<< HEAD
-              if (type="predmat"){
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
                            object@predmat$BII,
@@ -394,16 +375,7 @@ setMethod("getLogSigB",
                                             object@signal$BchrY))
                                
                            }
-<<<<<<< HEAD
-=======
-=======
-              return(rbind(object@predmat$BIGrn,
-                           object@predmat$BIRed,
-                           object@predmat$BII,
-                           object@predmat$BchrY))
->>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
-          }
+           }
 )
 
 ################################################################################
