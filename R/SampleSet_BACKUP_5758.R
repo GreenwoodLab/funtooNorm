@@ -342,6 +342,10 @@ setGeneric(name="getLogSigA",
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
           definition = function(object,type){
               if (type=="predmat"){
               return(rbind(object@predmat$AIGrn,
@@ -354,6 +358,16 @@ setMethod("getLogSigA",
                                             object@signal$AchrY))
                                
                            }
+<<<<<<< HEAD
+=======
+=======
+          definition = function(object){
+              return(rbind(object@predmat$AIGrn,
+                           object@predmat$AIRed,
+                           object@predmat$AII,
+                           object@predmat$AchrY))
+>>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
+>>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
           }
 )
 
@@ -366,20 +380,10 @@ setMethod("getLogSigB",
           definition = function(object,type="signal"){
               if (type=="predmat"){
 =======
-<<<<<<< HEAD
-          definition = function(object,type="signal"){
-              if (type=="predmat"){
-=======
-<<<<<<< HEAD
-          definition = function(object,type="signal"){
-              if (type=="predmat"){
-=======
           definition = function(object){
 <<<<<<< HEAD
               if (type="predmat"){
 >>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
->>>>>>> 140be42bdce86aa72adcd7de8c5b0a960c89b754
->>>>>>> e7f9f07fe3461b64e90eca3ea6890fd3fdf7053d
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
                            object@predmat$BII,
@@ -392,11 +396,6 @@ setMethod("getLogSigB",
                            }
 <<<<<<< HEAD
 =======
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
 =======
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
@@ -404,8 +403,6 @@ setMethod("getLogSigB",
                            object@predmat$BchrY))
 >>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
 >>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
->>>>>>> 140be42bdce86aa72adcd7de8c5b0a960c89b754
->>>>>>> e7f9f07fe3461b64e90eca3ea6890fd3fdf7053d
           }
 )
 

@@ -338,12 +338,19 @@ setMethod(f="show",
 )
 
 setGeneric(name="getLogSigA",
-           def=function(object,type) standardGeneric("getLogSigA")
+           def=function(object) standardGeneric("getLogSigA")
 )
 setMethod("getLogSigA",
           signature = "SampleSet",
+<<<<<<< Temporary merge branch 1
+          definition = function(object){
+              return(rbind(object@predmat$AIGrn,
+                           object@predmat$AIRed,
+                           object@predmat$AII,
+                           object@predmat$AchrY))
+=======
           definition = function(object,type){
-              if (type=="predmat"){
+              if (type="predmat"){
               return(rbind(object@predmat$AIGrn,
                            object@predmat$AIRed,
                            object@predmat$AII,
@@ -354,32 +361,23 @@ setMethod("getLogSigA",
                                             object@signal$AchrY))
                                
                            }
+>>>>>>> Temporary merge branch 2
           }
 )
 
 setGeneric(name="getLogSigB",
-           def=function(object,type) standardGeneric("getLogSigB")
+           def=function(object) standardGeneric("getLogSigB")
 )
 setMethod("getLogSigB",
           signature = "SampleSet",
-<<<<<<< HEAD
-          definition = function(object,type="signal"){
-              if (type=="predmat"){
-=======
-<<<<<<< HEAD
-          definition = function(object,type="signal"){
-              if (type=="predmat"){
-=======
-<<<<<<< HEAD
-          definition = function(object,type="signal"){
-              if (type=="predmat"){
-=======
           definition = function(object){
-<<<<<<< HEAD
+<<<<<<< Temporary merge branch 1
+              return(rbind(object@predmat$BIGrn,
+                           object@predmat$BIRed,
+                           object@predmat$BII,
+                           object@predmat$BchrY))
+=======
               if (type="predmat"){
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
->>>>>>> 140be42bdce86aa72adcd7de8c5b0a960c89b754
->>>>>>> e7f9f07fe3461b64e90eca3ea6890fd3fdf7053d
               return(rbind(object@predmat$BIGrn,
                            object@predmat$BIRed,
                            object@predmat$BII,
@@ -390,22 +388,7 @@ setMethod("getLogSigB",
                                             object@signal$BchrY))
                                
                            }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-=======
-              return(rbind(object@predmat$BIGrn,
-                           object@predmat$BIRed,
-                           object@predmat$BII,
-                           object@predmat$BchrY))
->>>>>>> 116126100c26aba68d00f6e6bf6bbba16668e8d3
->>>>>>> e0e41b17b73c1640d6356f4abf9e29bbbe6ebd4f
->>>>>>> 140be42bdce86aa72adcd7de8c5b0a960c89b754
->>>>>>> e7f9f07fe3461b64e90eca3ea6890fd3fdf7053d
+>>>>>>> Temporary merge branch 2
           }
 )
 
