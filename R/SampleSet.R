@@ -354,7 +354,6 @@ setMethod("getLogSigA",
                                             object@signal$AchrY))
                                
                            }
-
           }
 )
 
@@ -375,7 +374,7 @@ setMethod("getLogSigB",
                                             object@signal$BchrY))
                                
                            }
-           }
+          }
 )
 
 ################################################################################
