@@ -1,7 +1,5 @@
 # funtooNorm 
-[![Build Status]
-(https://travis-ci.org/GreenwoodLab/funtooNorm.svg?branch=master)]
-(https://travis-ci.org/GreenwoodLab/funtooNorm)
+[![Build Status](https://travis-ci.org/GreenwoodLab/funtooNorm.svg?branch=master)](https://travis-ci.org/GreenwoodLab/funtooNorm)
 
 The R package ```funtooNorm```  provides a function for normalization of 
 Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data 
