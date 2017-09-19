@@ -26,4 +26,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet
 
 }
-
