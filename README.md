@@ -1,7 +1,5 @@
 # funtooNorm 
-[![Build Status]
-(https://travis-ci.org/GreenwoodLab/funtooNorm.svg?branch=master)]
-(https://travis-ci.org/GreenwoodLab/funtooNorm)
+[![Build Status](https://travis-ci.org/GreenwoodLab/funtooNorm.svg?branch=master)](https://travis-ci.org/GreenwoodLab/funtooNorm)
 
 The R package ```funtooNorm```  provides a function for normalization of 
 Illumina Infinium Human Methylation 450 BeadChip (Illumina 450K) data 
@@ -15,7 +13,7 @@ biocLite("funtooNorm")
 ```  
 Download the current build <a href="https://github.com/GreenwoodLab/funtooNorm/releases" ><b>here</b></a> and install it with
 ``` shell
-$ R CMD INSTALL funtooNorm_0.99.7.tar.gz
+$ R CMD INSTALL funtooNorm_1.00.1.tar.gz
 ```
 
 Or, if you want to build from source, you can also install from GitHub using the [devtools](https://cran.r-project.org/package=devtools)
@@ -30,7 +28,7 @@ and install from source using the commands ```R CMD build``` and ```install```:
 ``` shell
 $ git clone https://github.com/GreenwoodLab/funtooNorm.git
 $ R CMD build ./funtooNorm
-$ R CMD INSTALL funtooNorm_0.99.7.tar.gz
+$ R CMD INSTALL funtooNorm_1.00.1.tar.gz
 =======
 install_github('greenwoodLab/funtooNorm')
 ```

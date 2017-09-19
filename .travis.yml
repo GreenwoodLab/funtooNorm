@@ -2,7 +2,9 @@ language: r
 r:
   - release
   - devel
-sudo: required
+  - bioc-devel
+sudo: false
+cache: packages
 
 env:
   - RGL_USE_NULL=TRUE
@@ -20,11 +22,7 @@ r_binary_packages:
   - knitr
   - pls
 
-apt_packages:
-  - latex-xcolor
-
 notifications:
   email:
     - maxime.turgeon@mail.mcgill.ca
     - kathleen.klein@mail.mcgill.ca
-    - raphael.poujol@gmail.com

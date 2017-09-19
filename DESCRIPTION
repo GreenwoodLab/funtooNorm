@@ -28,7 +28,7 @@ Suggests:
     knitr,
     rmarkdown
 Depends:
-    R(>= 3.2)
+    R(>= 3.4)
 LazyData: true
 VignetteBuilder: knitr
 biocViews: DNAMethylation, Preprocessing, Normalization
