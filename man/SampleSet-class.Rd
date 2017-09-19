@@ -43,7 +43,7 @@ minfi package}
 
 \item{\code{predmat}}{list: list of the normalized values for all 6 probe types.}
 }}
+
 \examples{
 showClass("SampleSet")
 }
-

@@ -32,6 +32,7 @@ the number of components to include in the normalization procedure.
 signal type, to determine the number of components to include 
 in the normalization procedure.
 }}
+
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -39,4 +40,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 plotValidationGraph(mySampleSet)
 
 }
-

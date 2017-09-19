@@ -21,4 +21,3 @@ An object of class 'SampleSet'.
 \description{
 Creates a S4 object of class 'SampleSet' from GenomeStudio files
 }
-

@@ -7,18 +7,19 @@ author: "\\
 date: "`r Sys.Date()`"
 bibliography: MyEndnoteLibrary.bib
 output:
-      BiocStyle::pdf_document:
+        prettydoc::html_pretty:
             toc: true
-      BiocStyle::html_document:
-            toc: true
+            theme: cayman
+            highligth: github
+        pdf_document:
+            toc:true
 vignette: >
   %\VignetteIndexEntry{Normalizing Illumina Infinium Human Methylation 450k for multiple cell types with funtooNorm}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteEncoding[utf8]{inputenc}
 ---
 
 ```{r style, echo=FALSE, results="asis", message=FALSE}
-BiocStyle::markdown()
 knitr::opts_chunk$set(tidy = FALSE,
                       warning = FALSE,
                       message = FALSE)
@@ -120,7 +121,7 @@ Below is a basic call to the function `funtooNorm`: `funtooNorm` will fit either
 
 To assess the performance of the normalization, if technical replicates are available, one can use a measure of intra-replicate differences __M__, described in [@Oros2016].  We provide a function `agreement` to implement calculation of this measure.  The function requires two arguments: a matrix of beta values and a vector of individual ID's.  Technical replicates will have identical individual ID's. The returned value of __M__ is expected to be more similar for the data after normalization:  
 
-```{r}
+```{r, eval=FALSE}
     #technical replicates are fictional, just for demonstration purposes.
     agreement(origBeta, c(1:5,5)) # M for data before the normalization
     agreement(normBeta, c(1:5,5)) # M for data after normalization
@@ -136,7 +137,7 @@ shows how to incorporate the `funtooNorm` and `minfi` packages.
 
 Here we demonstrate the use of `dmpFinder` on the _M_ values:  $log(Meth/nmeth)$
 
-```{r }
+```{r}
 library(minfi)
 
     age=pData(RGsetEx)$age
