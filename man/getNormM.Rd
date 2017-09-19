@@ -24,6 +24,7 @@ Computes M values,log2(Meth/Unmeth), from normalized signals
 \item \code{SampleSet}: Computes M values, log2(Meth/Unmeth),
 from normalized signals
 }}
+
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -31,4 +32,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 m=getNormM(funtooNorm(mySampleSet))
 
 }
-

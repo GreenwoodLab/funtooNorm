@@ -25,6 +25,7 @@ Computes M values after normalization of SNP data.
 \item \code{SampleSet}: Computes M values, log2(Meth/Unmeth), for normalized
 SNP data
 }}
+
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -32,4 +33,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 snp=getSnpM(funtooNorm(mySampleSet))
 
 }
-

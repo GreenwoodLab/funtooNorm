@@ -23,6 +23,7 @@ Build GRange object of methylation probes
 \itemize{
 \item \code{SampleSet}: Build GRange object of methylation probes
 }}
+
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -30,4 +31,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 gr=getGRanges(mySampleSet)
 
 }
-

@@ -7,18 +7,19 @@ author: "\\
 date: "`r Sys.Date()`"
 bibliography: MyEndnoteLibrary.bib
 output:
-      BiocStyle::pdf_document:
+        prettydoc::html_pretty:
             toc: true
-      BiocStyle::html_document:
-            toc: true
+            theme: cayman
+            highligth: github
+        pdf_document:
+            toc:true
 vignette: >
   %\VignetteIndexEntry{Normalizing Illumina Infinium Human Methylation 450k for multiple cell types with funtooNorm}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\VignetteEncoding[utf8]{inputenc}
 ---
 
 ```{r style, echo=FALSE, results="asis", message=FALSE}
-BiocStyle::markdown()
 knitr::opts_chunk$set(tidy = FALSE,
                       warning = FALSE,
                       message = FALSE)
@@ -136,7 +137,7 @@ shows how to incorporate the `funtooNorm` and `minfi` packages.
 
 Here we demonstrate the use of `dmpFinder` on the _M_ values:  $log(Meth/nmeth)$
 
-```{r }
+```{r}
 library(minfi)
 
     age=pData(RGsetEx)$age

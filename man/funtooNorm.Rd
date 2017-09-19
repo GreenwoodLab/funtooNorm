@@ -39,6 +39,7 @@ on Y.  We use a straightforward quantile normalization applied to males only.
 \itemize{
 \item \code{SampleSet}: The funtooNorm normalization function
 }}
+
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -46,4 +47,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 mySampleSet=funtooNorm(mySampleSet)
 
 }
-
