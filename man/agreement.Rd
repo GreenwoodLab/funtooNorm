@@ -29,3 +29,4 @@ We expect that the values returned by the agreement function after
 agreement(cbind(rnorm(n = 10),rnorm(n = 10),rnorm(n = 10)),c(1,1,1))
 
 }
+

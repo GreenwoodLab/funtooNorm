@@ -137,6 +137,7 @@ shows how to incorporate the `funtooNorm` and `minfi` packages.
 
 Here we demonstrate the use of `dmpFinder` on the _M_ values:  $log(Meth/nmeth)$
 
+
 ```{r}
 library(minfi)
 

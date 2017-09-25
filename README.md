@@ -29,7 +29,6 @@ and install from source using the commands ```R CMD build``` and ```install```:
 $ git clone https://github.com/GreenwoodLab/funtooNorm.git
 $ R CMD build ./funtooNorm
 $ R CMD INSTALL funtooNorm_1.00.1.tar.gz
-=======
 install_github('greenwoodLab/funtooNorm')
 ```
 

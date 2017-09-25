@@ -447,6 +447,7 @@ setGeneric(name="getRawBeta",
 setMethod("getRawBeta",
           signature = "SampleSet",
           definition = function(object,offset){
+
               mat=calcBeta(getLogSigA(object,type="signal"),
                            getLogSigB(object,type="signal"),
                            offset)
@@ -515,6 +516,7 @@ setMethod("getNormM",
                   stop("WARNING: please call funtooNorm")
                   }
               mat=getLogSigB(object,type="predmat")-getLogSigA(object,type="predmat")
+
               colnames(mat)=object@sampleNames
               rownames(mat)=getPositionNames(object)
               return(mat[!grepl("^rs",rownames(mat)),])
