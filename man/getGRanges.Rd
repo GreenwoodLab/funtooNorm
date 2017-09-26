@@ -31,4 +31,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 gr=getGRanges(mySampleSet)
 
 }
-

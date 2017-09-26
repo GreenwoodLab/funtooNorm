@@ -26,10 +26,7 @@ Computes Beta value from raw signals
 \itemize{
 \item \code{SampleSet}: Computes Beta value from raw signals
 }}
-<<<<<<< HEAD
 
-=======
->>>>>>> upstream/master
 \examples{
 require(minfiData)
 pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
@@ -37,4 +34,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 r=getRawBeta(mySampleSet)
 
 }
-

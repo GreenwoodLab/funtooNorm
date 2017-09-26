@@ -33,4 +33,3 @@ mySampleSet=fromRGChannelSet(RGsetEx)
 snp=getSnpM(funtooNorm(mySampleSet))
 
 }
-
