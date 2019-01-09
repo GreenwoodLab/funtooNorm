@@ -107,12 +107,11 @@ fromRGChannelSet <- function(myRGChannelSet){
                               ]
     #Here we remove the 15 probes that cannot be in the GenomeStudio output
     controlTable=controlTable[controlTable$Color!="-99",]
-    controlred=as.data.frame(minfi::getRed(myRGChannelSet)[controlTable$Address,
-                                                           ])
-    
-    controlgrn=as.data.frame(minfi::getGreen(myRGChannelSet)[controlTable$Address,
-                                                             ])
-    
+    controlred=as.data.frame(minfi::getRed(myRGChannelSet))
+      controlred=controlred[controlTable$Address,]
+
+    controlgrn=as.data.frame(minfi::getGreen(myRGChannelSet))
+      controlgrn=controlgrn[controlTable$Address,]
     cp.types=controlTable$Type
     
     controlgrn <- log2(1 + controlgrn)
@@ -138,8 +137,10 @@ fromRGChannelSet <- function(myRGChannelSet){
     sub=TypeI.Green$Name %in% chrYnames
     object@names$IGrn=TypeI.Green$Name[!sub]
     object@names$chrY=TypeI.Green$Name[sub]
-    sigA=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressA,]
-    sigB=minfi::getGreen(myRGChannelSet)[TypeI.Green$AddressB,]
+    sigA=minfi::getGreen(myRGChannelSet)
+      sigA=sigA[TypeI.Green$AddressA,]
+    sigB=minfi::getGreen(myRGChannelSet)
+      sigB=sigB[TypeI.Green$AddressB,]
     object@signal$AIGrn=sigA[!sub,]
     object@signal$BIGrn=sigB[!sub,]
     object@signal$BchrY=sigB[sub,]
@@ -151,8 +152,10 @@ fromRGChannelSet <- function(myRGChannelSet){
     sub=TypeI.Red$Name %in% chrYnames
     object@names$IRed=TypeI.Red$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeI.Red$Name[sub])
-    sigA=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressA,]
-    sigB=minfi::getRed(myRGChannelSet)[TypeI.Red$AddressB,]
+    sigA=minfi::getRed(myRGChannelSet)
+      sigA=sigA[TypeI.Red$AddressA,]
+    sigB=minfi::getRed(myRGChannelSet)
+      sigB=sigB[TypeI.Red$AddressB,]
     object@signal$AIRed=sigA[!sub,]
     object@signal$BIRed=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
@@ -164,8 +167,10 @@ fromRGChannelSet <- function(myRGChannelSet){
     sub=TypeII$Name %in% chrYnames
     object@names$II=TypeII$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeII$Name[sub])
-    sigA=minfi::getRed(myRGChannelSet)[TypeII$AddressA,]
-    sigB=minfi::getGreen(myRGChannelSet)[TypeII$AddressA,]
+    sigA=minfi::getRed(myRGChannelSet)
+      sigA=sigA[TypeII$AddressA,]
+    sigB=minfi::getGreen(myRGChannelSet)
+      sigB=sigB[TypeII$AddressA,]
     object@signal$AII=sigA[!sub,]
     object@signal$BII=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
