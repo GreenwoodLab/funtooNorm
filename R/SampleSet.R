@@ -124,7 +124,7 @@ fromRGChannelSet <- function(myRGChannelSet){
                            object@annotation["array"],
                            object@annotation["annotation"]),
                    orderByLocation = FALSE)
-    pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
+    # pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
     
     chrYnames=names(loc)[as.character(GenomeInfoDb::seqnames(loc))=="chrY"]
     
@@ -138,9 +138,9 @@ fromRGChannelSet <- function(myRGChannelSet){
     object@names$IGrn=TypeI.Green$Name[!sub]
     object@names$chrY=TypeI.Green$Name[sub]
     sigA=minfi::getGreen(myRGChannelSet)
-      sigA=sigA[TypeI.Green$AddressA,]
+      sigA=sigA[intersect(TypeI.Green$AddressA,row.names(sigA)),]
     sigB=minfi::getGreen(myRGChannelSet)
-      sigB=sigB[TypeI.Green$AddressB,]
+      sigB=sigB[interset(TypeI.Green$AddressB,row.names(sigB)),]
     object@signal$AIGrn=sigA[!sub,]
     object@signal$BIGrn=sigB[!sub,]
     object@signal$BchrY=sigB[sub,]
@@ -153,9 +153,9 @@ fromRGChannelSet <- function(myRGChannelSet){
     object@names$IRed=TypeI.Red$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeI.Red$Name[sub])
     sigA=minfi::getRed(myRGChannelSet)
-      sigA=sigA[TypeI.Red$AddressA,]
+      sigA=sigA[intersect(TypeI.Red$AddressA,row.names(sigA)),]
     sigB=minfi::getRed(myRGChannelSet)
-      sigB=sigB[TypeI.Red$AddressB,]
+      sigB=sigB[interset(TypeI.Red$AddressB,row.names(sigB)),]
     object@signal$AIRed=sigA[!sub,]
     object@signal$BIRed=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
@@ -168,9 +168,9 @@ fromRGChannelSet <- function(myRGChannelSet){
     object@names$II=TypeII$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeII$Name[sub])
     sigA=minfi::getRed(myRGChannelSet)
-      sigA=sigA[TypeII$AddressA,]
+      sigA=sigA[intersect(TypeII$AddressA,row.names(sigA)),]
     sigB=minfi::getGreen(myRGChannelSet)
-      sigB=sigB[TypeII$AddressA,]
+      sigB=sigB[intersect(TypeII$AddressA, row.names(sigB)),]
     object@signal$AII=sigA[!sub,]
     object@signal$BII=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
