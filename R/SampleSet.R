@@ -140,7 +140,7 @@ fromRGChannelSet <- function(myRGChannelSet){
     sigA=minfi::getGreen(myRGChannelSet)
       sigA=sigA[intersect(TypeI.Green$AddressA,row.names(sigA)),]
     sigB=minfi::getGreen(myRGChannelSet)
-      sigB=sigB[interset(TypeI.Green$AddressB,row.names(sigB)),]
+      sigB=sigB[intersect(TypeI.Green$AddressB,row.names(sigB)),]
     object@signal$AIGrn=sigA[!sub,]
     object@signal$BIGrn=sigB[!sub,]
     object@signal$BchrY=sigB[sub,]
@@ -155,7 +155,7 @@ fromRGChannelSet <- function(myRGChannelSet){
     sigA=minfi::getRed(myRGChannelSet)
       sigA=sigA[intersect(TypeI.Red$AddressA,row.names(sigA)),]
     sigB=minfi::getRed(myRGChannelSet)
-      sigB=sigB[interset(TypeI.Red$AddressB,row.names(sigB)),]
+      sigB=sigB[intersect(TypeI.Red$AddressB,row.names(sigB)),]
     object@signal$AIRed=sigA[!sub,]
     object@signal$BIRed=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
