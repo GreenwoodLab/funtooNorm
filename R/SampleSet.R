@@ -124,7 +124,7 @@ fromRGChannelSet <- function(myRGChannelSet){
                            object@annotation["array"],
                            object@annotation["annotation"]),
                    orderByLocation = FALSE)
-    pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
+    # pos=cbind(names(loc),as.character(GenomeInfoDb::seqnames(loc)),start(loc))
     
     chrYnames=names(loc)[as.character(GenomeInfoDb::seqnames(loc))=="chrY"]
     
@@ -134,13 +134,16 @@ fromRGChannelSet <- function(myRGChannelSet){
     TypeI.Green <- rbind(minfi::getProbeInfo(object@annotation, 
                                              type = "I-Green"),
                        SnpI[SnpI$Color == "Grn",])
+    
+    sigA=minfi::getGreen(myRGChannelSet)
+      sigA=sigA[intersect(TypeI.Green$AddressA,row.names(sigA)),]
+    sigB=minfi::getGreen(myRGChannelSet)
+      sigB=sigB[intersect(TypeI.Green$AddressB,row.names(sigB)),]
+    sub1 <- TypeI.Green$AddressA %in% row.names(sigA)
+    TypeI.Green <- TypeI.Green[sub1,]
     sub=TypeI.Green$Name %in% chrYnames
     object@names$IGrn=TypeI.Green$Name[!sub]
-    object@names$chrY=TypeI.Green$Name[sub]
-    sigA=minfi::getGreen(myRGChannelSet)
-      sigA=sigA[TypeI.Green$AddressA,]
-    sigB=minfi::getGreen(myRGChannelSet)
-      sigB=sigB[TypeI.Green$AddressB,]
+    object@names$chrY=TypeI.Green$Name[sub]  
     object@signal$AIGrn=sigA[!sub,]
     object@signal$BIGrn=sigB[!sub,]
     object@signal$BchrY=sigB[sub,]
@@ -149,13 +152,15 @@ fromRGChannelSet <- function(myRGChannelSet){
     ## Type I Red
     TypeI.Red <- rbind(minfi::getProbeInfo(object@annotation, type = "I-Red"),
                      SnpI[SnpI$Color == "Red",])
+    sigA=minfi::getRed(myRGChannelSet)
+      sigA=sigA[intersect(TypeI.Red$AddressA,row.names(sigA)),]
+    sigB=minfi::getRed(myRGChannelSet)
+      sigB=sigB[intersect(TypeI.Red$AddressB,row.names(sigB)),]
+    sub1 <- TypeI.Red$AddressA %in% row.names(sigA)
+    TypeI.Red <- TypeI.Red[sub1,]
     sub=TypeI.Red$Name %in% chrYnames
     object@names$IRed=TypeI.Red$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeI.Red$Name[sub])
-    sigA=minfi::getRed(myRGChannelSet)
-      sigA=sigA[TypeI.Red$AddressA,]
-    sigB=minfi::getRed(myRGChannelSet)
-      sigB=sigB[TypeI.Red$AddressB,]
     object@signal$AIRed=sigA[!sub,]
     object@signal$BIRed=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
@@ -164,13 +169,15 @@ fromRGChannelSet <- function(myRGChannelSet){
     ## Type II
     TypeII <- rbind(minfi::getProbeInfo(object@annotation, type = "II"),
                   minfi::getProbeInfo(object@annotation, type = "SnpII"))
+    sigA=minfi::getRed(myRGChannelSet)
+      sigA=sigA[intersect(TypeII$AddressA,row.names(sigA)),]
+    sigB=minfi::getGreen(myRGChannelSet)
+      sigB=sigB[intersect(TypeII$AddressA, row.names(sigB)),]
+    sub1 <- TypeII$AddressA %in% row.names(sigA)
+    TypeII <- TypeII[sub1,]  
     sub=TypeII$Name %in% chrYnames
     object@names$II=TypeII$Name[!sub]
     object@names$chrY=c(object@names$chrY,TypeII$Name[sub])
-    sigA=minfi::getRed(myRGChannelSet)
-      sigA=sigA[TypeII$AddressA,]
-    sigB=minfi::getGreen(myRGChannelSet)
-      sigB=sigB[TypeII$AddressA,]
     object@signal$AII=sigA[!sub,]
     object@signal$BII=sigB[!sub,]
     object@signal$AchrY=rbind(object@signal$AchrY,sigA[sub,])
