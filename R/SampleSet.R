@@ -608,7 +608,7 @@ setMethod("funtooNorm",
               ###### this part deal with chrY
               if(is.null(sex)){
                   mens=matrixStats::colMedians(calcBeta(object@signal$AchrY,
-                                                    object@signal$BchrY))<0.6
+                                                    object@signal$BchrY))>=0.6
                   message("we found ",sum(mens)," men and ",sum(!mens),
                           " women in your data set base on Y probes only")
                   }else{
@@ -619,7 +619,7 @@ setMethod("funtooNorm",
               # no correction for women
               object@predmat$AchrY=object@signal$AchrY
               object@predmat$BchrY=object@signal$BchrY
-              if(1<sum(mens)){
+              if(1<=sum(mens)){
                   object@predmat$AchrY[,mens]=
                       quantileNormalization(object@signal$AchrY[,mens])
                   object@predmat$BchrY[,mens]=
