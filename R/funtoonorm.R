@@ -12,8 +12,8 @@ constructProbCovMat <- function(controlred, controlgrn, cp.types,cell_type){
     ## For one control type, return the mean signal intensity 
     ## per color per sample
     getMeanProbesIntensity <- function(x){
-    cbind(colMeans(array(controlred[cp.types==x,])),
-          colMeans(array(controlgrn[cp.types==x,])))}
+    cbind(colMeans(controlred[cp.types==x,]),
+          colMeans(controlgrn[cp.types==x,]))}
     
     ## means for each of the 2 signals and the 15 type of control probe
     ## mat.by.ct is 30 columns

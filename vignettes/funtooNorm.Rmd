@@ -80,8 +80,11 @@ There must be at least two different cell or tissue types in the data or the pro
 We have provided a small data set containing $N=6$ samples from the Illumina 450K to demonstrate `funtooNorm`. Since the sample are all the same cell type, this example will not produce meaningful results.
 
 ```{r}
-    require(funtooNorm)
+    #require(funtooNorm)
     require(minfiData)
+    source("E:/kathleen/Documents/Rpackages/funtooNorm/R/funtoonorm.R")
+    source("E:/kathleen/Documents/Rpackages/funtooNorm/R/SampleSet.R")
+
     # We randomly assign cell types for the purpose of this example.
     pData(RGsetEx)$cell_type <- rep(c("type1","type2"),3)
     mySampleSet=fromRGChannelSet(RGsetEx)
